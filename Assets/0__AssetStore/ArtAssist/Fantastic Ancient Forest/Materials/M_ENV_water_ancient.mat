@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_ENV_water_ancient
+  m_Shader: {fileID: 4800000, guid: a0eb08716bb60a145b4858e07dd274ef, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _FoamTexture:
+        m_Texture: {fileID: 2800000, guid: 878c4cc4d4a444c44b68f234bb13108e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FoamTexture1:
+        m_Texture: {fileID: 2800000, guid: e388b79de9bcdb3469f40f95451853e4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalTexture:
+        m_Texture: {fileID: 2800000, guid: ce59a7fd9ada7694b9765d4a123505f8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RipplesTexture:
+        m_Texture: {fileID: 2800000, guid: e388b79de9bcdb3469f40f95451853e4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutoff: 0.5
+    - _Depth: -1.04
+    - _EdgeDistance: 0.1
+    - _EdgePower: 1
+    - _EnvironmentReflections: 1
+    - _FoamEdgeDistance: 0.029
+    - _FoamEdgeGradContrast: 10
+    - _FoamEdgeNoiseContrast: 2
+    - _FoamEmissionIntensity: 0.224
+    - _FoamNoiseTiling: 8
+    - _FoamScale: 5
+    - _FoamSpeed: 0.017
+    - _FoamTiling: 1
+    - _NormalSpeed: 0.1
+    - _NormalStrenght: 0.343
+    - _NormalStrength: 0.4
+    - _NormalTile: 1
+    - _NormalTiling: 1.5
+    - _Opacity: 0.539
+    - _QueueControl: -1
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
+    - _RippleDissolve: 5
+    - _RippleScale: 10
+    - _RippleSpeed: 1
+    - _RipplesDissolve: 0.81
+    - _RipplesNormalMaskValue: 0.968
+    - _RipplesSpeed: 0.89
+    - _RipplesTIling: 0.197
+    - _RipplesTransparency: 0.627
+    - _Smoothness: 0.9
+    - _SpecularHighlights: 1
+    m_Colors:
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissionFoamAndRipples: {r: 1, g: 1, b: 1, a: 0}
+    - _FoamAndRipplesEmission: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 0}
+    - _FoamPanDirecetion: {r: -1, g: 0, b: 0, a: 0}
+    - _FoamPanDirection: {r: -1, g: 0.5, b: 0, a: 0}
+    - _NormalDirection1: {r: 0.4, g: 0, b: 0, a: 0}
+    - _NormalDirection2: {r: -0.2, g: 0, b: 0, a: 0}
+    - _RipplesEmission: {r: 1, g: 1, b: 1, a: 0}
+    - _WaterColorDeep: {r: 0.102483094, g: 0.10852996, b: 0.46226418, a: 0}
+    - _WaterColorShallow: {r: 0.109024554, g: 0.6603774, b: 0.6450621, a: 0}
+  m_BuildTextureStacks: []
+--- !u!114 &3328265441833236055
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 5
