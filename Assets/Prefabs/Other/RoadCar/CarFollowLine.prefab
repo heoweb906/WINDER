@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &306748290663240828
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3878636505534160850}
+  - component: {fileID: 2287145564558354042}
+  - component: {fileID: 7607745370602967505}
+  m_Layer: 0
+  m_Name: CarFollowLine
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3878636505534160850
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306748290663240828}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 51.56, y: 1.21, z: -64.77}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2287145564558354042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306748290663240828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a200b19ca1a9685429ed7e043c28e904, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Resolution: 20
+  m_Appearance:
+    pathColor: {r: 0, g: 1, b: 0, a: 1}
+    inactivePathColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    width: 0.2
+  m_Looped: 0
+  m_Waypoints:
+  - position: {x: 86.29439, y: 0, z: 4}
+    roll: 0
+  - position: {x: 9.245422, y: 0, z: 4}
+    roll: 0
+  - position: {x: -25.594337, y: 0, z: 4}
+    roll: 0
+  - position: {x: -31, y: 0, z: 8.096466}
+    roll: 0
+  - position: {x: -31, y: 0, z: 14.127777}
+    roll: 0
+  - position: {x: -31.000008, y: 0, z: 44.067642}
+    roll: 0
+  - position: {x: -31.000008, y: 0, z: 84.90431}
+    roll: 0
+--- !u!114 &7607745370602967505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306748290663240828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24763c39196ea104596b9286aa41a700, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  path: {fileID: 2287145564558354042}
+  fCreateInterval: 1
+  Cars:
+  - {fileID: 8212593793374922755, guid: 8694868d8f11ad84493b74f5549c5c48, type: 3}
+  - {fileID: 1611813175003259497, guid: fb2e168ce78f7714eae69ce94c45f768, type: 3}
+  - {fileID: 1304078141973502186, guid: ce6b6cd02093c954785ef720438b531c, type: 3}
