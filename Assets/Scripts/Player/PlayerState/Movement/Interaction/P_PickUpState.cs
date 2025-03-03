@@ -79,13 +79,31 @@ public class P_PickUpState : P_InteractionState
         moveSequence = DOTween.Sequence();
         moveSequence.Join(player.curCarriedObject.transform.DOLocalMove(targetPosition, 0.5f));
         moveSequence.Join(player.curCarriedObject.transform.DORotate(targetRotation.eulerAngles, 0.5f));
-
-        player.isHandIK = true;
+        
+        if(player.curCarriedObject.carriedObjectType == CarriedObjectType.Normal)
+        {
+            player.isHandIK = true;
+        }
+        else if(player.curCarriedObject.carriedObjectType == CarriedObjectType.Guitar)
+        {
+            player.isHandIK = false;
+            DOTween.To(() => player.playerAnim.GetLayerWeight(1), x => player.playerAnim.SetLayerWeight(1, x), 1, 0.2f);
+        }
     }
 
     public override void OnAnimationExitEvent()
     {
-        player.playerAnim.SetLayerWeight(1, 1);
+        if(player.curCarriedObject.carriedObjectType == CarriedObjectType.Normal)
+        {
+            player.playerAnim.SetBool(player.playerAnimationData.CarryNormalParameterHash, true);
+            player.playerAnim.SetBool(player.playerAnimationData.CarryGuitarParameterHash, false);
+        }
+        else if(player.curCarriedObject.carriedObjectType == CarriedObjectType.Guitar)
+        {
+            player.playerAnim.SetBool(player.playerAnimationData.CarryNormalParameterHash, false);
+            player.playerAnim.SetBool(player.playerAnimationData.CarryGuitarParameterHash, true);
+        }
+        DOTween.To(() => player.playerAnim.GetLayerWeight(1), x => player.playerAnim.SetLayerWeight(1, x), 1, 0.2f);
         machine.OnStateChange(machine.IdleState);
     }
 

@@ -44,7 +44,7 @@ public class PlayerStateMachine : StateMachine
     public P_PutDownState PutDownState { get; private set; }
     public P_RemovePartsState RemovePartsState { get; private set; }
     public P_ThrowState ThrowState { get; private set; }
-
+    public P_GuitarBrokenState GuitarBrokenState { get; private set; }
     public P_GrabState GrabState { get; private set; }
     public P_GrabIdleState GrabIdleState { get; private set; }
     public P_PushState PushState { get; private set; }
@@ -95,7 +95,7 @@ public class PlayerStateMachine : StateMachine
         PutDownState = new P_PutDownState(player, this);
         RemovePartsState = new P_RemovePartsState(player, this);
         ThrowState = new P_ThrowState(player, this);
-
+        GuitarBrokenState = new P_GuitarBrokenState(player, this);
         GrabState = new P_GrabState(player, this);
         GrabIdleState = new P_GrabIdleState(player, this);
         PushState = new P_PushState(player, this);

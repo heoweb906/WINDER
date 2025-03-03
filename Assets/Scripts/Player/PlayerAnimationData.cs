@@ -60,7 +60,9 @@ public class PlayerAnimationData
     [SerializeField] private string putPartsParameterName = "isPutParts";
     [SerializeField] private string removePartsParameterName = "isRemoveParts";
     [SerializeField] private string throwParameterName = "isThrow";
-
+    [SerializeField] private string carryNormalParameterName = "isCarryNormal";
+    [SerializeField] private string carryGuitarParameterName = "isCarryGuitar";
+    [SerializeField] private string guitarBrokenParameterName = "isGuitarBroken";
     [Header("Interaction_Grap Group Parameter")]
     [SerializeField] private string grabParameterName = "Grab";
     [SerializeField] private string pushParameterName = "isPush";
@@ -112,6 +114,10 @@ public class PlayerAnimationData
     public int PutPartsParameterHash { get; private set; }
     public int RemovePartsParameterHash { get; private set; }
     public int ThrowParameterHash { get; private set; }
+    public int CarryNormalParameterHash { get; private set; }
+    public int CarryGuitarParameterHash { get; private set; }
+    public int GuitarBrokenParameterHash { get; private set; }
+
 
     public int GrabParameterHash { get; private set; }
     public int PushParameterHash { get; private set; }
@@ -162,6 +168,9 @@ public class PlayerAnimationData
         PutPartsParameterHash = Animator.StringToHash(putPartsParameterName);
         RemovePartsParameterHash = Animator.StringToHash(removePartsParameterName);
         ThrowParameterHash = Animator.StringToHash(throwParameterName);
+        CarryNormalParameterHash = Animator.StringToHash(carryNormalParameterName);
+        CarryGuitarParameterHash = Animator.StringToHash(carryGuitarParameterName);
+        GuitarBrokenParameterHash = Animator.StringToHash(guitarBrokenParameterName);
 
         GrabParameterHash = Animator.StringToHash(grabParameterName);
         PushParameterHash = Animator.StringToHash(pushParameterName);

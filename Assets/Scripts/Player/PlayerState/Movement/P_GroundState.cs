@@ -72,7 +72,14 @@ public class P_GroundState : PlayerMovementState
                 }
                 else
                 {
-                    machine.OnStateChange(machine.ThrowState);
+                    if(player.curCarriedObject.carriedObjectType == CarriedObjectType.Normal)
+                    {
+                        machine.OnStateChange(machine.ThrowState);
+                    }
+                    else if(player.curCarriedObject.carriedObjectType == CarriedObjectType.Guitar)
+                    {
+                        machine.OnStateChange(machine.GuitarBrokenState);
+                    }
                     Debug.Log("파츠 못찾음");
                 }
             }
