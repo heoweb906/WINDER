@@ -46,22 +46,7 @@ public class NPC_Simple_GrappedState : NPC_Simple_State
     }
 
 
-    private void ChangeStateNPC()
-    {
-        npc.bSad = false;
-        npc.GetAnimator().SetBool("Bool_Sad",false);
-
-
-        if (npc.bClockWorkEventNPC)
-        {
-
-
-        }
-        else
-        {
-            machine.OnStateChange(machine.ThankState);
-        }
-    }
+  
 
     
 }

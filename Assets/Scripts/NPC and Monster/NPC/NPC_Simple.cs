@@ -37,7 +37,7 @@ public class NPC_Simple : MonoBehaviour
     public ActionEventList actionEventList;
 
     [Header("기타 오브젝트들")]
-    public NPC_ClockWork npc_ClockWork; // 자기 등에 꽂혀 있는 태엽
+    public NPCHeart npcHeart; // 자기 등에 꽂혀 있는 태엽
     private ClockWork clockWork;        // 일하는 NPC가 사요할 거임
 
 
@@ -61,7 +61,14 @@ public class NPC_Simple : MonoBehaviour
 
 
         machine = new NPC_Simple_StateMachine(this);
-        npc_ClockWork.machine = machine;
+
+        if (npcHeart != null)
+        {
+            npcHeart.machine = machine;
+            npcHeart.SetAnimator(anim);
+        }
+          
+        else Debug.Log("심장이 비어있습니다");
     }
 
 

@@ -60,7 +60,7 @@ public class ClockWork : InteractableObject
         return clockWorkType;
     }
 
-    public void ClockWorkRotate(float fRotateDirection = 1f, float fRotateSpeed_Wall = 0.3f, float fRotateSpeed_Floor = 0.8f)
+    public virtual void ClockWorkRotate(float fRotateDirection = 1f, float fRotateSpeed_Wall = 0.3f, float fRotateSpeed_Floor = 0.8f)
     {
         if (clockWorkType == ClockWorkType.Wall)
         {

@@ -15,10 +15,22 @@ public class NPC_Simple_ReactionThankState : NPC_Simple_State
     public override void OnEnter()
     {
         base.OnEnter();
+        if (npc.clockworkEvent == ClockWorkEventList.None)
+        {
+            npc.GetAnimator().SetTrigger("doReactionHappy");
 
-        npc.GetAnimator().SetTrigger("doReactionHappy");
+            elapsedTime = 0f;
 
-        elapsedTime = 0f; 
+        }
+        else
+        {
+
+            ChangeStateNPC();
+
+
+        }
+
+       
 
     }
 
@@ -45,7 +57,26 @@ public class NPC_Simple_ReactionThankState : NPC_Simple_State
 
     public override void OnExit()
     {
+        npc.bSad = false;
+        npc.GetAnimator().SetBool("Bool_Sad", false);
+
         base.OnExit();
+    }
+
+    private void ChangeStateNPC()
+    {
+     
+
+
+        if (npc.bClockWorkEventNPC)
+        {
+
+
+        }
+        else
+        {
+            machine.OnStateChange(machine.ThankState);
+        }
     }
 
 }
