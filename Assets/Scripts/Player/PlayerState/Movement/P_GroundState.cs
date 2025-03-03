@@ -124,6 +124,8 @@ public class P_GroundState : PlayerMovementState
             {
                 player.curClockWork = player.curInteractableObject.GetComponent<ClockWork>();
 
+                player.curClockWork.GrapClockWorkOn();
+
                 if (player.curClockWork.GetClockWorkType() == ClockWorkType.Floor)
                 {
                     float angle = player.curClockWork.transform.eulerAngles.y * Mathf.Deg2Rad;

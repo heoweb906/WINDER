@@ -97,6 +97,10 @@ public class ClockWork : InteractableObject
             clockWorkType = ClockWorkType.Wall;
         }
     }
+
+
+
+    public virtual void GrapClockWorkOn() {}
 }
 
 
