@@ -131,10 +131,8 @@ public class P_GroundState : PlayerMovementState
                     float angle = player.curClockWork.transform.eulerAngles.y * Mathf.Deg2Rad;
                     Vector3 pos1 = player.curClockWork.transform.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * player.clockWorkInteractionDistance_Floor;
                     Vector3 pos2 = player.curClockWork.transform.position + (-new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * player.clockWorkInteractionDistance_Floor);
-                    //Debug.Log((pos1 - player.transform.position).magnitude + "//" + (pos2 - player.transform.position).magnitude);
 
                     player.targetPos = (pos1 - player.transform.position).magnitude >= (pos2 - player.transform.position).magnitude ? pos2 : pos1;
-                    Debug.Log(player.targetPos);
 
                     //player.targetPos = player.curClockWork.transform.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * player.clockWorkInteractionDistance_Floor;
                 }
@@ -143,6 +141,13 @@ public class P_GroundState : PlayerMovementState
                     float angle = player.curClockWork.transform.eulerAngles.y * Mathf.Deg2Rad;
                     player.targetPos = player.curClockWork.transform.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * player.clockWorkInteractionDistance_Wall;
                 }
+                else if (player.curClockWork.GetClockWorkType() == ClockWorkType.NPC)
+                {
+                    Transform npcPos = player.curClockWork.gameObject.GetComponent<NPC_ClockWork>().NPC.transform;
+                    float angle = (npcPos.eulerAngles.y+180) * Mathf.Deg2Rad;
+                    player.targetPos = npcPos.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * player.clockWorkInteractionDistance_Wall;
+                }
+
             }
             else if (player.curInteractableObject.type == InteractableType.Carrried && player.partsArea == null)
             {
@@ -176,7 +181,7 @@ public class P_GroundState : PlayerMovementState
             {
                 if (player.curInteractableObject.type == InteractableType.ClockWork)
                 {
-                    if (player.curClockWork.GetClockWorkType() == ClockWorkType.Wall)
+                    if (player.curClockWork.GetClockWorkType() == ClockWorkType.Wall || player.curClockWork.GetClockWorkType() == ClockWorkType.NPC)
                         machine.OnStateChange(machine.SpinClockWorkWallState);
                     else if (player.curClockWork.GetClockWorkType() == ClockWorkType.Floor)
                         machine.OnStateChange(machine.SpinClockWorkFloorState);

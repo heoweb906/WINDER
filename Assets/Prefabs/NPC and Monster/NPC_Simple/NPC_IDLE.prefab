@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 345962184516222134}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.68446183, z: -0, w: 0.72904867}
+  m_LocalRotation: {x: 0, y: 0.68446445, z: 0, w: 0.7290463}
   m_LocalPosition: {x: -7.74, y: -0.75, z: 2.43}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 1
@@ -40,6 +40,7 @@ Transform:
   - {fileID: 809134337955542159}
   - {fileID: 6769764546439335719}
   - {fileID: 1911899126449014429}
+  - {fileID: 4283470601880383871}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 86.387, z: 0}
 --- !u!114 &4322606921702690002
@@ -60,7 +61,8 @@ MonoBehaviour:
   bActionEventNPC: 0
   clockworkEvent: 0
   actionEventList: 0
-  npc_ClockWork: {fileID: 6726311321795108807}
+  npcHeart: {fileID: 7809221568587220932}
+  npcClockWork: {fileID: 5478883803251598331}
   checkPoints: []
 --- !u!95 &7795427605289915666
 Animator:
@@ -142,8 +144,8 @@ NavMeshAgent:
   m_GameObject: {fileID: 345962184516222134}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
+  m_Radius: 0.26
+  m_Speed: 1.2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -262,13 +264,13 @@ GameObject:
   - component: {fileID: 8237843821253339382}
   - component: {fileID: 50697350422183000}
   - component: {fileID: 6726311321795108807}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ClockWork
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1911899126449014429
 Transform:
   m_ObjectHideFlags: 0
@@ -277,13 +279,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1012665086195906198}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0.548, z: -0.215}
-  m_LocalScale: {x: 0.29416382, y: 0.29416382, z: 0.29416382}
+  m_LocalScale: {x: 0.14596115, y: 0.14596115, z: 0.14596115}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4706063886809028362}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!33 &6169276578589192575
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -349,7 +351,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -370,6 +372,12 @@ MonoBehaviour:
   type: 0
   canInteract: 1
   isParts: 0
+  clockBattery: {fileID: 7809221568587220932}
+  clockWorkType: 1
+  plusClockWorksList: []
+  isSingleEvent: 1
+  npcHeart: {fileID: 7809221568587220932}
+  NPC: {fileID: 0}
 --- !u!1 &1096703202168280222
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,6 +572,56 @@ Transform:
   - {fileID: 8638145005931572639}
   m_Father: {fileID: 9007866541895110615}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1844066021339326117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4283470601880383871}
+  - component: {fileID: 7809221568587220932}
+  m_Layer: 13
+  m_Name: NPC_Heart
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4283470601880383871
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844066021339326117}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4706063886809028362}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7809221568587220932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844066021339326117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b4a92dfc75c1ca46b9ac867a19b999b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clockWork: {fileID: 0}
+  fMaxClockBattery: 3
+  fCurClockBattery: 0
+  fLowClockBatteryPoint: 0
+  bDoing: 0
+  bBatteryFull: 0
 --- !u!1 &1894517424530382758
 GameObject:
   m_ObjectHideFlags: 0
@@ -1361,7 +1419,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8638145005931572639}
-  m_Layer: 0
+  - component: {fileID: 3844061953346492342}
+  - component: {fileID: 5478883803251598331}
+  m_Layer: 8
   m_Name: taeyeob_bone000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1384,6 +1444,48 @@ Transform:
   - {fileID: 5169000792728995560}
   m_Father: {fileID: 6446452322269904053}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3844061953346492342
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6899338395546916034}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.3, y: 0.3, z: 0.3}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5478883803251598331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6899338395546916034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1e103fa80e65164382c66bfe6a084a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  canInteract: 0
+  isParts: 0
+  clockBattery: {fileID: 7809221568587220932}
+  clockWorkType: 2
+  plusClockWorksList: []
+  isSingleEvent: 1
+  npcHeart: {fileID: 7809221568587220932}
+  NPC: {fileID: 345962184516222134}
 --- !u!1 &6987926475089217340
 GameObject:
   m_ObjectHideFlags: 0

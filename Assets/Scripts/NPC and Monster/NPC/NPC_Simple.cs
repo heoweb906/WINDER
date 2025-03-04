@@ -38,6 +38,7 @@ public class NPC_Simple : MonoBehaviour
 
     [Header("기타 오브젝트들")]
     public NPCHeart npcHeart; // 자기 등에 꽂혀 있는 태엽
+    public NPC_ClockWork npcClockWork; 
     private ClockWork clockWork;        // 일하는 NPC가 사요할 거임
 
 
@@ -56,6 +57,8 @@ public class NPC_Simple : MonoBehaviour
         anim.SetBool("Bool_Walk", bWalking);
         anim.SetBool("Bool_Sad", bSad);
         anim.SetBool("Bool_ActionEvent", bActionEventNPC);
+
+        npcClockWork.canInteract = bSad;
 
         agent = GetComponent<NavMeshAgent>();
 
