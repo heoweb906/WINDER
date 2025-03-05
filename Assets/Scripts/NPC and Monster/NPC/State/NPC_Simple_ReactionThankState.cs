@@ -15,6 +15,15 @@ public class NPC_Simple_ReactionThankState : NPC_Simple_State
     public override void OnEnter()
     {
         base.OnEnter();
+
+        npc.bSad = false;
+        npc.GetAnimator().SetBool("Bool_Sad", false);
+        npc.GetAnimator().SetTrigger("doClockWorkStart");
+
+
+
+
+
         if (npc.clockworkEvent == ClockWorkEventList.None)
         {
             npc.GetAnimator().SetTrigger("doReactionHappy");
@@ -57,8 +66,7 @@ public class NPC_Simple_ReactionThankState : NPC_Simple_State
 
     public override void OnExit()
     {
-        npc.bSad = false;
-        npc.GetAnimator().SetBool("Bool_Sad", false);
+    
 
         base.OnExit();
     }

@@ -383,6 +383,8 @@ public class MainMenuController : MonoBehaviour
     // #. Scene 전환 함수, 게임 시작 버튼에서 사용하지만, 버튼에는 버튼 관련 기능만 넣기 위해서
     public void StartNewGame(string sSceneSname = "Chapter0_1_Alley")
     {
+        //  
+
         bNowSceneChange = true;
 
         // Vignette의 intensity를 현재 값에서 1로 서서히 변화

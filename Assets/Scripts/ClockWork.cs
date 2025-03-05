@@ -7,7 +7,8 @@ using UnityEngine;
 public enum ClockWorkType
 {
     Floor,
-    Wall
+    Wall,
+    NPC
 };
 
 public class ClockWork : InteractableObject

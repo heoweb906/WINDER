@@ -6,6 +6,8 @@ public class NPC_ClockWork : ClockWork
 {
     public NPCHeart npcHeart;
 
+    public GameObject NPC;
+
     
 
     
@@ -13,14 +15,23 @@ public class NPC_ClockWork : ClockWork
     {
         npcHeart.machine.OnStateChange(npcHeart.machine.GrappedState);
 
-        npcHeart.GetAnimator().SetTrigger("doClockWorkStop");
-
+     
 
 
     }
 
 
+    public override void ClockWorkRotate(float fRotateDirection = 1f, float fRotateSpeed_Wall = 0.3f, float fRotateSpeed_Floor = 0.8f)
+    {
+        base.ClockWorkRotate();
 
+        Debug.Log("ÅÂ¿± È¸Àü!!!");
+
+        npcHeart.GetAnimator().SetTrigger("doClockWorkStop");
+    }
+
+
+  
 
 
 
