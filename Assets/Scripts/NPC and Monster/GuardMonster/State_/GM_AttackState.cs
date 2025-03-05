@@ -24,15 +24,18 @@ public class GM_AttackState : GuardMState
         player.transform.SetParent(guardM.transformGrabPlayer);
 
         // 0.85초 뒤에 이동 (0.4초 동안)
+        Quaternion targetRotation = Quaternion.Euler(1.431f, 180f, 175.697f);
+
         player.transform.DOLocalMove(Vector3.zero, 0.4f)
             .SetEase(Ease.OutQuint)
             .SetDelay(0.85f);
 
-        // 0.85초 뒤에 회전 (0.4초 동안)
-        Vector3 targetRotation = new Vector3(1.431f, 180f, 175.697f); // 예제 값
-        player.transform.DOLocalRotate(targetRotation, 0.4f, RotateMode.FastBeyond360)
+        player.transform.DOLocalRotateQuaternion(targetRotation, 0.5f)
             .SetEase(Ease.OutQuint)
             .SetDelay(0.9f);
+
+
+
 
 
         // 위치 & 회전 고정
