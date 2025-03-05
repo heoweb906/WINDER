@@ -21,6 +21,9 @@ public class BulBug_WanderingState : BulbBugState
         bulbBug.rigid.isKinematic = true;
         bulbBug.nav.enabled = true;
 
+        bulbBug.nav.updatePosition = false; // NavMeshAgent의 자동 위치 업데이트 비활성화
+        // bulbBug.nav.updateRotation = false; // NavMeshAgent의 자동 회전 업데이트 비활성화
+
         StartWandering();
     }
 
@@ -34,9 +37,19 @@ public class BulBug_WanderingState : BulbBugState
     {
         base.OnFixedUpdate();
 
-        // 플레이어가 너무 나까이 오면 잠듦 상태로 변경
+        // 플레이어가 너무 가까이 오면 잠듦 상태로 변경
         if (bulbBug.CheckingArea_2.isPlayerInArea) machine.OnStateChange(machine.SleepState);
 
+        // NavMeshAgent의 위치와 회전 수동 업데이트
+        if (bulbBug.nav.enabled)
+        {
+            bulbBug.transform.position = bulbBug.nav.nextPosition; // FixedUpdate에서 직접 위치 업데이트
+            bulbBug.transform.rotation = Quaternion.Lerp(
+                bulbBug.transform.rotation,
+                Quaternion.LookRotation(bulbBug.nav.desiredVelocity.normalized, Vector3.up),
+                Time.fixedDeltaTime * bulbBug.nav.angularSpeed
+            );
+        }
 
         // 평소의 배회
         if (bulbBug.CheckingArea_1.isPlayerInArea && !isStopped)
@@ -75,8 +88,8 @@ public class BulBug_WanderingState : BulbBugState
                 }
             }
         }
-
     }
+
 
 
     public override void OnExit()
