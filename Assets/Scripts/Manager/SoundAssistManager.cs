@@ -332,15 +332,15 @@ public class SoundAssistManager : MonoBehaviour
                     break;
 
                 case "MainMenu":
-                    if (audioSource_BGM.clip != soundDictionary["The Last Campfire OST  Title Screen"])
+                    if (audioSource_BGM.clip != soundDictionary["MainMenu_ToyBox"])
                     {
 
                     }
-                    UnmuteMasterVolume(4f);
-                    Debug.Log("The Last Campfire OST  Title Screen");
+                    UnmuteMasterVolume(2f);
+                    Debug.Log("MainMenu_ToyBox");
 
                     audioSource_BGM.Stop();
-                    audioSource_BGM.clip = soundDictionary["The Last Campfire OST  Title Screen"];
+                    audioSource_BGM.clip = soundDictionary["MainMenu_ToyBox"];
                     audioSource_BGM.Play();
                     break;
 
