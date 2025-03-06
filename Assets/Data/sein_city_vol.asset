@@ -58,21 +58,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 899c54efeace73346a0a16faa3afe726, type: 3}
   m_Name: Vignette
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   color:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {r: 0, g: 0, b: 0, a: 1}
   center:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {x: 0.5, y: 0.05}
   intensity:
-    m_OverrideState: 1
-    m_Value: 0.175
+    m_OverrideState: 0
+    m_Value: 0.186
   smoothness:
-    m_OverrideState: 1
-    m_Value: 0.783
+    m_OverrideState: 0
+    m_Value: 1
   rounded:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 1
 --- !u!114 &-3168699666803681427
 MonoBehaviour:
@@ -241,13 +241,13 @@ MonoBehaviour:
   active: 1
   shadows:
     m_OverrideState: 1
-    m_Value: {x: 0.16288638, y: 0.32508206, z: 1, w: 0.20563608}
+    m_Value: {x: 0.5646641, y: 0.68360496, z: 1, w: 0.07874006}
   midtones:
     m_OverrideState: 1
-    m_Value: {x: 0.53230464, y: 0.61486775, z: 1, w: 0.03811934}
+    m_Value: {x: 0.5816531, y: 0.73318255, z: 1, w: 0.49212623}
   highlights:
     m_OverrideState: 1
-    m_Value: {x: 0.9571967, y: 1, z: 0.9586408, w: 0.025412943}
+    m_Value: {x: 0.9069571, y: 1, z: 0.8639749, w: 0.025412943}
   shadowsStart:
     m_OverrideState: 1
     m_Value: 0
@@ -324,10 +324,10 @@ MonoBehaviour:
     m_Value: 0.8
   intensity:
     m_OverrideState: 1
-    m_Value: 11.24
+    m_Value: 6.83
   scatter:
     m_OverrideState: 1
-    m_Value: 0.562
+    m_Value: 0.154
   clamp:
     m_OverrideState: 1
     m_Value: 65472
@@ -344,7 +344,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 6
   dirtTexture:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {fileID: 0}
     dimension: 1
   dirtIntensity:
@@ -408,16 +408,16 @@ MonoBehaviour:
     m_Value: 0.72
   contrast:
     m_OverrideState: 1
-    m_Value: 46.3
+    m_Value: 75
   colorFilter:
     m_OverrideState: 1
-    m_Value: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
+    m_Value: {r: 0.735849, g: 0.7254361, b: 0.7254361, a: 1}
   hueShift:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: -4
   saturation:
     m_OverrideState: 1
-    m_Value: -34
+    m_Value: -17
 --- !u!114 &5254273991159672689
 MonoBehaviour:
   m_ObjectHideFlags: 3
