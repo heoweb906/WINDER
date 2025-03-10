@@ -19,8 +19,6 @@ public class P_OnAirState : PlayerMovementState
     {
         base.OnUpdate();
         CheckHanging();
-        if (Input.GetKeyDown(KeyCode.Q))
-            machine.OnStateChange(machine.FallingIdleState);
     }
 
     public override void OnFixedUpdate()
@@ -43,6 +41,9 @@ public class P_OnAirState : PlayerMovementState
             Debug.DrawRay(ray.origin, player.transform.forward * player.cliffCheckRayDistance, Color.red);
             if (Physics.Raycast(ray, out player.cliffRayHit, player.cliffCheckRayDistance, player.cliffLayer))
             {
+                GrabObject grabObject = player.cliffRayHit.collider.GetComponent<GrabObject>();
+                if (grabObject == null || !grabObject.isCliff) return;
+                
                 BoxCollider _col = player.cliffRayHit.collider.GetComponent<BoxCollider>();
                 Vector3 cliffPos = Vector3.Scale(_col.size * 0.5f, _col.transform.lossyScale) + player.cliffRayHit.transform.position;
                 if ((cliffPos.y - player.cliffRayHit.point.y) < 0.1f && (cliffPos.y - player.cliffRayHit.point.y) > -0.1f)

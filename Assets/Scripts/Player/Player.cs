@@ -163,7 +163,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         groundLayer = ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Carry"));
-        cliffLayer = (1 << LayerMask.NameToLayer("Cliff"));
+        cliffLayer = (1 << LayerMask.NameToLayer("Cliff") | 1 << LayerMask.NameToLayer("Interactable"));
     }
 
     private void Update()

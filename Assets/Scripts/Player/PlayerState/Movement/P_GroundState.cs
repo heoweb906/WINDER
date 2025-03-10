@@ -53,6 +53,7 @@ public class P_GroundState : PlayerMovementState
         {
             if (!player.isCarryObject)
             {
+                player.rigid.velocity = new Vector3(player.rigid.velocity.x, 0, player.rigid.velocity.z);
                 if (GetCurDirection() == Vector3.zero)
                 {
                     machine.OnStateChange(machine.JumpStartIdleState);
