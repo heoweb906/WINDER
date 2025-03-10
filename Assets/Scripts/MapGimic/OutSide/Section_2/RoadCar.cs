@@ -27,7 +27,7 @@ public class RoadCar : MonoBehaviour
         if(CarFrame != null) StartShakeEffect();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (bMoveActive)
         {
@@ -53,7 +53,7 @@ public class RoadCar : MonoBehaviour
             if (hit.collider.GetComponent<RoadCar>() != null)
             {
                 // 안전 거리 확보를 위해 서서히 감속
-                currentSpeed -= deceleration * Time.deltaTime;
+                currentSpeed -= deceleration * Time.fixedDeltaTime;
                 currentSpeed = Mathf.Max(currentSpeed, 0);
             }
         }
@@ -62,12 +62,12 @@ public class RoadCar : MonoBehaviour
             // 안전 거리가 확보되면 가속
             if (currentSpeed < maxSpeed)
             {
-                currentSpeed += acceleration * Time.deltaTime;
+                currentSpeed += acceleration * Time.fixedDeltaTime;
             }
         }
 
         // MovePosition을 사용해 오브젝트 이동
-        Vector3 targetPosition = transform.position + transform.forward * currentSpeed * Time.deltaTime;
+        Vector3 targetPosition = transform.position + transform.forward * currentSpeed * Time.fixedDeltaTime;
         rb.MovePosition(targetPosition);
 
         // JustRotate 배열의 각 요소 회전 속도 업데이트

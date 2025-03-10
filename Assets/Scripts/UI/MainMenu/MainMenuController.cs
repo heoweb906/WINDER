@@ -496,13 +496,14 @@ public class MainMenuController : MonoBehaviour
 
         Image fadeoutImage = image_FadeOut.GetComponent<Image>();
         Color fadeColor = fadeoutImage.color;
-        
+
         // 알파값을 서서히 1로, 마지막에 감속 후 씬 전환
         DOTween.To(() => fadeColor.a, x => {
             fadeColor.a = x;
             fadeoutImage.color = fadeColor;
-        }, 0f, 3.2f)
+        }, 0f, 4.5f)
         .SetEase(Ease.OutQuad)
+        .SetDelay(1f)
         .OnComplete(() => {
             // image_FadeOut.SetActive(false); 
         });
@@ -517,7 +518,7 @@ public class MainMenuController : MonoBehaviour
 
             ObjGameLogo.DOMove(targetTransform.position, 5.5f)
                 .SetEase(Ease.OutQuad) // 부드러운 감속 효과
-                .SetDelay(3.2f)
+                .SetDelay(5.0f)
                 .SetUpdate(true); // UI에서도 정상 작동
         }
     }

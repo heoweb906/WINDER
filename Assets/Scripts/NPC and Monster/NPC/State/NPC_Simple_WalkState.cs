@@ -10,13 +10,26 @@ public class NPC_Simple_WalkState : NPC_Simple_State
     {
         base.OnEnter();
 
-        npc.GetNav().enabled = true;
+        Debug.Log(npc.CurrentCheckPointIndex);
+
+
+
+
+
+        npc.GetNav().radius = 0.26f;
+        npc.GetNav().isStopped = false;
+
+        // npc.GetNav().enabled = true;
         npc.GetNav().autoBraking = false;
 
         int ranNum = (Random.value < 0.15f) ? 0 : 1;
 
-        if (ranNum == 0) npc.GetNav().speed = 0.7f;
-
+        if(npc.bSad) npc.GetNav().speed = 0.5f;
+        else
+        {
+            if (ranNum == 0) npc.GetNav().speed = 0.7f;
+        }
+      
         npc.GetAnimator().SetInteger("Walk_Num", ranNum);
     }
 
@@ -42,14 +55,16 @@ public class NPC_Simple_WalkState : NPC_Simple_State
                 if (npc.CurrentCheckPointIndex < npc.checkPoints.Length)
                 {
                     MoveToNextCheckPoint();
+                    npc.CurrentCheckPointIndex++;
                 }
                 else
                 {
-                    Debug.Log("NPC 삭제");
+                    Debug.Log(npc.CurrentCheckPointIndex);
+
                     Object.Destroy(npc.gameObject);
                 }
 
-                npc.CurrentCheckPointIndex++;
+                
             }
         }
     }
@@ -57,11 +72,14 @@ public class NPC_Simple_WalkState : NPC_Simple_State
     public override void OnExit()
     {
         base.OnExit();
-        npc.GetNav().enabled = false;
+        // npc.GetNav().enabled = false;
+        npc.GetNav().isStopped = true;
     }
 
     private void MoveToNextCheckPoint()
     {
+        Debug.Log(npc.CurrentCheckPointIndex);
+
         npc.GetNav().SetDestination(npc.checkPoints[npc.CurrentCheckPointIndex].position);
         Debug.Log("걷는 중입니다!!!!!.");
     }

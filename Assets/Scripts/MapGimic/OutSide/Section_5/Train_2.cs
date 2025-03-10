@@ -39,8 +39,8 @@ public class Train_2 : MonoBehaviour
 
         // 기차가 계속 이동합니다.
         transform.DOMove(position_StationPoint_2.position, travelDuration)
-                       .SetEase(Ease.OutCubic)
-                       .SetUpdate(true); 
+               .SetEase(Ease.OutCubic)
+               .SetUpdate(UpdateType.Fixed);
 
         yield return new WaitForSeconds(travelDuration);
 
