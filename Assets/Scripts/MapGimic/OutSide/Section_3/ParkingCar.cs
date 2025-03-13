@@ -72,7 +72,7 @@ public class ParkingCar : ClockBattery
             }
             float moveDirection = bMoveDirection ? -1f : 1f;
 
-            CarObj.transform.position += CarObj.transform.forward * currentSpeed * moveDirection * Time.deltaTime;
+            CarObj.transform.position += CarObj.transform.forward * currentSpeed * moveDirection * Time.fixedDeltaTime;
             fCurClockBattery -= Time.deltaTime;
 
             yield return null;
@@ -89,8 +89,17 @@ public class ParkingCar : ClockBattery
         if(other.GetComponent<ParkingCar>() != null && bIsMove)
         {
             Debug.Log("충돌!!!");
-            TurnOffObj();
+
+            if (nowCoroutine != null) StopCoroutine(nowCoroutine);
+            if (rb != null) rb.velocity = Vector3.zero;
+
+            if (bIsMove)
+            {
+                bMoveDirection = !bMoveDirection;
+                bIsMove = false;
+            }
         }
+        
     }
 
 

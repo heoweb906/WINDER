@@ -12,6 +12,7 @@ public class P_SpinClockWorkState : P_InteractionState
     {
         base.OnEnter();
         machine.StartAnimation(player.playerAnimationData.SpinClockWorkParameterHash);
+        player.curClockWork.GetComponent<BoxCollider>().isTrigger = true;
     }
 
     public override void OnExit()
@@ -21,6 +22,7 @@ public class P_SpinClockWorkState : P_InteractionState
         player.curClockWork.EndCharging_To_BatteryStart();
         // player.curClockWork = null;
         player.curInteractableObject = null;
+        player.curClockWork.GetComponent<BoxCollider>().isTrigger = false;
     }
 
     public override void OnUpdate()

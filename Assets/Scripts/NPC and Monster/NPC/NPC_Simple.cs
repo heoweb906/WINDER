@@ -27,41 +27,56 @@ public class NPC_Simple : MonoBehaviour
     private NavMeshAgent agent;
     public NPC_Simple_StateMachine machine;
 
-
     [Header("NPC 상태들")]
-    public bool bSad; // true = Sad <-> false = NotSad
-    public bool bWalking; // true = Walking <-> false = IDLE
-    public bool bClockWorkEventNPC; // true = 태엽을 돌려준 이후에 특정한 이벤트를 취하는 캐릭터인지
-    public bool bActionEventNPC; // 생성 시점부터 특정한 행동을 취하고 있는 NPC;
+    public bool bSad; // true = Sad, false = NotSad
+    public bool bWalking; // true = Walking, false = IDLE
+    public int iAnimWalking;        // 걷기 애니메이션 인덱스
+    public bool bClockWorkEventNPC; // 태엽을 돌려준 이후에 이벤트 수행 여부
+    public bool bActionEventNPC; // 생성 시점부터 특정 행동 수행 여부
     public ClockWorkEventList clockworkEvent;
     public ActionEventList actionEventList;
 
     [Header("기타 오브젝트들")]
-    public NPCHeart npcHeart; // 자기 등에 꽂혀 있는 태엽
-    public NPC_ClockWork npcClockWork; 
-    private ClockWork clockWork;        // 일하는 NPC가 사요할 거임
-
+    public NPCHeart npcHeart;
+    public NPC_ClockWork npcClockWork;
+    private ClockWork clockWork;
 
     [Header("Walk 관련 컴포넌트들")]
     public Transform[] checkPoints; // 목표 지점 배열
     private int currentCheckPointIndex = 0; // 현재 목표 지점 인덱스
 
-
     private void Awake()
     {
         Init();
     }
+
+    // NPC를 풀에서 꺼냈을 때마다 초기화하도록 OnEnable()에 ResetState() 호출
+    private void OnEnable()
+    {
+        if (agent == null) agent = GetComponent<NavMeshAgent>();
+
+        if (agent.isOnNavMesh)
+        {
+            ResetState();
+        }
+        else
+        {
+            Debug.LogWarning($"{gameObject.name} is not on a NavMesh. ResetState() skipped.");
+        }
+    }
+
     private void Init()
     {
         anim = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
+
+        // 최초 초기화
         anim.SetBool("Bool_Walk", bWalking);
         anim.SetBool("Bool_Sad", bSad);
         anim.SetBool("Bool_ActionEvent", bActionEventNPC);
 
-        npcClockWork.canInteract = bSad;
-
-        agent = GetComponent<NavMeshAgent>();
-
+        if (npcClockWork != null)
+            npcClockWork.canInteract = bSad;
 
         machine = new NPC_Simple_StateMachine(this);
 
@@ -70,10 +85,41 @@ public class NPC_Simple : MonoBehaviour
             npcHeart.machine = machine;
             npcHeart.SetAnimator(anim);
         }
-          
-        else Debug.Log("심장이 비어있습니다");
+        else
+        {
+            Debug.Log("심장이 비어있습니다");
+        }
     }
 
+    // ResetState()를 통해 풀에서 재사용 시 필요한 변수들을 재설정
+    public void ResetState()
+    {
+        if (agent == null) agent = GetComponent<NavMeshAgent>();
+
+        if (!agent.isOnNavMesh)
+        {
+            Debug.LogWarning($"{gameObject.name} is not on a NavMesh! Skipping ResetState().");
+            return;
+        }
+
+        // 체크포인트 인덱스 초기화
+        currentCheckPointIndex = 0;
+
+        // NavMeshAgent 초기화
+        agent.ResetPath();
+        agent.isStopped = false;
+
+        // 애니메이터 파라미터 초기화
+        if (anim != null)
+        {
+            anim.SetBool("Bool_Walk", bWalking);
+            anim.SetBool("Bool_Sad", bSad);
+            anim.SetBool("Bool_ActionEvent", bActionEventNPC);
+        }
+
+        // 상태 머신 재시작 (필요한 경우)
+        machine = new NPC_Simple_StateMachine(this);
+    }
 
     private void Update()
     {
@@ -85,23 +131,10 @@ public class NPC_Simple : MonoBehaviour
         machine?.OnStateFixedUpdate();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     public Animator GetAnimator()
     {
         return anim;
     }
-
 
     public NavMeshAgent GetNav()
     {
@@ -114,10 +147,9 @@ public class NPC_Simple : MonoBehaviour
         set => currentCheckPointIndex = value;
     }
 
-
     public ClockWork ClockWork
     {
-        get { return clockWork; }  
+        get { return clockWork; }
         set { clockWork = value; }
     }
 
@@ -125,7 +157,6 @@ public class NPC_Simple : MonoBehaviour
     {
         clockWork.ClockWorkRotate();
     }
-
 
 
 

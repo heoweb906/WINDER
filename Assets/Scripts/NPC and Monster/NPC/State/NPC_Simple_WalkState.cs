@@ -9,47 +9,36 @@ public class NPC_Simple_WalkState : NPC_Simple_State
     public override void OnEnter()
     {
         base.OnEnter();
-
-        Debug.Log(npc.CurrentCheckPointIndex);
-
-
-
-
-
         npc.GetNav().radius = 0.26f;
         npc.GetNav().isStopped = false;
-
-        // npc.GetNav().enabled = true;
         npc.GetNav().autoBraking = false;
 
-        int ranNum = (Random.value < 0.15f) ? 0 : 1;
-
-        if(npc.bSad) npc.GetNav().speed = 0.5f;
+        if (npc.bSad)
+            npc.GetNav().speed = 0.5f;
         else
         {
-            if (ranNum == 0) npc.GetNav().speed = 0.7f;
+            if (npc.iAnimWalking == 0)
+                npc.GetNav().speed = 0.7f;
         }
-      
-        npc.GetAnimator().SetInteger("Walk_Num", ranNum);
+        npc.GetAnimator().SetInteger("Walk_Num", npc.iAnimWalking);
+
+
     }
 
     public override void OnUpdate()
     {
         base.OnUpdate();
-
-        // 위치 이동은 FixedUpdate에서 하므로 여기서는 필요하지 않음.
+        // 이동 로직은 FixedUpdate에서 처리
     }
 
     public override void OnFixedUpdate()
     {
         base.OnFixedUpdate();
-
         if (npc.checkPoints == null) return;
 
-        // NavMeshAgent가 이동할 목표 위치까지 남은 거리를 수동으로 체크
         if (npc.GetNav().enabled)
         {
-            // 목표 지점에 도달하면 다음 체크포인트로 이동
+            // 목표 지점 도달 시 다음 체크포인트로 이동하거나, 모두 도달하면 풀로 반환
             if (Vector3.Distance(npc.transform.position, npc.GetNav().destination) <= npc.GetNav().stoppingDistance && npc.bWalking)
             {
                 if (npc.CurrentCheckPointIndex < npc.checkPoints.Length)
@@ -59,12 +48,13 @@ public class NPC_Simple_WalkState : NPC_Simple_State
                 }
                 else
                 {
-                    Debug.Log(npc.CurrentCheckPointIndex);
-
-                    Object.Destroy(npc.gameObject);
+                    // 부모에 있는 Create_WanderingNPC 스크립트를 찾아 풀로 반환
+                    Create_WanderingNPC spawner = npc.transform.parent.GetComponent<Create_WanderingNPC>();
+                    if (spawner != null)
+                        spawner.ReturnNPCToPool(npc.gameObject);
+                    else
+                        Object.Destroy(npc.gameObject); // 예외 처리
                 }
-
-                
             }
         }
     }
@@ -72,15 +62,11 @@ public class NPC_Simple_WalkState : NPC_Simple_State
     public override void OnExit()
     {
         base.OnExit();
-        // npc.GetNav().enabled = false;
         npc.GetNav().isStopped = true;
     }
 
     private void MoveToNextCheckPoint()
     {
-        Debug.Log(npc.CurrentCheckPointIndex);
-
         npc.GetNav().SetDestination(npc.checkPoints[npc.CurrentCheckPointIndex].position);
-        Debug.Log("걷는 중입니다!!!!!.");
     }
 }

@@ -42,16 +42,20 @@ public class P_OnAirState : PlayerMovementState
             if (Physics.Raycast(ray, out player.cliffRayHit, player.cliffCheckRayDistance, player.cliffLayer))
             {
                 GrabObject grabObject = player.cliffRayHit.collider.GetComponent<GrabObject>();
-                if (grabObject == null || !grabObject.isCliff) return;
-                
+                if (grabObject != null && !grabObject.isCliff) return;
+
                 BoxCollider _col = player.cliffRayHit.collider.GetComponent<BoxCollider>();
-                Vector3 cliffPos = Vector3.Scale(_col.size * 0.5f, _col.transform.lossyScale) + player.cliffRayHit.transform.position;
+
+                // BoxCollider의 크기와 center를 고려하여 상단 위치를 계산
+                Vector3 worldCenter = _col.transform.TransformPoint(_col.center);
+                Vector3 worldSize = Vector3.Scale(_col.size * 0.5f, _col.transform.lossyScale);
+                Vector3 cliffPos = new Vector3(worldCenter.x, worldCenter.y + worldSize.y, worldCenter.z);
+
                 if ((cliffPos.y - player.cliffRayHit.point.y) < 0.1f && (cliffPos.y - player.cliffRayHit.point.y) > -0.1f)
                 {
-                    Debug.Log((cliffPos.y - player.cliffRayHit.point.y));
+                    Debug.Log(cliffPos.y - player.cliffRayHit.point.y);
                     player.hangingPos = new Vector3(player.cliffRayHit.point.x, cliffPos.y, player.cliffRayHit.point.z);
-                    //player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + cliffPos.y - 0.6f, player.transform.position.z); 
-                   
+
                     machine.OnStateChange(machine.HangingState);
                 }
             }

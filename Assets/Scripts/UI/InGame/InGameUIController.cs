@@ -334,7 +334,7 @@ public class InGameUIController : MonoBehaviour
         Time.timeScale = 30f; 
         GameAssistManager.Instance.PlayerInputLockOn();
 
-        yield return new WaitForSecondsRealtime(4.4f);
+        yield return new WaitForSecondsRealtime(5.4f);
 
         Time.timeScale = 1f; // 정상 속도로 복귀
         GameAssistManager.Instance.PlayerInputLockOff();

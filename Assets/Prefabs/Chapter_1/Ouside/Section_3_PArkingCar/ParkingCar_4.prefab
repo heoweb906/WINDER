@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 6856054185869590934}
   - component: {fileID: 2483922043806896509}
   - component: {fileID: 5606564148921235133}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ClockWork
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -220,7 +220,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.7258621, y: 0.10644859, z: 0.5636122}
+  m_Size: {x: 0.34, y: 0.10644859, z: 0.5636122}
   m_Center: {x: 0, y: 0.00000047311187, z: 0.00000022351745}
 --- !u!114 &5606564148921235133
 MonoBehaviour:
@@ -236,9 +236,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   canInteract: 1
+  isParts: 0
   clockBattery: {fileID: 3362356267248106992}
   clockWorkType: 0
   plusClockWorksList: []
+  isSingleEvent: 0
 --- !u!1 &1202745554042945056
 GameObject:
   m_ObjectHideFlags: 0
