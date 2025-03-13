@@ -230,7 +230,7 @@ public class P_GroundState : PlayerMovementState
     public bool FindClosestInteractableObject()
     {
         int interactableLayer = 1 << LayerMask.NameToLayer("Interactable");
-        Collider[] hitColliders = Physics.OverlapSphere(player.transform.position, player.detectionRadius, interactableLayer);
+        Collider[] hitColliders = Physics.OverlapSphere(player.transform.position + new Vector3(0, 1f, 0), player.detectionRadius, interactableLayer);
         player.curInteractableObject = null;
         player.partsArea = null;
 
@@ -244,7 +244,9 @@ public class P_GroundState : PlayerMovementState
             if (detectedObject != null && detectedObject.canInteract)
             {
                 float distance = Vector3.Distance(player.transform.position, collider.transform.position);
-                if (distance < closestDistance)
+                float heightDiff = collider.transform.position.y - player.transform.position.y;
+                Debug.Log(heightDiff);
+                if (distance < closestDistance && heightDiff > -0.05f && heightDiff < 1f)
                 {
                     closestDistance = distance;
                     player.curInteractableObject = detectedObject; 
@@ -258,7 +260,8 @@ public class P_GroundState : PlayerMovementState
             if (detectedObject != null && detectedObject.Parts != null)
             {
                 float distance = Vector3.Distance(player.transform.position, collider.transform.position);
-                if (distance < closestDistance)
+                float heightDiff = collider.transform.position.y - player.transform.position.y;
+                if (distance < closestDistance && heightDiff > -0.05f && heightDiff < 1f)
                 {
                     closestDistance = distance;
                     player.partsArea = detectedObject;
@@ -269,8 +272,6 @@ public class P_GroundState : PlayerMovementState
 
         if (player.curInteractableObject != null)
         {
-            if (player.partsArea == null)
-                Debug.Log("!!!!!!!!!!");
             return true;
             // 여기에서 추가적인 로직을 구현할 수 있습니다.
         }
@@ -294,7 +295,8 @@ public class P_GroundState : PlayerMovementState
             if (detectedObject != null && detectedObject.Parts == null)
             {
                 float distance = Vector3.Distance(player.transform.position, collider.transform.position);
-                if (distance < closestDistance)
+                float heightDiff = collider.transform.position.y - player.transform.position.y;
+                if (distance < closestDistance && heightDiff > -0.3f && heightDiff < 0.3f)
                 {
                     closestDistance = distance;
                     player.partsArea = detectedObject; // 가장 가까운 ClockWork 참조 저장

@@ -1746,7 +1746,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000011985563, y: -0.00000020861621, z: -0.00000037273594,
     w: 1}
-  m_LocalPosition: {x: 3.48, y: -0.092, z: -5.289}
+  m_LocalPosition: {x: 3.673, y: -0.092, z: -8.24}
   m_LocalScale: {x: 0.34651163, y: 0.34651163, z: 0.34651154}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -2124,6 +2124,7 @@ MonoBehaviour:
   - {fileID: 2092351378}
   - {fileID: 458216513}
   - {fileID: 3434771}
+  isCliff: 0
 --- !u!23 &416001047
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2183,8 +2184,8 @@ Transform:
   m_GameObject: {fileID: 416001042}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.026361693, z: -0, w: 0.9996525}
-  m_LocalPosition: {x: 4.23, y: 0.19, z: -18.21}
-  m_LocalScale: {x: 1.5, y: 0.937575, z: 1.5}
+  m_LocalPosition: {x: 4.476, y: 0.757, z: -11.094}
+  m_LocalScale: {x: 1.5, y: 2.053119, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 962082602}
@@ -2500,8 +2501,8 @@ Transform:
   m_GameObject: {fileID: 537889983}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.28, y: 7.84, z: -16.63}
-  m_LocalScale: {x: 3.7602575, y: 1.7577329, z: 3.7202542}
+  m_LocalPosition: {x: -1.28, y: 7.08, z: -16.63}
+  m_LocalScale: {x: 3.7602575, y: 1.6421987, z: 3.7202542}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 961711071}
@@ -9071,7 +9072,7 @@ PrefabInstance:
     - target: {fileID: 1512203282086398246, guid: fababbdd322ffc249b437d09da15434f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.24
+      value: -0.236
       objectReference: {fileID: 0}
     - target: {fileID: 1512203282086398246, guid: fababbdd322ffc249b437d09da15434f,
         type: 3}
@@ -9122,6 +9123,11 @@ PrefabInstance:
         type: 3}
       propertyPath: dieIndex
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7422542431565854588, guid: fababbdd322ffc249b437d09da15434f,
+        type: 3}
+      propertyPath: detectionRadius
+      value: 1.42
       objectReference: {fileID: 0}
     - target: {fileID: 7422542431565854588, guid: fababbdd322ffc249b437d09da15434f,
         type: 3}

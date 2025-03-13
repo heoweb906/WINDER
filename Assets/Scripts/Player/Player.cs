@@ -212,7 +212,7 @@ public class Player : MonoBehaviour
     {
         // 탐지 반경을 시각적으로 표시
         Gizmos.color = Color.green; // 기즈모 색상 설정
-        Gizmos.DrawWireSphere(transform.position, detectionRadius); // WireSphere로 탐지 범위 그리기
+        Gizmos.DrawWireSphere(transform.position + new Vector3(0, 1f, 0), detectionRadius); // WireSphere로 탐지 범위 그리기
     }
 
 
