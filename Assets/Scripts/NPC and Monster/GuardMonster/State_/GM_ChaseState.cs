@@ -31,24 +31,26 @@ public class GM_ChaseState : GuardMState
             guardM.nav.isStopped = false;
             if (guardM.area.playerPosition != null && guardM.area.isPlayerInArea)
             {
-                if (!guardM.IsObstacleBetween())
-                {
-                    guardM.nav.SetDestination(GameAssistManager.Instance.GetPlayer().transform.position /*guardM.area.playerPosition.position*/); 
+                guardM.nav.SetDestination(GameAssistManager.Instance.GetPlayer().transform.position /*guardM.area.playerPosition.position*/);
 
-                    float distanceToTarget = Vector3.Distance(guardM.transform.position, guardM.area.playerPosition.position);
-                    if (distanceToTarget <= guardM.fAttackRange)
-                    {
-                        bAnimEnd = false;
-                        guardM.nav.isStopped = true;
-                        machine.OnStateChange(machine.AttackState);
-                    }
-                }
-                else
+                float distanceToTarget = Vector3.Distance(guardM.transform.position, guardM.area.playerPosition.position);
+                if (distanceToTarget <= guardM.fAttackRange)
                 {
                     bAnimEnd = false;
                     guardM.nav.isStopped = true;
-                    machine.OnStateChange(machine.BackHomeState);
+                    machine.OnStateChange(machine.AttackState);
                 }
+
+                //if (!guardM.IsObstacleBetween())
+                //{
+                    
+                //}
+                //else
+                //{
+                //    bAnimEnd = false;
+                //    guardM.nav.isStopped = true;
+                //    machine.OnStateChange(machine.BackHomeState);
+                //}
 
 
             }
