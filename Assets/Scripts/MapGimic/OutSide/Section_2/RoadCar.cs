@@ -18,7 +18,7 @@ public class RoadCar : MonoBehaviour
     private float currentSpeed; // 현재 속력
 
     public JustRotate[] justRotates;  // 타이어들 회전 관리
-    public GameObject CarFrame;
+    public Transform CarFrame;
 
     private void Awake()
     {
