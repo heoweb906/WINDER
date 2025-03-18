@@ -58,7 +58,7 @@ public class GameMachine : ClockBattery, IPartsOwner
         {
             if (fCurClockBattery >= 3 && CheckIfAnyFalse(bBulbBug)) bPowerOn = true;
 
-            yield return new WaitForSecondsRealtime(1.0f);
+            yield return new WaitForSeconds(1.0f);
 
             if(iIndex <= 2) BulbBugSpriteonOff(iIndex, bBulbBug[iIndex]);
             iIndex++;
@@ -66,7 +66,7 @@ public class GameMachine : ClockBattery, IPartsOwner
             fCurClockBattery -= 1;
         }
 
-        yield return new WaitForSecondsRealtime(1.0f);
+        yield return new WaitForSeconds(1.0f);
 
         TurnOffObj(); // 배터리가 다 되면 종료
     }

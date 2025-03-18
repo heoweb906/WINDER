@@ -22,8 +22,10 @@ public class P_UnControllable : PlayerMovementState
     {
         base.OnUpdate();
     }
+
     public override void SetDirection()
     {
         return;
     }
+
 }

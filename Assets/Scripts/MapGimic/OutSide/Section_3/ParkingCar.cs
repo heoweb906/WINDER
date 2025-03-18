@@ -66,22 +66,31 @@ public class ParkingCar : ClockBattery
 
         while (fCurClockBattery > 0)
         {
+            if (Time.timeScale == 0)
+            {
+                yield return null; // TimeScale이 0일 때 코루틴 실행 멈추기
+                continue;
+            }
+
             if (fCurClockBattery < fLowClockBatteryPoint)
             {
                 currentSpeed = Mathf.Lerp(0, initialSpeed, fCurClockBattery / fLowClockBatteryPoint);
             }
+
             float moveDirection = bMoveDirection ? -1f : 1f;
 
+            // FixedUpdate 주기마다 실행되도록 변경
             CarObj.transform.position += CarObj.transform.forward * currentSpeed * moveDirection * Time.fixedDeltaTime;
-            fCurClockBattery -= Time.deltaTime;
 
-            yield return null;
+            Debug.Log("이 부분이 작동 중");
+
+            fCurClockBattery -= Time.unscaledDeltaTime; // TimeScale 영향을 받지 않도록 변경
+
+            yield return new WaitForFixedUpdate(); // FixedUpdate 주기마다 실행
         }
-
 
         TurnOffObj();
     }
-
 
 
     private void OnTriggerEnter(Collider other)
@@ -95,13 +104,24 @@ public class ParkingCar : ClockBattery
 
             if (bIsMove)
             {
-                bMoveDirection = !bMoveDirection;
-                bIsMove = false;
+                StartCoroutine(CalculateRestTime());
+                //bMoveDirection = !bMoveDirection;
+                //bIsMove = false;
             }
         }
-        
     }
+    private IEnumerator CalculateRestTime()
+    {
+        while (fCurClockBattery > 0)
+        {
+            float moveDirection = bMoveDirection ? -1f : 1f;
+            fCurClockBattery -= Time.deltaTime;
 
+            yield return null;
+        }
+
+        TurnOffObj();
+    }
 
 
 

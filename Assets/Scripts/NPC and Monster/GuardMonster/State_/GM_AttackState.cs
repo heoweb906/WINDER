@@ -14,7 +14,7 @@ public class GM_AttackState : GuardMState
         base.OnEnter();
 
         guardM.anim.SetTrigger("doAttack");
-        GameAssistManager.Instance.DiePlayerReset(3f, 1, 0.6f);
+        GameAssistManager.Instance.DiePlayerReset(3f, 1, 0.6f); 
 
 
 
@@ -34,13 +34,8 @@ public class GM_AttackState : GuardMState
             .SetEase(Ease.OutQuint)
             .SetDelay(0.9f);
 
-
-
-
-
         // 위치 & 회전 고정
         playerRigidbody.constraints = RigidbodyConstraints.FreezePosition | RigidbodyConstraints.FreezeRotation;
-
 
 
         guardM.StartGuardCoroutine(AssistAnim(2f));

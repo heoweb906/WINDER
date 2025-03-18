@@ -112,7 +112,23 @@ public class P_UC_Die : P_UnControllable
             rb.isKinematic = true;
         }
     }
+
+    public override void OnFixedUpdate()
+    {
+        return;
+    }
+
+    public override void OnTriggerExit(Collider other)
+    {
+        return;
+    }
+
+    public override void OnTriggerEnter(Collider other)
+    {
+        return;
+    }
 }
+
 
 /*
 using System.Collections;

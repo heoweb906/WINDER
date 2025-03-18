@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -135,6 +136,7 @@ public class GuardM : MonoBehaviour
         // Raycast로 감시자와 플레이어 사이를 검사 (Obstacle 레이어만 감지)
         if (Physics.Raycast(guardPosition, direction, out RaycastHit hit, distance, obstacleLayerMask))
         {
+            Debug.Log("장애물이 감지됨");
             return true;
         }
 

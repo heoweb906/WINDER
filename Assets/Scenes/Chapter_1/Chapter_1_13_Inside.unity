@@ -1015,6 +1015,7 @@ MonoBehaviour:
   canInteract: 1
   isParts: 1
   partOwnerType: 4
+  carriedObjectType: 0
   rigid: {fileID: 0}
   col: {fileID: 0}
   holdPositionOffset: {x: 0, y: 0, z: 0}
@@ -3595,6 +3596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  bCantInpuFunc: 0
   iStageNum: 29
   Transforms_Respawn:
   - {fileID: 277433323}
@@ -3943,6 +3945,7 @@ MonoBehaviour:
   canInteract: 1
   isParts: 1
   partOwnerType: 4
+  carriedObjectType: 0
   rigid: {fileID: 0}
   col: {fileID: 0}
   holdPositionOffset: {x: 0, y: 0, z: 0}
@@ -4205,8 +4208,8 @@ Transform:
   m_GameObject: {fileID: 698079013}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.73, y: -0.45140326, z: -4.16}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -16.24, y: -0.45140326, z: -4.16}
+  m_LocalScale: {x: 1.6187, y: 1.6187, z: 1.6187}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 157769899}
@@ -4926,6 +4929,7 @@ MonoBehaviour:
   canInteract: 1
   isParts: 1
   partOwnerType: 4
+  carriedObjectType: 0
   rigid: {fileID: 0}
   col: {fileID: 0}
   holdPositionOffset: {x: 0, y: 0, z: 0}
@@ -8603,6 +8607,7 @@ MonoBehaviour:
   canInteract: 1
   isParts: 1
   partOwnerType: 4
+  carriedObjectType: 0
   rigid: {fileID: 0}
   col: {fileID: 0}
   holdPositionOffset: {x: 0, y: 0, z: 0}

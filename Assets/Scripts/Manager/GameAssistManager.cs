@@ -76,7 +76,9 @@ public class GameAssistManager : MonoBehaviour
         {
             bPlayerDie = true;
 
-            PlayerInputLockOn();    // 플레리어 입력 막음
+            Debug.Log("플레이어 죽음 함수 실행");
+
+            // PlayerInputLockOn();    // 플레리어 입력 막음
 
             StartCoroutine(_DiePlayerReset(fDieDelay)); 
             StartCoroutine(ActionPlayerDieAnimation(iDieIndex, fDieAimDuration));       // 상황별 죽음 애니메이션
@@ -254,6 +256,12 @@ public class GameAssistManager : MonoBehaviour
     public GameObject GetPlayer()
     {
         return player;
+    }
+    public Player GetPlayerScript()
+    {
+        Player _player = player.GetComponent<Player>();
+
+        return _player;
     }
     public bool GetBoolPlayerDie()
     {

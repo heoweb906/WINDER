@@ -158,7 +158,4 @@ public class NPC_Simple : MonoBehaviour
         clockWork.ClockWorkRotate();
     }
 
-
-
-
 }

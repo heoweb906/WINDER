@@ -6,8 +6,8 @@ using UnityEngine;
 public class CarShakeEffect : MonoBehaviour
 {
     public Transform carFrame; // 떨림을 넣을 자동차 프레임
-
     private Vector3 initialPosition; // 원래 위치 저장
+    
 
     private void Start()
     {

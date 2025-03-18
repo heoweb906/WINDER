@@ -127,8 +127,11 @@ public class TrafficLight : ClockBattery, IPartsOwner
             // 배터리가 있는 동안 fCurClockBattery 감소
             while (fCurClockBattery > 0)
             {
-                fCurClockBattery -= Time.deltaTime;
-                yield return null;
+                yield return new WaitForSeconds(1.0f);
+                fCurClockBattery -= 1;
+
+                //fCurClockBattery -= Time.deltaTime;
+                //yield return null;
             }
 
             TurnOffObj();

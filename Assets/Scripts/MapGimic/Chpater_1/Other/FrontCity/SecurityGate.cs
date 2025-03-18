@@ -14,10 +14,13 @@ public class SecurityGate : MonoBehaviour
 
 
 
-    public void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<NPC_Simple>() != null)  // "MyScript"는 확인하려는 스크립트
+        // 부모에서 처리하도록 이벤트를 호출
+        if (other.GetComponent<NPC_Simple>() != null)
         {
+            // Debug.Log("NPC 입장");
+
             WorkDoor();
         }
     }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using System.Drawing;
 
 public class GM_ChaseState : GuardMState
 {
@@ -31,24 +32,39 @@ public class GM_ChaseState : GuardMState
             guardM.nav.isStopped = false;
             if (guardM.area.playerPosition != null && guardM.area.isPlayerInArea)
             {
-                if (!guardM.IsObstacleBetween())
-                {
-                    guardM.nav.SetDestination(GameAssistManager.Instance.GetPlayer().transform.position /*guardM.area.playerPosition.position*/); 
+                guardM.nav.SetDestination(GameAssistManager.Instance.GetPlayer().transform.position /*guardM.area.playerPosition.position*/);
 
-                    float distanceToTarget = Vector3.Distance(guardM.transform.position, guardM.area.playerPosition.position);
-                    if (distanceToTarget <= guardM.fAttackRange)
+                float distanceToTarget = Vector3.Distance(guardM.transform.position, guardM.area.playerPosition.position);
+                if (distanceToTarget <= guardM.fAttackRange)
+                {
+                    Debug.Log(GameAssistManager.Instance.GetPlayerScript().machine.CurrentState);
+
+                    if(GameAssistManager.Instance.GetPlayer().transform.parent == null)
                     {
                         bAnimEnd = false;
                         guardM.nav.isStopped = true;
                         machine.OnStateChange(machine.AttackState);
                     }
+                    else
+                    {
+                        bAnimEnd = false;
+                        guardM.nav.isStopped = true;
+                        machine.OnStateChange(machine.BackHomeState);
+                    }
+                     
+                  
                 }
-                else
-                {
-                    bAnimEnd = false;
-                    guardM.nav.isStopped = true;
-                    machine.OnStateChange(machine.BackHomeState);
-                }
+
+                //if (!guardM.IsObstacleBetween())
+                //{
+                    
+                //}
+                //else
+                //{
+                //    bAnimEnd = false;
+                //    guardM.nav.isStopped = true;
+                //    machine.OnStateChange(machine.BackHomeState);
+                //}
 
 
             }

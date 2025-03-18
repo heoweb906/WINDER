@@ -15,7 +15,7 @@ public class GM_ReadyState : GuardMState
     {
         base.OnUpdate();
 
-        if (guardM.area.isPlayerInArea && guardM.area.playerPosition != null)
+        if (guardM.area.isPlayerInArea && guardM.area.playerPosition != null && guardM.visualRange.isPlayerInArea)
         {
             if (!guardM.IsObstacleBetween())
             {

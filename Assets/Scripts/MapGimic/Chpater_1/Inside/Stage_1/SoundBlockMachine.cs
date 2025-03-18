@@ -56,7 +56,7 @@ public class SoundBlockMachine : ClockBattery, IPartsOwner
                     SoundAssistManager.Instance.GetSFXAudioBlock("POP Brust 08", gameObject.transform);
                 }
 
-                yield return new WaitForSecondsRealtime(1.0f);
+                yield return new WaitForSeconds(1.0f);
 
                 // 배터리 감소
                 fCurClockBattery -= 1;
