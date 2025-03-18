@@ -20,7 +20,9 @@ public class GameAssistManager : MonoBehaviour
     public int iStageNum;
     public Transform[] Transforms_Respawn;
     public GameObject[] Cameras;
-    private bool bPlayerDie;   // 현재 플레이어가 죽음 상태 -> 죽음 반복 방지
+    private GameObject nowCamera;
+    public GameObject[] Cameras_Event;
+    private bool bPlayerDie; // 현재 플레이어가 죽음 상태 -> 죽음 반복 방지
 
     [Header("연출 관련 내면 세계 진입")]
     public GameObject CameraOverlay;
@@ -62,6 +64,7 @@ public class GameAssistManager : MonoBehaviour
         player.transform.position = Transforms_Respawn[iTransform].position;
         Cameras[iCamera].SetActive(true);
 
+        nowCamera = Cameras[iCamera];
     }
 
 
@@ -142,11 +145,38 @@ public class GameAssistManager : MonoBehaviour
             else
             {
                 Cameras[i].SetActive(true);
+                nowCamera = Cameras[i];
                 SaveData_Manager.Instance.SetIntCameraNum(i);
             }
                
         }
     }
+    // #. 특정 구간을 보여주기 위한 카메라 연출
+    public void ImplementCameraEvent(GameObject camera, int fEventTime)
+    {
+        Debug.Log("잘 실행되고 있습니다.");
+
+        nowCamera.SetActive(false);
+        for (int i = 0; i < Cameras_Event.Length; i++)
+        {
+            if (Cameras_Event[i] != camera) Cameras_Event[i].SetActive(false);
+            else Cameras_Event[i].SetActive(true);
+        }
+
+        StartCoroutine(CameraEventCroutine(nowCamera, 4));
+    }
+    private IEnumerator CameraEventCroutine(GameObject nextCamera, int fEventTime)
+    {
+        while (fEventTime > 0)
+        {
+            yield return new WaitForSeconds(1.0f);
+            fEventTime -= 1;
+        }
+        nextCamera.SetActive(true);
+    }
+
+
+
     // #. 현재 활성화된 카메라와 변경하려는 카메라가 다른지 구분하는 함수
     public bool BoolNowActiveCameraObj(GameObject camera)
     {
