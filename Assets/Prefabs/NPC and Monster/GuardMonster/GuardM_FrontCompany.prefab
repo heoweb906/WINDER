@@ -810,7 +810,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dadd0e056958ad447928b8bf71d06583, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Parent: {fileID: 9037676393192090922}
   bFindPlayer: 0
   maxRotate: {x: 0, y: 45, z: 40}
   minRotate: {x: 0, y: -45, z: -40}
@@ -1356,7 +1355,7 @@ Transform:
   m_GameObject: {fileID: 5006422647117309584}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.213, z: 1.023}
+  m_LocalPosition: {x: -0.155, y: 1.324, z: 0.761}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1621,7 +1620,7 @@ GameObject:
   - component: {fileID: 9044474710631388148}
   - component: {fileID: 6861802334922123841}
   m_Layer: 0
-  m_Name: GuardM_Visualrange (1)
+  m_Name: GuardM_Visualrange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1635,9 +1634,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5849774946979736389}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.77696, z: -0, w: 0.62955}
-  m_LocalPosition: {x: -5.7421484, y: 0.8669008, z: 7.3516197}
-  m_LocalScale: {x: 1.9450529, y: 1.4738001, z: 5.2138996}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.14, z: 3.27}
+  m_LocalScale: {x: 10.796842, y: 1.4738001, z: 5.2138996}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3356603333537286285}
@@ -2561,7 +2560,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6867f492a4353164d9edc620d0c1ebc6, type: 2}
+  - {fileID: 2100000, guid: 480dd30ee38dee24db41363f186a5b77, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2758,11 +2757,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   guardMType: 0
   anim: {fileID: 4369784891051896375}
-  visualRange: {fileID: 0}
+  visualRange: {fileID: 6861802334922123841}
   area: {fileID: 0}
   nav: {fileID: 3813186622747399914}
   trackingHead: {fileID: 7263302694038950014}
-  transformGrabPlayer: {fileID: 0}
+  transformGrabPlayer: {fileID: 4119489752271997395}
   fAttackRange: 3
   transformStart: {fileID: 0}
   transformEnd: {fileID: 0}
@@ -2776,10 +2775,10 @@ NavMeshAgent:
   m_GameObject: {fileID: 9037676393192090922}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 2
+  m_Radius: 0.92
+  m_Speed: 3.5
   m_Acceleration: 8
-  avoidancePriority: 50
+  avoidancePriority: 1
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
