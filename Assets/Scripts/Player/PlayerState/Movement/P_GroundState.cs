@@ -240,12 +240,12 @@ public class P_GroundState : PlayerMovementState
 
         foreach (Collider collider in hitColliders)
         {
+            Debug.Log(collider.gameObject.name);
             InteractableObject detectedObject = collider.GetComponent<InteractableObject>();
             if (detectedObject != null && detectedObject.canInteract)
             {
                 float distance = Vector3.Distance(player.transform.position, collider.transform.position);
                 float heightDiff = collider.transform.position.y - player.transform.position.y;
-                Debug.Log(heightDiff);
                 if (distance < closestDistance && heightDiff > -0.05f && heightDiff < 1f)
                 {
                     closestDistance = distance;
