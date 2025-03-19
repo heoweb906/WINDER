@@ -8,6 +8,7 @@ using DG.Tweening;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Unity.VisualScripting;
+using Cinemachine;
 
 public class GameAssistManager : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class GameAssistManager : MonoBehaviour
     [Header("연출 관련 내면 세계 진입")]
     public GameObject CameraOverlay;
     public Volume volume_1;
+
 
 
     private void Awake()
@@ -161,16 +163,16 @@ public class GameAssistManager : MonoBehaviour
         {
             if (Cameras_Event[i] != camera) Cameras_Event[i].SetActive(false);
             else Cameras_Event[i].SetActive(true);
+               
         }
-
-        StartCoroutine(CameraEventCroutine(nowCamera, 4));
+        StartCoroutine(CameraEventCroutine(nowCamera, fEventTime));
     }
-    private IEnumerator CameraEventCroutine(GameObject nextCamera, int fEventTime)
+    private IEnumerator CameraEventCroutine(GameObject nextCamera, int iEventTime)
     {
-        while (fEventTime > 0)
+        while (iEventTime > 0)
         {
             yield return new WaitForSeconds(1.0f);
-            fEventTime -= 1;
+            iEventTime -= 1;
         }
         nextCamera.SetActive(true);
     }
