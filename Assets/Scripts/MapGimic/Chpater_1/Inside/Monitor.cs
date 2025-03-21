@@ -4,64 +4,49 @@ using UnityEngine;
 
 public class Monitor : MonoBehaviour
 {
+    public GameObject monitor; 
     public Material mat;
-    public Texture2D[] textures_Face;
+    public Material[] mats_Face;
+    // public Texture2D[] textures_Face;
     public float fShake;
 
 
     private Coroutine shakeCoroutine;
 
-
-    private void Start()
+    private void Awake()
     {
+        mat = new Material(mat); // 개별 인스턴스 생성
+        ApplyMaterial(); // 모니터에 머테리얼 적용
         shakeCoroutine = StartCoroutine(ShakeEffect());
     }
 
-    void Update()
+
+    public void SetTextureProperty(int textureIndex)
     {
-        // 예를 들어, 키를 눌렀을 때 float 값을 변경
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            SetFloatProperty(0.15f);
-        }
-        else if (Input.GetKeyDown(KeyCode.X))
-        {
-            SetFloatProperty(0.0f);
-        }
+        Debug.Log("작동");
 
-        else if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            SetTextureProperty(0);
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            SetTextureProperty(1);
-        }
-
-
-
+        mat = new Material(mats_Face[textureIndex]); // 개별 인스턴스로 변경
+        ApplyMaterial(); // 변경 사항 적용
     }
+
+    private void ApplyMaterial()
+    {
+        if (monitor != null)
+        {
+            Renderer renderer = monitor.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                renderer.material = mat; // monitor의 머테리얼 변경
+            }
+        }
+    }
+
+
 
     void SetFloatProperty(float value)
     {
         mat.SetFloat("_fShake", value);
     }
-
-    void SetTextureProperty(int textureIndex)
-    {
-        Debug.Log("작동!!!");
-
-        if (textureIndex >= 0 && textureIndex < textures_Face.Length)
-        {
-            mat.SetTexture("_textureFace", textures_Face[textureIndex]);
-        }
-        else
-        {
-            Debug.LogWarning("텍스처 인덱스가 범위를 벗어났습니다.");
-        }
-    }
-
-
     IEnumerator ShakeEffect()
     {
         while (true)

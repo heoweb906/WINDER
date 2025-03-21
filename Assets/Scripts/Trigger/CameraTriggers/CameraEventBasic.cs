@@ -1,0 +1,87 @@
+using Cinemachine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CameraEvent : MonoBehaviour
+{
+    public Camera mainCamera;
+    public CinemachineBrain cineBrain;
+    public CameraObj camObj;
+    private bool bTrigger = false;
+
+    public GameObject camera;
+    public int iEventTime;          // 이벤트 시간
+    public float fReturnTime;       // 돌아갈 때 카메라 보간 속도, // 연출용 카메라 보간 속도는 카메라 자체에 설정해놔야 함
+
+
+    private void Awake()
+    {
+        mainCamera = Camera.main;
+
+        if (mainCamera != null)
+        {
+            Transform parentTransform = mainCamera.transform;
+            while (parentTransform.parent != null)
+            {
+                parentTransform = parentTransform.parent;
+                if (parentTransform.GetComponent<Camera>() != null)
+                {
+                    mainCamera = parentTransform.GetComponent<Camera>();
+                }
+            }
+            cineBrain = mainCamera.GetComponent<CinemachineBrain>();
+            camObj = camera.GetComponent<CameraObj>();
+        }
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            cineBrain.m_DefaultBlend = new CinemachineBlendDefinition(camObj.blendStyle, camObj.duration);
+
+            GameAssistManager.Instance.ImplementCameraEvent(camera, iEventTime);
+
+
+
+            StartCoroutine(StartDirection(iEventTime));
+        }
+    }
+
+
+    IEnumerator StartDirection(int iEventTime)
+    {
+        while (iEventTime > 0)
+        {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            yield return new WaitForSeconds(1.0f);
+            iEventTime -= 1;
+        }
+        
+        cineBrain.m_DefaultBlend = new CinemachineBlendDefinition(camObj.blendStyle, fReturnTime);
+    }
+
+}

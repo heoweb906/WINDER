@@ -8,20 +8,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: P_face3
-  m_Shader: {fileID: -6465566751694194690, guid: edd7abf643fa4bc4e8561d4c280c97cf,
+  m_Shader: {fileID: -6465566751694194690, guid: 0c328bf857cec4c44aa6237047a648b6,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - TCP2_REFLECTIONS_FRESNEL
-  - TCP2_RIM_LIGHTING_LIGHTMASK
-  - TCP2_SHADOW_LIGHT_COLOR
-  - TCP2_SPECULAR
-  - TCP2_SPECULAR_STYLIZED
-  - _EMISSION
-  m_InvalidKeywords:
-  - TCP2_UV_NORMALS_FULL
-  - _METALLICSPECGLOSSMAP
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -96,6 +88,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: a81a27cfa8a10ba46b9a26c7050b24b8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _textureFace:
+        m_Texture: {fileID: 2800000, guid: d88f467990729944e8f5f536673dd333, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -149,6 +145,7 @@ Material:
     - _OutlineTextureType: 0
     - _OutlineWidth: 1
     - _Parallax: 0.005
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _RampBands: 4
     - _RampBandsSmoothing: 0.1
@@ -193,6 +190,7 @@ Material:
     - _UseSpecular: 1
     - _WorkflowMode: 1
     - _ZWrite: 1
+    - _fShake: 0.15
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}

@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.WebSockets;
 using Unity.VisualScripting;
 using UnityEngine;
 using static Unity.Collections.Unicode;
@@ -18,7 +19,12 @@ public class GameMachine : ClockBattery, IPartsOwner
     public bool[] bBulbBug;         // 전구 벌레가 장착된 상태인지
     public GameObject[] SpritesBulbBug;
 
-
+    [Header("게임기")]
+    public GameObject objGameMachine;
+    public float launchForce;
+    public float targetScale;
+    public float scaleDuration;
+    public Vector3 dirVec3;
 
 
 
@@ -40,12 +46,26 @@ public class GameMachine : ClockBattery, IPartsOwner
         }
         else    // 충전에 성공한 경우
         {
-            Debug.Log("배터리 충전 성공!!!");
+            objGameMachine.transform.SetParent(null);
+
+            // Rigidbody 가져오기
+            Rigidbody rb = objGameMachine.GetComponent<Rigidbody>();
+            CarriedObject carry = objGameMachine.GetComponent<CarriedObject>();
+            if (rb == null) rb = objGameMachine.AddComponent<Rigidbody>();
+
+            rb.isKinematic = false;
+            carry.canInteract = true;
+
+            // 크기 조절 (DoTween 사용)
+            objGameMachine.transform.DOScale(Vector3.one * targetScale, scaleDuration)
+                .SetEase(Ease.OutBack);
+
+            // 힘을 가해 발사
+            rb.velocity = Vector3.zero; // 기존 속도 초기화
+            rb.AddForce(dirVec3.normalized * launchForce, ForceMode.Impulse);
+
+
         }
-        
-
-
-       
     }
 
 
@@ -56,8 +76,11 @@ public class GameMachine : ClockBattery, IPartsOwner
         int iIndex = 0;
         while (fCurClockBattery > 0)
         {
-            if (fCurClockBattery >= 3 && CheckIfAnyFalse(bBulbBug)) bPowerOn = true;
-
+            if (fCurClockBattery >= 3 && CheckIfAnyFalse(bBulbBug))
+            {
+                bPowerOn = true;
+            }
+                
             yield return new WaitForSeconds(1.0f);
 
             if(iIndex <= 2) BulbBugSpriteonOff(iIndex, bBulbBug[iIndex]);
@@ -80,7 +103,6 @@ public class GameMachine : ClockBattery, IPartsOwner
             return;
         }
             
-
         if (index == 0)
         {
             if (bOnOff) SpritesBulbBug[0].SetActive(true);

@@ -246,7 +246,7 @@ public class P_GroundState : PlayerMovementState
             {
                 float distance = Vector3.Distance(player.transform.position, collider.transform.position);
                 float heightDiff = collider.transform.position.y - player.transform.position.y;
-                if (distance < closestDistance && heightDiff > -0.05f && heightDiff < 1f)
+                if (distance < closestDistance && heightDiff > -0.05f && heightDiff < 2f)
                 {
                     closestDistance = distance;
                     player.curInteractableObject = detectedObject; 
@@ -261,7 +261,7 @@ public class P_GroundState : PlayerMovementState
             {
                 float distance = Vector3.Distance(player.transform.position, collider.transform.position);
                 float heightDiff = collider.transform.position.y - player.transform.position.y;
-                if (distance < closestDistance && heightDiff > -0.05f && heightDiff < 1f)
+                if (distance < closestDistance && heightDiff > -0.05f && heightDiff < 2f)
                 {
                     closestDistance = distance;
                     player.partsArea = detectedObject;
@@ -296,7 +296,7 @@ public class P_GroundState : PlayerMovementState
             {
                 float distance = Vector3.Distance(player.transform.position, collider.transform.position);
                 float heightDiff = collider.transform.position.y - player.transform.position.y;
-                if (distance < closestDistance && heightDiff > -0.3f && heightDiff < 0.3f)
+                if (distance < closestDistance && heightDiff > -0.05f && heightDiff < 2f)
                 {
                     closestDistance = distance;
                     player.partsArea = detectedObject; // 가장 가까운 ClockWork 참조 저장

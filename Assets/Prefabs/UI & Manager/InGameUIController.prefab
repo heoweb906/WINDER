@@ -372,15 +372,15 @@ RectTransform:
   m_GameObject: {fileID: 414548562130678468}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.83206, y: 0.83206, z: 0.83206}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1143516688482966200}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 460, y: 166}
-  m_SizeDelta: {x: 208, y: 147}
+  m_AnchoredPosition: {x: 145.4, y: 170.4}
+  m_SizeDelta: {x: 191, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7956691457640833826
 CanvasRenderer:
@@ -410,7 +410,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1b38d29e4db0e2445974ad66d11f8583, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f8d42c0661fdae746ac79bf64acdfec6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2705,6 +2705,7 @@ MonoBehaviour:
   lastButton: {fileID: 0}
   ingameButtons: []
   nowPanelNum: 643
+  bNowSceneChange: 0
   Panel_InGameUI: {fileID: 3698608981875585264}
   Panel_Option: {fileID: 3632041188853641631}
   Panel_Resolution: {fileID: 9221065767375432948}
@@ -4525,15 +4526,15 @@ RectTransform:
   m_GameObject: {fileID: 6821564385542018182}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.72598, y: 0.72598, z: 0.72598}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1143516688482966200}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 140, y: 169}
-  m_SizeDelta: {x: 176, y: 142}
+  m_AnchoredPosition: {x: 457.8, y: 166.4}
+  m_SizeDelta: {x: 245, y: 183}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3975716710402798351
 CanvasRenderer:
@@ -4563,7 +4564,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1519aea4c5d16ce4e8bf653de243101f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7a9552d2148b415439bf18a4b689bd6a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
