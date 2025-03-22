@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.XR;
 
 public enum ColorType
 {
@@ -27,6 +28,24 @@ public class ScanMaster_1 : ClockBattery
     public float duration = 1.0f; // 문이 열리는 시간
 
 
+    [Header("Boss Hand")]
+    public GameObject objLeftHand; 
+    public GameObject objRightHand;
+    private Transform transform_LeftHand;
+    private Transform transform_RightHand;
+
+
+
+    private void Awake()
+    {
+        transform_LeftHand = objLeftHand.transform;
+        transform_RightHand = objRightHand.transform;
+
+
+        Hand_Floating();
+    }
+ 
+
 
     public override void TurnOnObj()
     {
@@ -47,10 +66,7 @@ public class ScanMaster_1 : ClockBattery
     }
 
 
-
-
     // #. ScanMaster 메인 스캔 동작
-
     private IEnumerator ScanStart_()
     {
         if (BoolCheckObjOnScanner())  // 스캔 성공
@@ -95,7 +111,6 @@ public class ScanMaster_1 : ClockBattery
     }
 
 
-
     // #. 스캔 성공!
     private void Scan_Success()
     {
@@ -104,12 +119,6 @@ public class ScanMaster_1 : ClockBattery
 
         // image_obj 컬러 변경
         for (int i = 0; i < scanners.Length; i++) scanners[i].ChangeImageColor(1.2f, new Color(1f, 1f, 1f));
-
-
-
-
-
-
 
 
 
@@ -156,8 +165,6 @@ public class ScanMaster_1 : ClockBattery
         }
 
 
-
-
     }
     // #. 스캐너 초기 상태로 돌리기
     private void Scan_Reset()
@@ -168,7 +175,6 @@ public class ScanMaster_1 : ClockBattery
 
         
     }
-
 
 
     private void FaceChange(int index)
@@ -183,6 +189,41 @@ public class ScanMaster_1 : ClockBattery
         monitor.SetTextureProperty(index);
     }
 
+
+
+    #region // 보스 손 컨트롤
+
+    // #. 본래 위치로 돌리기
+    private void Hand_Move(Transform transformLeft = null, Transform transformRight = null, float fDuration = 0f)
+    {
+        objLeftHand.transform.DOMove(transform_LeftHand.position, fDuration)
+            .SetEase(Ease.OutQuad);
+
+        // RightHand를 지정된 위치로 부드럽게 이동
+        objRightHand.transform.DOMove(transform_RightHand.position, fDuration)
+            .SetEase(Ease.OutQuad);
+    }
+
+    // #. 둥둥 뜨게 하기
+    private void Hand_Floating()
+    {
+        objLeftHand.transform.DOMoveY(objLeftHand.transform.position.y + 0.5f, 1.5f)
+           .SetLoops(-1, LoopType.Yoyo)
+           .SetEase(Ease.InOutSine);
+
+        // RightHand를 위아래로 떠 있는 효과 적용
+        objRightHand.transform.DOMoveY(objRightHand.transform.position.y + 0.5f, 1.7f)
+            .SetLoops(-1, LoopType.Yoyo)
+            .SetEase(Ease.InOutSine);
+    }
+
+    // #. Dotween 애니메이션 종료
+    private void Hand_DokillTween()
+    {
+        objLeftHand.transform.DOKill();
+        objRightHand.transform.DOKill();
+    }
+    #endregion
 
 
 }
