@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
 
 
 public class Scanner : MonoBehaviour
 {
-    public List<ColorObj> colorObjList = new List<ColorObj>();
+    private List<ColorObj> colorObjList = new List<ColorObj>();
+    public SpriteRenderer sprite_Obj;
 
 
     // 기능 확인용으로 있는 스크립트, 나중에 지워야함
@@ -35,8 +38,23 @@ public class Scanner : MonoBehaviour
                 objRigidbody.AddForce(throwDirection * 40f, ForceMode.Impulse);
             }
         }
-
     }
+
+
+    // #. Image의 RGB 변경 함수
+    public void ChangeImageColor(float duration, Color targetColor)
+    {
+        if (sprite_Obj != null)
+        {
+            sprite_Obj.DOColor(targetColor, duration);
+        }
+    }
+
+
+
+
+
+
 
 
 

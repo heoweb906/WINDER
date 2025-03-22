@@ -21,6 +21,7 @@ public class NPCHeart : ClockBattery
     {
         base.TurnOffObj();
 
+        Debug.Log("태엽 작동 중지");
 
         machine.OnStateChange(machine.ThankState);
 
@@ -32,6 +33,8 @@ public class NPCHeart : ClockBattery
 
     private IEnumerator PowerCharge()
     {
+        fCurClockBattery = 1;
+
         while (fCurClockBattery > 0)
         {
             fCurClockBattery -= 1;

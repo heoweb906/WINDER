@@ -36,18 +36,24 @@ public class CameraEvent : MonoBehaviour
 
     }
 
+
+    // #. 트리거로 실행
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             cineBrain.m_DefaultBlend = new CinemachineBlendDefinition(camObj.blendStyle, camObj.duration);
-
             GameAssistManager.Instance.ImplementCameraEvent(camera, iEventTime);
-
-
-
             StartCoroutine(StartDirection(iEventTime));
         }
+    }
+
+    // #. 함수로 실행
+    public void CameraTriggerStart()
+    {
+        cineBrain.m_DefaultBlend = new CinemachineBlendDefinition(camObj.blendStyle, camObj.duration);
+        GameAssistManager.Instance.ImplementCameraEvent(camera, iEventTime);
+        StartCoroutine(StartDirection(iEventTime));
     }
 
 
@@ -83,5 +89,11 @@ public class CameraEvent : MonoBehaviour
         
         cineBrain.m_DefaultBlend = new CinemachineBlendDefinition(camObj.blendStyle, fReturnTime);
     }
+
+
+
+
+    
+
 
 }

@@ -186,7 +186,7 @@ Transform:
   - {fileID: 8400977562584266328}
   - {fileID: 8488381285461580076}
   - {fileID: 5153276566099352089}
-  - {fileID: 7718369234333953203}
+  - {fileID: 7857113565977002621}
   - {fileID: 1391788448666377101}
   - {fileID: 5597540218935456294}
   m_Father: {fileID: 6196616280779657671}
@@ -774,7 +774,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7718369234333953203}
-  - component: {fileID: 7263302694038950014}
   m_Layer: 0
   m_Name: security_head000
   m_TagString: Untagged
@@ -790,31 +789,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2684441036272380327}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00000050411904, y: 0.0000005149834, z: -0.60698026, w: 0.7947169}
-  m_LocalPosition: {x: -0.5504299, y: -0.0057347487, z: 0.0000003953524}
+  m_LocalRotation: {x: 0.000000029802308, y: -0.000000029802308, z: -0.00000010803337,
+    w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4113235224554263896}
-  m_Father: {fileID: 6339183900415276346}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7263302694038950014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2684441036272380327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dadd0e056958ad447928b8bf71d06583, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bFindPlayer: 0
-  maxRotate: {x: 0, y: 45, z: 40}
-  minRotate: {x: 0, y: -45, z: -40}
-  fRotationSpeed: 0.6
-  fRotateInterval: 3
+  m_Father: {fileID: 7857113565977002621}
+  m_LocalEulerAnglesHint: {x: 38.317, y: 16.75, z: -43.905}
 --- !u!1 &2707466582897119630
 GameObject:
   m_ObjectHideFlags: 0
@@ -1393,6 +1376,56 @@ Transform:
   - {fileID: 6022299858167891263}
   m_Father: {fileID: 148552286080849151}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5118892647209692213
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7857113565977002621}
+  - component: {fileID: 6618850696135345577}
+  m_Layer: 0
+  m_Name: HeadScript
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7857113565977002621
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5118892647209692213}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5504299, y: -0.0057347487, z: 0.0000003953524}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7718369234333953203}
+  m_Father: {fileID: 6339183900415276346}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6618850696135345577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5118892647209692213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dadd0e056958ad447928b8bf71d06583, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bFindPlayer: 0
+  maxRotate: {x: 45, y: 0, z: -50}
+  minRotate: {x: -45, y: 0, z: -130}
+  fRotationSpeed: 0.6
+  fRotateInterval: 3
 --- !u!1 &5330031527061022701
 GameObject:
   m_ObjectHideFlags: 0
@@ -2681,7 +2714,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9037676393192090922}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 5e6c78f7e1b9b9d43850a76dece9eca0, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 5ec0c9f159af09e48a81e72e15ac3cc8, type: 2}
   m_Controller: {fileID: 9100000, guid: 92c36baa12dd5c44cb99470fab9e08e0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
@@ -2760,7 +2793,7 @@ MonoBehaviour:
   visualRange: {fileID: 6861802334922123841}
   area: {fileID: 0}
   nav: {fileID: 3813186622747399914}
-  trackingHead: {fileID: 7263302694038950014}
+  trackingHead: {fileID: 6618850696135345577}
   transformGrabPlayer: {fileID: 4119489752271997395}
   fAttackRange: 3
   transformStart: {fileID: 0}

@@ -33,6 +33,8 @@ public class GGILICK_ChaseManager : MonoBehaviour
     private ChaseState currentState = ChaseState.Idle;
     private float stateTimer = 0f;
     private float currentSpeedFactor = 0f;  // 0~1 사이의 속도 계수
+
+    private Animator animator;
     
     private void Start()
     {
@@ -47,6 +49,8 @@ public class GGILICK_ChaseManager : MonoBehaviour
         {
             Debug.LogWarning("ggilick에 Collider가 없습니다. 충돌 감지를 위해 Collider를 추가해주세요.");
         }
+
+        animator = ggilick.GetComponent<Animator>();
     }
     
     private void FixedUpdate()
@@ -148,10 +152,12 @@ public class GGILICK_ChaseManager : MonoBehaviour
                 
             case ChaseState.Starting:
                 currentSpeedFactor = 0f;
+                animator.SetTrigger("Walk");
                 break;
                 
             case ChaseState.Chasing:
                 currentSpeedFactor = 1f;
+                animator.SetTrigger("Run");
                 break;
                 
             case ChaseState.Stopping:
@@ -160,6 +166,7 @@ public class GGILICK_ChaseManager : MonoBehaviour
                 
             case ChaseState.Stunned:
                 currentSpeedFactor = 0f;
+                animator.SetTrigger("Brake");
                 // 기절 효과 추가 (필요시 애니메이션 등 추가)
                 break;
         }

@@ -9,14 +9,11 @@ public class NPC_ClockWork : ClockWork
     public GameObject NPC;
 
     
-
-    
     public override void GrapClockWorkOn()
     {
         npcHeart.machine.OnStateChange(npcHeart.machine.GrappedState);
 
      
-
 
     }
 

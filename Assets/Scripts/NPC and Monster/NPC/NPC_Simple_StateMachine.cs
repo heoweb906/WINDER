@@ -11,7 +11,9 @@ public class NPC_Simple_StateMachine : StateMachine
     public NPC_Simple_IDLEState IDLEState { get; private set; }
     public NPC_Simple_WalkState WalkState { get; private set; }
     public NPC_Simple_GrappedState GrappedState { get; private set; }
+
     public NPC_Simple_ReactionThankState ThankState { get; private set; }
+    public NPC_Simple_ThankRotatePlayerClockWork ThankState_RotatePlayerClockWork { get; private set; }
 
 
     // #. 특정한 행동을 취하고 있는 NPC들
@@ -33,7 +35,9 @@ public class NPC_Simple_StateMachine : StateMachine
         IDLEState = new NPC_Simple_IDLEState(npc, this);
         WalkState = new NPC_Simple_WalkState(npc, this);
         GrappedState = new NPC_Simple_GrappedState(npc, this);
+
         ThankState = new NPC_Simple_ReactionThankState(npc, this);
+        ThankState_RotatePlayerClockWork = new NPC_Simple_ThankRotatePlayerClockWork(npc, this);
 
         ActionEventState = new NPC_Simple_ActionEvent(npc, this);
         SpinTaeYubState = new NPC_Simple_ActionEventSpinTaeYub(npc, this);

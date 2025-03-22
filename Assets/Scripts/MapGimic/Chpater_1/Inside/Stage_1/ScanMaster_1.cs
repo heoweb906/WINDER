@@ -53,8 +53,6 @@ public class ScanMaster_1 : ClockBattery
 
     private IEnumerator ScanStart_()
     {
-
-
         if (BoolCheckObjOnScanner())  // 스캔 성공
         {
             Scan_Success();
@@ -69,10 +67,6 @@ public class ScanMaster_1 : ClockBattery
 
         Scan_Reset();
     }
-
-
-
-
 
 
 
@@ -105,6 +99,21 @@ public class ScanMaster_1 : ClockBattery
     // #. 스캔 성공!
     private void Scan_Success()
     {
+        // 스캐너 별로 오브젝트 1개식을 제외하고 모두 날려버리기 
+        for (int i = 0; i < scanners.Length; i++) scanners[i].ThrowOtherColorObj(ColorCorrects[i]);
+
+        // image_obj 컬러 변경
+        for (int i = 0; i < scanners.Length; i++) scanners[i].ChangeImageColor(1.2f, new Color(1f, 1f, 1f));
+
+
+
+
+
+
+
+
+
+
         // 마스터 오브젝트 생성
         GameObject spawnedObject = Instantiate(masterObject, transformMasterObj.position, Quaternion.identity);
         Collider objCollider = spawnedObject.GetComponent<Collider>();
@@ -136,22 +145,19 @@ public class ScanMaster_1 : ClockBattery
 
 
 
-     
 
-        for (int i = 0; i < scanners.Length; i++)
-        {
-            scanners[i].ThrowOtherColorObj(ColorCorrects[i]);
-        }
     }
     // #. 스캔 실패 ㅠㅠ
     private void Scan_Fail()
     {
-      
-
         for (int i = 0; i < scanners.Length; i++) 
         {
             scanners[i].ThrowOtherColorObj(ColorCorrects[i]);
         }
+
+
+
+
     }
     // #. 스캐너 초기 상태로 돌리기
     private void Scan_Reset()

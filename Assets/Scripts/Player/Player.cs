@@ -139,6 +139,8 @@ public class Player : MonoBehaviour
 
     public int dieIndex = 1;
 
+    public bool isLockCarryObject = false;
+
     private void Awake()
     {
         playerAnimationData.Initialize();
@@ -169,6 +171,15 @@ public class Player : MonoBehaviour
     private void Update()
     {
         machine?.OnStateUpdate();
+        if(Input.GetKeyDown(KeyCode.X)){
+            RemoveCarryObject();
+        }
+        if(Input.GetKeyDown(KeyCode.C)){
+            if(isLockCarryObject)
+                SetLockCarryObject(false);
+            else
+                SetLockCarryObject(true);
+        }
     }
 
     private void FixedUpdate()
@@ -346,4 +357,18 @@ public class Player : MonoBehaviour
         machine.OnStateChange(machine.UC_DieState);
     }
 
+
+    public void SetLockCarryObject(bool _bool)
+    {
+        isLockCarryObject = _bool;
+    }
+
+    public void RemoveCarryObject(){
+        curInteractableObject = null;
+        curCarriedObject = null;
+        isCarryObject = false;
+        isLockCarryObject = false;
+        isHandIK = false;
+        DOTween.To(() => playerAnim.GetLayerWeight(1), x => playerAnim.SetLayerWeight(1, x), 0, 0.2f);
+    }
 }

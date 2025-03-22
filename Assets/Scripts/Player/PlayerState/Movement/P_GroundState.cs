@@ -73,7 +73,7 @@ public class P_GroundState : PlayerMovementState
                 }
                 else
                 {
-                    if(player.curCarriedObject.carriedObjectType == CarriedObjectType.Normal)
+                    if(player.curCarriedObject.carriedObjectType == CarriedObjectType.Normal && !player.isLockCarryObject)
                     {
                         machine.OnStateChange(machine.ThrowState);
                     }
@@ -105,7 +105,7 @@ public class P_GroundState : PlayerMovementState
 
     public void CheckPutDownObject()
     {
-        if (player.isCarryObject && machine.CurrentState is not P_MoveStopState && !Input.GetButton("Fire1") && !player.playerAnim.IsInTransition(0))
+        if (player.isCarryObject && machine.CurrentState is not P_MoveStopState && !Input.GetButton("Fire1") && !player.playerAnim.IsInTransition(0) && !player.isLockCarryObject)
         {
             machine.OnStateChange(machine.PutDownState);
         }

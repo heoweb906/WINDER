@@ -9,7 +9,8 @@ using UnityEngine.AI;
 // #. 태엽을 돌려주고 난 이후에 취할 액션
 public enum ClockWorkEventList
 {
-    None   // Num 0
+    None,
+    RotatePlayerClockwork
 }
 
 // #. 평소에 취하고 있을 액션

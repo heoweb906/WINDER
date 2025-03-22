@@ -19,6 +19,8 @@ public class NPC_Simple_GrappedState : NPC_Simple_State
         npc.GetNav().radius = 0.5f;
         npc.GetAnimator().SetTrigger("doReactionGrapped");
 
+        Debug.Log("NPC가 잡힌 상태가 됨");
+
         // elapsedTime = 0f; // 상태 진입 시 시간 초기화
     }
 

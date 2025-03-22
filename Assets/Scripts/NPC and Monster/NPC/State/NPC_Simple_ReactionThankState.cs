@@ -22,8 +22,6 @@ public class NPC_Simple_ReactionThankState : NPC_Simple_State
 
 
 
-
-
         if (npc.clockworkEvent == ClockWorkEventList.None)
         {
             npc.GetAnimator().SetTrigger("doReactionHappy");
@@ -34,9 +32,8 @@ public class NPC_Simple_ReactionThankState : NPC_Simple_State
         else
         {
 
+
             ChangeStateNPC();
-
-
         }
 
        
@@ -73,18 +70,15 @@ public class NPC_Simple_ReactionThankState : NPC_Simple_State
 
     private void ChangeStateNPC()
     {
-     
-
-
-        if (npc.bClockWorkEventNPC)
+        if (npc.clockworkEvent == ClockWorkEventList.RotatePlayerClockwork)
         {
-
+            machine.OnStateChange(machine.ThankState_RotatePlayerClockWork);
 
         }
-        else
-        {
-            machine.OnStateChange(machine.ThankState);
-        }
+        //else
+        //{
+        //    machine.OnStateChange(machine.ThankState);
+        //}
     }
 
 }
