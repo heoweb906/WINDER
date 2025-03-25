@@ -174,6 +174,7 @@ public class GameAssistManager : MonoBehaviour
             yield return new WaitForSeconds(1.0f);
             iEventTime -= 1;
         }
+        for (int i = 0; i < Cameras_Event.Length; i++) Cameras_Event[i].SetActive(false);
         nextCamera.SetActive(true);
     }
 
@@ -299,7 +300,10 @@ public class GameAssistManager : MonoBehaviour
     {
         return bPlayerDie;
     }
-
+    public GameObject GetNowCamera()
+    {
+        return nowCamera;
+    }
 
 
 

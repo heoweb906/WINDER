@@ -69,7 +69,7 @@ public class InsideAssist : MonoBehaviour
     // 연출 관련
     #region
 
-    // #. 내면 세계 첫진입
+    // #. 내면 세계 첫 진입
     public void StartDirect_1()
     {
         GameAssistManager.Instance.InsideInEffect();

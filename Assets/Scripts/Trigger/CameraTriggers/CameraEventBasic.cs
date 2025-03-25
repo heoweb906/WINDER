@@ -49,10 +49,10 @@ public class CameraEvent : MonoBehaviour
     }
 
     // #. 함수로 실행
-    public void CameraTriggerStart()
+    public void CameraTriggerStart(int iEEEventTime)
     {
         cineBrain.m_DefaultBlend = new CinemachineBlendDefinition(camObj.blendStyle, camObj.duration);
-        GameAssistManager.Instance.ImplementCameraEvent(camera, iEventTime);
+        GameAssistManager.Instance.ImplementCameraEvent(camera, iEEEventTime);
         StartCoroutine(StartDirection(iEventTime));
     }
 

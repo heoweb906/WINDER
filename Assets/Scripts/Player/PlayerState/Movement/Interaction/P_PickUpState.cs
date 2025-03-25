@@ -15,6 +15,12 @@ public class P_PickUpState : P_InteractionState
         player.SetPlayerPhysicsIgnore(player.curCarriedObject.col, true);
         player.angle = 0;
         player.isSetAngleZero = false;
+
+        if (player.curCarriedObject.bPickUpEvent)
+        {
+            player.SetLockCarryObject(true);
+            player.curCarriedObject.PickUpEvent();
+        }
     }
 
     public override void OnExit()
@@ -44,7 +50,7 @@ public class P_PickUpState : P_InteractionState
 
     public void CheckPutDownObject()
     {
-        if (player.isCarryObject && !Input.GetButton("Fire1") && !player.playerAnim.IsInTransition(0))
+        if (player.isCarryObject && !Input.GetButton("Fire1") && !player.playerAnim.IsInTransition(0) && !player.isLockCarryObject)
         {
 
             player.SetPlayerPhysicsIgnore(player.curCarriedObject.col, false);

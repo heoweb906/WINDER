@@ -30,6 +30,8 @@ namespace Keto
                     m_materials.Add(m_skinnedMeshRenderers[j].material);
                 }
             }
+
+           
         }
         public void Reset()
         {

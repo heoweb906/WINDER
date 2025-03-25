@@ -7,6 +7,8 @@ public class CarriedObject : InteractableObject
     public PartOwnerType partOwnerType = PartOwnerType.Nothing;
     public CarriedObjectType carriedObjectType = CarriedObjectType.Normal;
 
+    public bool bPickUpEvent = false;
+
     public Rigidbody rigid;
     public Collider col;
 
@@ -28,6 +30,12 @@ public class CarriedObject : InteractableObject
         rigid = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
     }
+
+    public virtual void PickUpEvent()
+    {
+        if (!bPickUpEvent) return;
+    }
+
 }
 
 public enum CarriedObjectType
@@ -35,3 +43,4 @@ public enum CarriedObjectType
     Normal,
     Guitar,
 }
+

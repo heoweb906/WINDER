@@ -42,7 +42,7 @@ public class ClockBattery : MonoBehaviour
 
     private IEnumerator RotateObjectCoroutine(int time)
     {
-        float rotationAmount = time * -180f;
+        float rotationAmount = time * (-180f);
         float elapsedTime = 0f;
 
         Vector3 initialRotation = clockWork.transform.localEulerAngles;
@@ -79,23 +79,15 @@ public class ClockBattery : MonoBehaviour
     //    clockWork.transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
     //}
 
-    // #. 태엽의 일반 회전
+    // #. 태엽의 일반 회전 
     protected void TruningClockWork_Simple(float fRoateSpeed)
     {
         clockWork.transform.Rotate(Vector3.forward * fRoateSpeed * Time.deltaTime);
     }
-
-
-
-
-
-
 
     // #. 태엽을 흔듬 (오작동 연출)
     protected void TruningClockWork_Shake(float fDuration, float dShakeStength = 20f)
     {
         clockWork.transform.DOPunchRotation(new Vector3(0, 0, 5), fDuration, 20, 1);
     }
-
-
 }

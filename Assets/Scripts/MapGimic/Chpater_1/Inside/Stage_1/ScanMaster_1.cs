@@ -1,5 +1,7 @@
 using DG.Tweening;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -16,12 +18,8 @@ public class ScanMaster_1 : ClockBattery
 
     [Header("스캔 기능 관련")]
     public ColorType[] ColorCorrects;       // ScanMaster의 정답 컬러
-    public Scanner[] scanners;              // 각 스테이지의 Scanner 
-
-    [Header("MasterObj 관련")]
-    public GameObject masterObject;         // 스캔에 성공하면 획득할 수 있는 오브젝트
-    public Transform transformMasterObj;    // 마스터 오브젝트 생성 위치
-
+    public Scanner[] scanners;              // 각 스테이지의 Scanner
+  
     [Header("Door, Monitor")]
     public Monitor monitor;
     public GameObject objDoor_1;
@@ -29,11 +27,14 @@ public class ScanMaster_1 : ClockBattery
 
 
     [Header("Boss Hand")]
+    public CameraEvent cameraEvent;
+    public GameObject masterObject;         // 스캔에 성공하면 획득할 수 있는 오브젝트
+    public Transform transformMasterObj;    // 마스터 오브젝트 생성 위치
     public GameObject objLeftHand; 
     public GameObject objRightHand;
     private Transform transform_LeftHand;
     private Transform transform_RightHand;
-
+   
 
 
     private void Awake()
@@ -51,8 +52,8 @@ public class ScanMaster_1 : ClockBattery
     {
         base.TurnOnObj();
 
-        RotateObject((int)fCurClockBattery);
-        nowCoroutine = StartCoroutine(ScanStart_());
+       
+        ScanStart_();
     }
     public override void TurnOffObj()
     {
@@ -67,24 +68,23 @@ public class ScanMaster_1 : ClockBattery
 
 
     // #. ScanMaster 메인 스캔 동작
-    private IEnumerator ScanStart_()
+    private void ScanStart_()
     {
         if (BoolCheckObjOnScanner())  // 스캔 성공
         {
-            Scan_Success();
-            yield break;
+            RotateObject((int)fCurClockBattery + 15);
+            StartCoroutine(Scan_Success());
         }
         else
         {
-            Scan_Fail();
+            RotateObject((int)fCurClockBattery + 5);
+            StartCoroutine(Scan_Fail());
         }
 
-        yield return new WaitForSeconds(1f);
+        //yield return new WaitForSeconds(1f);
 
-        Scan_Reset();
+        //Scan_Reset();
     }
-
-
 
     // #. 스캐너 위의 오브젝트들의 색상이 정답과 일치하는지 검사하는 함수
     private bool BoolCheckObjOnScanner()
@@ -112,39 +112,116 @@ public class ScanMaster_1 : ClockBattery
 
 
     // #. 스캔 성공!
-    private void Scan_Success()
+    IEnumerator Scan_Success()
     {
-        // 스캐너 별로 오브젝트 1개식을 제외하고 모두 날려버리기 
-        for (int i = 0; i < scanners.Length; i++) scanners[i].ThrowOtherColorObj(ColorCorrects[i]);
+        InGameUIController.Instance.bIsUIDoing = true;
 
+
+        cameraEvent.CameraTriggerStart(25);
+        yield return new WaitForSeconds(1f);
+        List<ColorObj> colorObjs = new List<ColorObj>(); // 리스트 생성
+        GameAssistManager.Instance.PlayerInputLockOn();
+
+        yield return new WaitForSeconds(2f);
+
+
+        // for (int i = 0; i < scanners.Length; i++) scanners[i].ThrowOtherColorObj(ColorCorrects[i]);
         // image_obj 컬러 변경
-        for (int i = 0; i < scanners.Length; i++) scanners[i].ChangeImageColor(1.2f, new Color(1f, 1f, 1f));
-
-
-
-
-        // 마스터 오브젝트 생성
-        GameObject spawnedObject = Instantiate(masterObject, transformMasterObj.position, Quaternion.identity);
-        Collider objCollider = spawnedObject.GetComponent<Collider>();
-        Rigidbody objRigidbody = spawnedObject.GetComponent<Rigidbody>();
-
-        // 초기 위치를 바닥으로 설정 (Y축으로 -2만큼 아래로)
-        Vector3 startPosition = transformMasterObj.position;
-        startPosition.y -= 2f;
-        spawnedObject.transform.position = startPosition;
-
-        if (objCollider != null) objCollider.enabled = false;
-        if (objRigidbody != null) objRigidbody.isKinematic = true;
-
-        // DOTween으로 부드럽게 올라오는 애니메이션
-        spawnedObject.transform.DOMoveY(transformMasterObj.position.y, 1f)
-            .SetEase(Ease.OutBack)
-            .OnComplete(() =>
+        for (int i = 0; i < scanners.Length; i++) scanners[i].ChangeImageColor(2f, new Color(1f, 1f, 1f));
+        for (int i = 0; i < ColorCorrects.Length; i++)
+        {
+            if (scanners[i] != null)
             {
-                // 애니메이션 완료 후 Collider 및 Rigidbody 활성화
-                if (objCollider != null) objCollider.enabled = true;
-                if (objRigidbody != null) objRigidbody.isKinematic = false;
-            });
+                foreach (var colorObj in scanners[i].GetColorObjList())
+                {
+                    colorObjs.Add(colorObj);
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(3f);
+
+        Hand_DokillTween();
+        Hand_Move(transform_LeftHand.position + new Vector3(0, 15f, 0),
+        transform_RightHand.position + new Vector3(0, 15f, 0), 2f);
+
+        yield return new WaitForSeconds(3f);
+
+
+     
+        colorObjs.Add(scanners[0].GetColorObjList()[0]);
+        colorObjs.Add(scanners[1].GetColorObjList()[0]);
+        colorObjs.Add(scanners[2].GetColorObjList()[0]);
+ 
+
+
+        for (int i = 0; i < colorObjs.Count; i++)
+        {
+            Renderer renderer = colorObjs[i].GetComponent<Renderer>();
+
+            if (renderer != null)
+            {
+                Material mat = renderer.material;
+                // Emission 켜기
+                mat.SetFloat("_UseEmission", 1f);
+                mat.EnableKeyword("_EMISSION");
+
+                // 3초 동안 _EmissionColor를 (1.7f, 1.7f, 1.7f, 1f)로 Tween
+                DOTween.To(() => mat.GetColor("_EmissionColor"),
+                           x => mat.SetColor("_EmissionColor", x),
+                           new Color(1.7f, 1.7f, 1.7f, 1f),
+                           2f)
+                       .SetEase(Ease.Linear);
+            }
+        }
+
+        yield return new WaitForSeconds(2.3f);
+
+        for (int i = 0; i < colorObjs.Count; i++)
+        {
+            Renderer renderer = colorObjs[i].GetComponent<Renderer>();
+
+            if (renderer != null)
+            {
+                Material mat = renderer.material;
+
+                // Transparent 렌더링 모드로 전환
+                mat.SetFloat("_RenderingMode", 3f);
+                mat.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                mat.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                mat.SetFloat("_ZWrite", 0f);
+                mat.renderQueue = 3000; // Transparent 큐로 변경
+
+                // Base Color 알파를 0으로 Tween
+                Color startColor = mat.GetColor("_BaseColor");
+                Color targetColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
+
+                DOTween.To(() => mat.GetColor("_BaseColor"),
+                           x => mat.SetColor("_BaseColor", x),
+                           targetColor,
+                           1.2f) // 4초 동안 변화
+                       .SetEase(Ease.Linear);
+            }
+        }
+        for (int i = 0; i < scanners.Length; i++) scanners[i].ChangeImageColor(3f, new Color(0f, 0f, 0f));
+
+
+
+        yield return new WaitForSeconds(3f);
+        for (int i = 0; i < colorObjs.Count; i++)
+        {
+            Destroy(colorObjs[i].gameObject);
+        }
+
+
+
+        GameObject spawnedObject = Instantiate(masterObject);
+        spawnedObject.transform.localPosition = transformMasterObj.position;
+
+
+        yield return new WaitForSeconds(2f);
+
+
 
 
         // 문 열기
@@ -153,19 +230,111 @@ public class ScanMaster_1 : ClockBattery
                 .SetEase(Ease.OutQuad);
 
 
-
-
+        InGameUIController.Instance.bIsUIDoing = false;
+        GameAssistManager.Instance.PlayerInputLockOff();
     }
+
     // #. 스캔 실패 ㅠㅠ
-    private void Scan_Fail()
+    IEnumerator Scan_Fail()
     {
-        for (int i = 0; i < scanners.Length; i++) 
+        Debug.Log("스캔 실패 ");
+
+        InGameUIController.Instance.bIsUIDoing = true;
+        List<ColorObj> colorObjs = new List<ColorObj>(); // 리스트 생성
+
+        cameraEvent.CameraTriggerStart(10);
+        yield return new WaitForSeconds(1f);
+        GameAssistManager.Instance.PlayerInputLockOn();
+
+        yield return new WaitForSeconds(2f);
+
+        for (int i = 0; i < ColorCorrects.Length; i++)
         {
-            scanners[i].ThrowOtherColorObj(ColorCorrects[i]);
+            if (scanners[i] != null)
+            {
+                foreach (var colorObj in scanners[i].GetColorObjList())
+                {
+                    if (colorObj != null && colorObj.colorType == ColorCorrects[i])
+                    {
+                        scanners[i].ChangeImageColor(2f, new Color(1f, 1f, 1f));
+                    }
+                    if(colorObj.colorType == ColorType.None)
+                    {
+                        colorObjs.Add(colorObj);
+                        Debug.Log("확인됨");
+                    }
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(3f);
+
+        for (int i = 0; i < colorObjs.Count; i++)
+        {
+            Renderer renderer = colorObjs[i].GetComponent<Renderer>();
+
+            if (renderer != null)
+            {
+                Material mat = renderer.material;
+                // Emission 켜기
+                mat.SetFloat("_UseEmission", 1f);
+                mat.EnableKeyword("_EMISSION");
+
+                // 3초 동안 _EmissionColor를 (1.7f, 1.7f, 1.7f, 1f)로 Tween
+                DOTween.To(() => mat.GetColor("_EmissionColor"),
+                           x => mat.SetColor("_EmissionColor", x),
+                           new Color(1.7f, 1.7f, 1.7f, 1f),
+                           2f)
+                       .SetEase(Ease.Linear);
+            }
+        }
+
+        yield return new WaitForSeconds(2.3f);
+
+        for (int i = 0; i < colorObjs.Count; i++)
+        {
+            Renderer renderer = colorObjs[i].GetComponent<Renderer>();
+
+            if (renderer != null)
+            {
+                Material mat = renderer.material;
+
+                // Transparent 렌더링 모드로 전환
+                mat.SetFloat("_RenderingMode", 3f);
+                mat.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                mat.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                mat.SetFloat("_ZWrite", 0f);
+                mat.renderQueue = 3000; // Transparent 큐로 변경
+
+                // Base Color 알파를 0으로 Tween
+                Color startColor = mat.GetColor("_BaseColor");
+                Color targetColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
+
+                DOTween.To(() => mat.GetColor("_BaseColor"),
+                           x => mat.SetColor("_BaseColor", x),
+                           targetColor,
+                           1.2f) // 4초 동안 변화
+                       .SetEase(Ease.Linear);
+            }
+        }
+        for (int i = 0; i < scanners.Length; i++) scanners[i].ChangeImageColor(3f, new Color(0f, 0f, 0f));
+
+        yield return new WaitForSeconds(2f);
+
+        for (int i = 0; i < colorObjs.Count; i++)
+        {
+            Destroy(colorObjs[i].gameObject);
         }
 
 
+        InGameUIController.Instance.bIsUIDoing = false;
+        GameAssistManager.Instance.PlayerInputLockOff();
+        TurnOffObj();
+
+
+
     }
+
     // #. 스캐너 초기 상태로 돌리기
     private void Scan_Reset()
     {
@@ -193,16 +362,38 @@ public class ScanMaster_1 : ClockBattery
 
     #region // 보스 손 컨트롤
 
-    // #. 본래 위치로 돌리기
-    private void Hand_Move(Transform transformLeft = null, Transform transformRight = null, float fDuration = 0f)
+    // #. 위치 옮기기
+    private void Hand_Move(Vector3? leftPosition = null, Vector3? rightPosition = null, float fDuration = 0f)
     {
-        objLeftHand.transform.DOMove(transform_LeftHand.position, fDuration)
-            .SetEase(Ease.OutQuad);
+        if (leftPosition.HasValue)
+        {
+            objLeftHand.transform.DOMove(leftPosition.Value, fDuration)
+                .SetEase(Ease.OutQuad);
+        }
 
-        // RightHand를 지정된 위치로 부드럽게 이동
-        objRightHand.transform.DOMove(transform_RightHand.position, fDuration)
-            .SetEase(Ease.OutQuad);
+        if (rightPosition.HasValue)
+        {
+            objRightHand.transform.DOMove(rightPosition.Value, fDuration)
+                .SetEase(Ease.OutQuad);
+        }
     }
+
+    // #. 로테이션 돌리기
+    private void Hand_Rotate(Quaternion? leftRotation = null, Quaternion? rightRotation = null, float fDuration = 0f)
+    {
+        if (leftRotation.HasValue) 
+        {
+            objLeftHand.transform.DORotateQuaternion(leftRotation.Value, fDuration)
+                .SetEase(Ease.OutQuad);
+        }
+
+        if (rightRotation.HasValue)
+        {
+            objRightHand.transform.DORotateQuaternion(rightRotation.Value, fDuration)
+                .SetEase(Ease.OutQuad);
+        }
+    }
+
 
     // #. 둥둥 뜨게 하기
     private void Hand_Floating()

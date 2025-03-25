@@ -30,6 +30,7 @@ public class DissolveCustom : MonoBehaviour
         }
     }
 
+
     public void Reset()
     {
         StopAllCoroutines();
@@ -38,6 +39,15 @@ public class DissolveCustom : MonoBehaviour
             material.SetFloat(DISSOLVE_AMOUNT, m_dissolveStart);
         }
     }
+
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.B)) Dissolve();
+    }
+
+
+
 
     public void Dissolve()
     {
