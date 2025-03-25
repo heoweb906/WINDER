@@ -35,17 +35,24 @@ public class P_GrabState : P_InteractionState
     {
         base.OnUpdate();
         if (!Input.GetButton("Fire1"))
-        {
+        { 
             machine.OnStateChange(machine.IdleState);
         }
         else if (player.curDirection != Vector3.zero)
         {
-            // 플레이어와 물체 사이의 방향
-            Vector3 toObject = (player.grabPos.position - player.transform.position).normalized;
-            // 이동하려는 방향
-            Vector3 moveDirection = player.curDirection.normalized;
+            // 플레이어와 물체 사이의 방향 (y축 제외)
+            Vector3 toObject = (player.grabPos.position - player.transform.position);
+            toObject.y = 0;
+            toObject = toObject.normalized;
+
+            // 이동하려는 방향 (y축 제외)
+            Vector3 moveDirection = player.curDirection;
+            moveDirection.y = 0;
+            moveDirection = moveDirection.normalized;
             
             float dotProduct = Vector3.Dot(toObject, moveDirection);
+            
+            Debug.Log("dotProduct : " + dotProduct);
             
             if (dotProduct > 0) // 물체 방향으로 이동 = 밀기
                 machine.OnStateChange(machine.PushState);

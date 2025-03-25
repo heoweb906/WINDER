@@ -75,7 +75,7 @@ public class P_OnAirState : PlayerMovementState
 
     public override void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player"))
+        if (!other.CompareTag("Player") && other.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast"))
         {
             if (machine.CheckCurrentState(machine.JumpStartIdleState) || machine.CheckCurrentState(machine.FallingIdleState))
                 machine.OnStateChange(machine.SoftLandingState);

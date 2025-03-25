@@ -240,7 +240,6 @@ public class P_GroundState : PlayerMovementState
 
         foreach (Collider collider in hitColliders)
         {
-            Debug.Log(collider.gameObject.name);
             InteractableObject detectedObject = collider.GetComponent<InteractableObject>();
             if (detectedObject != null && detectedObject.canInteract)
             {

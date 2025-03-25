@@ -159,4 +159,9 @@ public class NPC_Simple : MonoBehaviour
         clockWork.ClockWorkRotate();
     }
 
+    public void SetAvoidState()
+    {
+        anim.SetTrigger("doAvoid");
+    }
+
 }
