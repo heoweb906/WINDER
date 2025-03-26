@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CameraEvent : MonoBehaviour
 {
+    private Coroutine nowCoroutine;
+
     public Camera mainCamera;
     public CinemachineBrain cineBrain;
     public CameraObj camObj;
@@ -44,7 +46,7 @@ public class CameraEvent : MonoBehaviour
         {
             cineBrain.m_DefaultBlend = new CinemachineBlendDefinition(camObj.blendStyle, camObj.duration);
             GameAssistManager.Instance.ImplementCameraEvent(camera, iEventTime);
-            StartCoroutine(StartDirection(iEventTime));
+            nowCoroutine = StartCoroutine(StartDirection(iEventTime));
         }
     }
 
@@ -53,7 +55,7 @@ public class CameraEvent : MonoBehaviour
     {
         cineBrain.m_DefaultBlend = new CinemachineBlendDefinition(camObj.blendStyle, camObj.duration);
         GameAssistManager.Instance.ImplementCameraEvent(camera, iEEEventTime);
-        StartCoroutine(StartDirection(iEventTime));
+        nowCoroutine = StartCoroutine(StartDirection(iEventTime));
     }
 
 
@@ -65,29 +67,12 @@ public class CameraEvent : MonoBehaviour
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             yield return new WaitForSeconds(1.0f);
             iEventTime -= 1;
         }
         
         cineBrain.m_DefaultBlend = new CinemachineBlendDefinition(camObj.blendStyle, fReturnTime);
+        StopCoroutine(nowCoroutine);
     }
 
 
