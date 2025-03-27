@@ -63,6 +63,7 @@ public class Scanner : MonoBehaviour
         }
     }
 
+
     private void OnTriggerExit(Collider other)
     {
         if (other.GetComponent<ColorObj>() != null)
@@ -81,6 +82,22 @@ public class Scanner : MonoBehaviour
         }
     }
 
+
+    public void ScannerCleaner()
+    {
+        for (int i = colorObjList.Count - 1; i >= 0; i--)
+        {
+            if (colorObjList[i] == null || colorObjList[i].colorType != ColorType.Yellow)
+            {
+                colorObjList.RemoveAt(i);
+            }
+        }
+
+        if (colorObjList.Count == 0)
+        {
+            testEffect.SetActive(false);
+        }
+    }
 
 
 

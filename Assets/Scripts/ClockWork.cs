@@ -20,6 +20,8 @@ public class ClockWork : InteractableObject
 
     public bool isSingleEvent;
 
+    public float fDistanceOffset;
+
     private void Start()
     {
         type = InteractableType.ClockWork;
@@ -102,6 +104,7 @@ public class ClockWork : InteractableObject
 
 
     public virtual void GrapClockWorkOn() {}
+
 }
 
 

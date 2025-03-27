@@ -85,7 +85,8 @@ public class P_GroundState : PlayerMovementState
                 }
             }
         }
-        else if (Input.GetButton("Jump") && player.curInteractableObject != null&& !player.playerAnim.IsInTransition(0) && player.partsArea != null)
+        else if (Input.GetButton("Jump") && player.curInteractableObject != null&& !player.playerAnim.IsInTransition(0) 
+            && player.partsArea != null && player.partsArea.BCanInteract)
         {
             if (Vector3.Distance(new Vector3(player.targetPos.x, 0, player.targetPos.z), new Vector3(player.transform.position.x, 0, player.transform.position.z)) < 0.03f)
             {
@@ -140,7 +141,7 @@ public class P_GroundState : PlayerMovementState
                 else if (player.curClockWork.GetClockWorkType() == ClockWorkType.Wall)
                 {
                     float angle = player.curClockWork.transform.eulerAngles.y * Mathf.Deg2Rad;
-                    player.targetPos = player.curClockWork.transform.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * player.clockWorkInteractionDistance_Wall;
+                    player.targetPos = player.curClockWork.transform.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * (player.clockWorkInteractionDistance_Wall + player.curClockWork.fDistanceOffset);
                 }
                 else if (player.curClockWork.GetClockWorkType() == ClockWorkType.NPC)
                 {
@@ -256,7 +257,7 @@ public class P_GroundState : PlayerMovementState
         foreach (Collider collider in hitColliders)
         {
             PartsArea detectedObject = collider.GetComponent<PartsArea>();
-            if (detectedObject != null && detectedObject.Parts != null)
+            if (detectedObject != null && detectedObject.Parts != null && detectedObject.BCanInteract)
             {
                 float distance = Vector3.Distance(player.transform.position, collider.transform.position);
                 float heightDiff = collider.transform.position.y - player.transform.position.y;
@@ -291,7 +292,7 @@ public class P_GroundState : PlayerMovementState
         foreach (Collider collider in hitColliders)
         {
             PartsArea detectedObject = collider.GetComponent<PartsArea>();
-            if (detectedObject != null && detectedObject.Parts == null)
+            if (detectedObject != null && detectedObject.Parts == null && detectedObject.BCanInteract)
             {
                 float distance = Vector3.Distance(player.transform.position, collider.transform.position);
                 float heightDiff = collider.transform.position.y - player.transform.position.y;

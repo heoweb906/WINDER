@@ -102,6 +102,10 @@ public class InsideClearChecker_1 : MonoBehaviour
                    .SetEase(Ease.Linear);
         }
 
+        yield return new WaitForSeconds(3.1f);
+
+        GameAssistManager.Instance.GetPlayerScript().RemoveCarryObject();
+
 
 
 

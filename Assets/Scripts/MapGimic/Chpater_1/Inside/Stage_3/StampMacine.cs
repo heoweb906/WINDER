@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class StampMacine : ClockBattery, IPartsOwner
 {
     private Coroutine nowCoroutine;
 
-    [Header("서류 오브젝트")]
-    public GameObject obj_Document;         // 커다랑 상태의 서류
-    public GameObject obj_SmallDocument;    // 생성할 ColorObj
-    public Transform transform_CreateDocument;
+    [Header("도장 찍는 기둥")]
+    public GameObject obj_StampCillinder;
+    public PartsArea partsArea;
+    public ColorObj colorObjMachine;
+    public DocumentObj documentObj;
 
     [Header("스탬프 정보")]
     private int iStampNum = 0;
@@ -19,26 +21,25 @@ public class StampMacine : ClockBattery, IPartsOwner
 
 
 
-
     public override void TurnOnObj()
     {
         base.TurnOnObj();
 
-        RotateObject((int)fCurClockBattery);
+        RotateObject((int)fCurClockBattery + 3);
         nowCoroutine = StartCoroutine(HitStamp());
     }
     public override void TurnOffObj()
     {
         base.TurnOffObj();
 
+       
         if (nowCoroutine != null) StopCoroutine(nowCoroutine);
 
-
-        // 도장을 알맞은 모양으로 찍었다면
         if(IsQueueInOrder(queueStamp))
         {
-            obj_Document.SetActive(false);
-            GameObject instantiatedObject = Instantiate(obj_SmallDocument, transform_CreateDocument);
+            Debug.Log("도장 성공");
+
+            documentObj.ChangeToColorObj_();
         }
     }
 
@@ -46,34 +47,65 @@ public class StampMacine : ClockBattery, IPartsOwner
 
     private IEnumerator HitStamp()
     {
-        // 배터리가 3보다 작다면
-        if (fCurClockBattery < 3)
-        {
-            while (fCurClockBattery > 0)
-            {
-                fCurClockBattery -= 1;
-                yield return new WaitForSecondsRealtime(1.0f); // 1초 대기
-            }
-        }
-        else // 배터리가 3 이상이라면
-        {
-            while (fCurClockBattery > 0)
-            {
-                fCurClockBattery -= 1;
-                yield return new WaitForSecondsRealtime(1.0f); // 1초 대기
-            }
+        partsArea.BCanInteract = false;
 
-            if (iStampNum > 0)
-            {
-                queueStamp.Enqueue(iStampNum);
-                CreateStackedStamps();      // 도장 찍기
-            }
+        obj_StampCillinder.transform.DOLocalMoveY(1.8f, 2f)
+           .SetEase(Ease.InOutQuad);
+        Renderer renderer = colorObjMachine.GetComponent<Renderer>();
+
+        if (renderer != null)
+        {
+            Material mat = renderer.material;
+            mat.EnableKeyword("_EMISSION");
+
+            DOTween.To(() => mat.GetColor("_EmissionColor"),
+                       x => mat.SetColor("_EmissionColor", x),
+                       new Color(4f, 4f, 4f, 1f),
+                       2f)
+                   .SetEase(Ease.Linear);
         }
 
+        while (fCurClockBattery > 0)
+        {
+            yield return new WaitForSeconds(1.0f); // 1초 대기
+            fCurClockBattery -= 1;
+        }
+
+        obj_StampCillinder.transform.DOLocalMoveY(0.98f, 0.05f)
+          .SetEase(Ease.InOutQuad);
+        yield return new WaitForSeconds(0.1f);
+
+
+        if (iStampNum > 0)
+        {
+            queueStamp.Enqueue(iStampNum);
+            CreateStackedStamps();      // 도장 찍기
+        }
+        yield return new WaitForSeconds(1.0f);
+
+
+        obj_StampCillinder.transform.DOLocalMoveY(1.5f, 1.5f)
+         .SetEase(Ease.InOutQuad);
+        if (renderer != null)
+        {
+            Material mat = renderer.material;
+            mat.EnableKeyword("_EMISSION");
+
+            DOTween.To(() => mat.GetColor("_EmissionColor"),
+                       x => mat.SetColor("_EmissionColor", x),
+                       new Color(0f, 0f, 0f, 1f),
+                       1.5f)
+                   .SetEase(Ease.Linear);
+        }
+        yield return new WaitForSeconds(1.5f);
+
+
+        partsArea.BCanInteract = true;
         TurnOffObj();
         yield break;
     }
-    // #. 도장 생성하기
+
+
     public void CreateStackedStamps()
     {
         // 이미 생성되어 있는 도장들을 지움
@@ -81,8 +113,6 @@ public class StampMacine : ClockBattery, IPartsOwner
         {
             Destroy(child.gameObject);  
         }
-
-
         // 자신 아래의 도장들을 지움
         Queue<int> tempQueue = new Queue<int>();
         while (queueStamp.Count > 0)
@@ -95,8 +125,6 @@ public class StampMacine : ClockBattery, IPartsOwner
         {
             queueStamp.Enqueue(tempQueue.Dequeue());
         }
-
-
 
         if (queueStamp.Count > 0)
         {
@@ -130,9 +158,6 @@ public class StampMacine : ClockBattery, IPartsOwner
             }
         }
     }
-
-
-
 
     private bool IsQueueInOrder(Queue<int> queue)
     {

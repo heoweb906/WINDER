@@ -18,6 +18,7 @@ Material:
   - TCP2_SHADOW_LIGHT_COLOR
   - TCP2_SPECULAR
   - TCP2_SPECULAR_STYLIZED
+  - _EMISSION
   - _NORMALMAP
   m_InvalidKeywords:
   - TCP2_UV_NORMALS_FULL
@@ -171,14 +172,14 @@ Material:
     - _SpecularHighlights: 1
     - _SpecularMapType: 5
     - _SpecularRoughness: 1
-    - _SpecularToonSize: 0.066
+    - _SpecularToonSize: 0.061
     - _SpecularToonSmoothness: 1
     - _SpecularType: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
     - _UseAlphaTest: 0
-    - _UseEmission: 0
+    - _UseEmission: 1
     - _UseFresnelReflections: 1
     - _UseMatCap: 0
     - _UseMatCapMask: 0
