@@ -9,6 +9,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Unity.VisualScripting;
 using Cinemachine;
+using Unity.Collections;
 
 public class GameAssistManager : MonoBehaviour
 {
@@ -37,6 +38,7 @@ public class GameAssistManager : MonoBehaviour
         bPlayerDie = false;
        
         player = FindPlayerRoot();
+
 
         // #. 스테이지 관리
         SaveData_Manager.Instance.SetStringSceneName(SceneManager.GetActiveScene().name);

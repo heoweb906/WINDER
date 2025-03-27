@@ -12,7 +12,6 @@ public class InsideClearChecker_1 : MonoBehaviour
     private bool bTriggerOn = false;
 
     [Header("연출에 사용할 것들")]
-    public CineCameraChager cineCameraChager;    
     private ColorObj colorObj;
 
 
@@ -51,14 +50,9 @@ public class InsideClearChecker_1 : MonoBehaviour
         if (bTriggerOn) return;
         bTriggerOn = true;
 
-        InGameUIController.Instance.bIsUIDoing = true;
-        GameAssistManager.Instance.InsideInEffect();
-       
-
         StartCoroutine(DirectMapChange_());
 
-        
-
+       
 
     }
 
@@ -104,28 +98,15 @@ public class InsideClearChecker_1 : MonoBehaviour
             DOTween.To(() => mat.GetColor("_BaseColor"),
                        x => mat.SetColor("_BaseColor", x),
                        targetColor,
-                       1.2f) // 4초 동안 변화
+                       3.0f) 
                    .SetEase(Ease.Linear);
         }
 
 
-        yield return new WaitForSeconds(5f);
-
-        cineCameraChager.CameraChange();
 
 
 
 
-
-
-
-
-      
-
-        yield return new WaitForSeconds(25f);
-
-        InGameUIController.Instance.bIsUIDoing = false;
-        GameAssistManager.Instance.InsideOutEffect();
     }
     
 }

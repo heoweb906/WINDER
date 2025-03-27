@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7938687653889561349}
   - component: {fileID: 3815609711561424977}
   - component: {fileID: 2533661057118196964}
+  - component: {fileID: 4192200202609361595}
   m_Layer: 8
   m_Name: MasterObj_Bag
   m_TagString: Untagged
@@ -174,3 +175,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bIsObject: 1
+--- !u!114 &4192200202609361595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6583161780568221616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dacac028a81f8d4597eb863659a475b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorType: 0
+  _material: {fileID: 0}
