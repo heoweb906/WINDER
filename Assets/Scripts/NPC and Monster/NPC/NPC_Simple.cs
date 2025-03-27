@@ -164,4 +164,9 @@ public class NPC_Simple : MonoBehaviour
         anim.SetTrigger("doAvoid");
     }
 
+    public void SetDropState()
+    {
+        anim.SetTrigger("doDrop");
+    }
+
 }
