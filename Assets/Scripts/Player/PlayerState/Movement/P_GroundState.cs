@@ -24,7 +24,7 @@ public class P_GroundState : PlayerMovementState
             || machine.CheckCurrentState(machine.SoftStopState) || machine.CheckCurrentState(machine.HardStopState)
             || machine.CheckCurrentState(machine.RunningState) || machine.CheckCurrentState(machine.WalkingState)))
         {
-            if (player.isRun)
+            if (player.isRun && !player.isDirectionLock)
                 machine.OnStateChange(machine.RunningState);
             else
                 machine.OnStateChange(machine.WalkingState);
@@ -49,7 +49,7 @@ public class P_GroundState : PlayerMovementState
     public void CheckInputJump()
     {
 
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && !player.isDirectionLock)
         {
             if (!player.isCarryObject)
             {
@@ -143,7 +143,7 @@ public class P_GroundState : PlayerMovementState
                     float angle = player.curClockWork.transform.eulerAngles.y * Mathf.Deg2Rad;
                     player.targetPos = player.curClockWork.transform.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * (player.clockWorkInteractionDistance_Wall + player.curClockWork.fDistanceOffset);
                 }
-                else if (player.curClockWork.GetClockWorkType() == ClockWorkType.NPC)
+                else if (player.curClockWork.GetClockWorkType() == ClockWorkType.NPC || player.curClockWork.GetClockWorkType() == ClockWorkType.KyungSoo)
                 {
                     Transform npcPos = player.curClockWork.gameObject.GetComponent<NPC_ClockWork>().NPC.transform;
                     float angle = (npcPos.eulerAngles.y+180) * Mathf.Deg2Rad;
@@ -183,7 +183,7 @@ public class P_GroundState : PlayerMovementState
             {
                 if (player.curInteractableObject.type == InteractableType.ClockWork)
                 {
-                    if (player.curClockWork.GetClockWorkType() == ClockWorkType.Wall || player.curClockWork.GetClockWorkType() == ClockWorkType.NPC)
+                    if (player.curClockWork.GetClockWorkType() == ClockWorkType.Wall || player.curClockWork.GetClockWorkType() == ClockWorkType.NPC || player.curClockWork.GetClockWorkType() == ClockWorkType.KyungSoo)
                         machine.OnStateChange(machine.SpinClockWorkWallState);
                     else if (player.curClockWork.GetClockWorkType() == ClockWorkType.Floor)
                         machine.OnStateChange(machine.SpinClockWorkFloorState);
@@ -221,7 +221,23 @@ public class P_GroundState : PlayerMovementState
     public override void SetDirection()
     {
         if (!player.isGoToTarget)
+        {
             base.SetDirection();
+            if (player.isDirectionLock)
+            {
+                Vector3 directionToLockPos = player.directionLockPos.position - player.transform.position;
+                directionToLockPos.y = 0;
+                float dot = Vector3.Dot(player.curDirection.normalized, directionToLockPos.normalized);
+                if (dot < 0.7f)
+                {
+                    player.curDirection = Vector3.zero;
+                }
+                else
+                {
+                    player.curDirection = directionToLockPos.normalized;
+                }
+            }
+        }
         else
         {
             player.curDirection = player.targetPos - player.transform.position;
