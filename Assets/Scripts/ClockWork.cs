@@ -8,13 +8,14 @@ public enum ClockWorkType
 {
     Floor,
     Wall,
-    NPC
+    NPC,
+    KyungSoo
 };
 
 public class ClockWork : InteractableObject
 {
     public ClockBattery clockBattery;
-    [SerializeField] private ClockWorkType clockWorkType;
+    [SerializeField] public ClockWorkType clockWorkType;
 
     public List<ClockWork> plusClockWorksList  = new List<ClockWork>();
 

@@ -15,7 +15,9 @@ public class PlayerAnimationData
     [SerializeField] private string unControllableParameterName = "UnControllable";
     [SerializeField] private string uc_IdleParameterName = "UC_Idle";
     [SerializeField] private string uc_DieParameterName = "UC_Die";
+    [SerializeField] private string uc_FallDownParameterName = "UC_FallDown";
     [SerializeField] private string uc_Die_GrabParameterName = "UC_Die_Grab";
+    [SerializeField] private string uc_WakeUpParameterName = "UC_WakeUp";
     [SerializeField] private string moveStartParameterName = "MoveStart";
     [SerializeField] private string movingParameterName = "Move";
     [SerializeField] private string moveStopParameterName = "MoveStop";
@@ -78,6 +80,8 @@ public class PlayerAnimationData
     public int UC_IdleParameterHash { get; private set; }
     public int UC_DieParameterHash { get; private set; }
     public int UC_Die_GrabParameterHash { get; private set; }
+    public int UC_FallDownParameterHash { get; private set; }
+    public int UC_WakeUpParameterHash { get; private set; }
     public int MoveStartParameterHash { get; private set; }
     public int MovingParameterHash { get; private set; }
     public int MoveStopParameterHash { get; private set; }
@@ -134,6 +138,8 @@ public class PlayerAnimationData
         UC_IdleParameterHash = Animator.StringToHash(uc_IdleParameterName);
         UC_DieParameterHash = Animator.StringToHash(uc_DieParameterName);
         UC_Die_GrabParameterHash = Animator.StringToHash(uc_Die_GrabParameterName);
+        UC_FallDownParameterHash = Animator.StringToHash(uc_FallDownParameterName);
+        UC_WakeUpParameterHash = Animator.StringToHash(uc_WakeUpParameterName);
         MoveStartParameterHash = Animator.StringToHash(moveStartParameterName);
         MovingParameterHash = Animator.StringToHash(movingParameterName);
         MoveStopParameterHash = Animator.StringToHash(moveStopParameterName);

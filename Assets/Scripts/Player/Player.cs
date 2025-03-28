@@ -141,6 +141,9 @@ public class Player : MonoBehaviour
 
     public bool isLockCarryObject = false;
 
+    public bool isDirectionLock = false;
+    public Transform directionLockPos;
+
     private void Awake()
     {
         playerAnimationData.Initialize();
@@ -172,13 +175,10 @@ public class Player : MonoBehaviour
     {
         machine?.OnStateUpdate();
         if(Input.GetKeyDown(KeyCode.X)){
-            RemoveCarryObject();
+            machine.OnStateChange(machine.UC_WakeUpState);
         }
         if(Input.GetKeyDown(KeyCode.C)){
-            if(isLockCarryObject)
-                SetLockCarryObject(false);
-            else
-                SetLockCarryObject(true);
+            machine.OnStateChange(machine.UC_FallDownState);
         }
     }
 
@@ -371,4 +371,26 @@ public class Player : MonoBehaviour
         isHandIK = false;
         DOTween.To(() => playerAnim.GetLayerWeight(1), x => playerAnim.SetLayerWeight(1, x), 0, 0.2f);
     }
+
+    public void SetFallDownState(){
+        machine.OnStateChange(machine.UC_FallDownState);
+    }
+
+    public void SetWakeUpState(){
+        machine.OnStateChange(machine.UC_WakeUpState);
+    }
+    
+
+    public bool bCanExit = false;
+    public void SetCanExit(bool _bool){
+        bCanExit = _bool;
+    }
+    public void SetPlayerDirectionLock(bool _bool , GameObject _obj){
+        isDirectionLock = _bool;
+        if(isDirectionLock){
+            directionLockPos = _obj.transform;
+        }
+    }
+
+
 }

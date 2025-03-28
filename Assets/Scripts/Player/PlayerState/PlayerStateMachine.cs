@@ -15,6 +15,9 @@ public class PlayerStateMachine : StateMachine
     public P_UnControllable UnControllableState { get; private set; }
     public P_UC_Idle UC_IdleState { get; private set; }
     public P_UC_Die UC_DieState { get; private set; }
+    public P_UC_FallDown UC_FallDownState { get; private set; }
+    public P_UC_WakeUp UC_WakeUpState { get; private set; }
+
 
     public P_IdleState IdleState { get; private set; }
     public P_SoftLandingState SoftLandingState { get; private set; }
@@ -67,6 +70,9 @@ public class PlayerStateMachine : StateMachine
         UnControllableState = new P_UnControllable(player, this);
         UC_IdleState = new P_UC_Idle(player, this);
         UC_DieState = new P_UC_Die(player, this);
+        UC_FallDownState = new P_UC_FallDown(player, this);
+        UC_WakeUpState = new P_UC_WakeUp(player, this);
+
 
         IdleState = new P_IdleState(player, this);
         SoftLandingState = new P_SoftLandingState(player, this);
