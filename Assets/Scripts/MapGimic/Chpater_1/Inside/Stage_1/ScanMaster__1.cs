@@ -19,6 +19,7 @@ public class ScanMaster__1 : ClockBattery
     [Header("스캔 기능 관련")]
     public ColorType[] ColorCorrects;       // ScanMaster의 정답 컬러
     public Scanner[] scanners;              // 각 스테이지의 Scanner
+
   
     [Header("Door, Monitor")]
     public Monitor monitor;
@@ -118,7 +119,7 @@ public class ScanMaster__1 : ClockBattery
     {
         InGameUIController.Instance.bIsUIDoing = true;
         List<ColorObj> colorObjs = new List<ColorObj>(); // 리스트 생성
-        cameraEvent.CameraTriggerStart(25);
+        cameraEvent.CameraTriggerStart(23);
 
 
         yield return new WaitForSeconds(0.4f);
@@ -208,6 +209,8 @@ public class ScanMaster__1 : ClockBattery
         yield return new WaitForSeconds(3f);
 
         for (int i = 0; i < colorObjs.Count; i++) Destroy(colorObjs[i].gameObject);
+        for (int i = 0; i < scanners.Length; ++i) scanners[i].ScannerCleaner(); 
+
         GameObject spawnedObject = Instantiate(masterObject);
         spawnedObject.transform.localPosition = transformMasterObj.position;
 
@@ -452,6 +455,7 @@ public class ScanMaster__1 : ClockBattery
         {
             Destroy(colorObjs[i].gameObject);
         }
+        for (int i = 0; i < scanners.Length; ++i) scanners[i].ScannerCleaner();
 
 
         InGameUIController.Instance.bIsUIDoing = false;

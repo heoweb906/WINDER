@@ -2266,6 +2266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5174464374436308623}
   - component: {fileID: 2831648639433762844}
+  - component: {fileID: 1196303899797892896}
   m_Layer: 0
   m_Name: Kyungsoo_FollowLine
   m_TagString: Untagged
@@ -2318,6 +2319,21 @@ MonoBehaviour:
     roll: 0
   - position: {x: 0, y: 0, z: -39.760002}
     roll: 0
+--- !u!114 &1196303899797892896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6203025090592937580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a64f66bcddf09045be8a48fe89751a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 1059992147563669461}
+  cart: {fileID: 3143986413493259963}
+  fDissapointTime: 5
 --- !u!1 &6474772359061599929
 GameObject:
   m_ObjectHideFlags: 0
@@ -3093,7 +3109,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7946075583855388221}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 99a9c787e5d1bbf48a389834c4a9641c, type: 3}
   m_Name: 

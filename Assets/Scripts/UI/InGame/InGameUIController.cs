@@ -51,9 +51,12 @@ public class InGameUIController : MonoBehaviour
     private GameObject lastCreatedObject = null; // 마지막으로 생성한 빈 오브젝트 저장
 
 
+    public bool bFast;
+
     private void Start()
     {
-        FadeOutImageEffect();
+        if (!bFast) FadeOutImageEffect();
+
         Instance = this; 
     }
 
@@ -330,7 +333,8 @@ public class InGameUIController : MonoBehaviour
     }
     IEnumerator FadeOutImageEffect_()
     {
-        Debug.Log("게임 속도 배속");
+        if(bFast) yield break;
+;       Debug.Log("게임 속도 배속");
         Time.timeScale = 30f; 
         GameAssistManager.Instance.PlayerInputLockOn();
 

@@ -25,4 +25,14 @@ public class TimelineManager : MonoBehaviour
     public void SetNPCAvoid(NPC_Simple npc){
         npc.SetAvoidState();
     }
+
+    public void SetNPCDrop(NPC_Simple npc)
+    {
+        npc.SetDropState();
+    }
+
+    public void SetDropBox(GameObject dropBox)
+    {
+        dropBox.transform.parent = null;
+    }
 }

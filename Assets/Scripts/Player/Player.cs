@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     public bool isWorldAxis;
     [Range(0, 360)]
     public float yAxis;
-
+    
     public PlayerStateMachine machine;
 
     public Transform camTransform;

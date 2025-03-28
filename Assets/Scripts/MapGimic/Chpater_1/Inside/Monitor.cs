@@ -9,8 +9,7 @@ public class Monitor : MonoBehaviour
     public Material[] mats_Face;
     // public Texture2D[] textures_Face;
     public float fShake;
-
-
+    
     private Coroutine shakeCoroutine;
 
     private void Awake()
@@ -23,8 +22,11 @@ public class Monitor : MonoBehaviour
 
     public void SetTextureProperty(int textureIndex)
     {
-        Debug.Log("작동");
-
+        // 0 - 화남
+        // 1 - 기분 나쁘게 웃음
+        // 2 - 실망한 표정
+        // 3 - 무표정
+        // 4 - 밝게 웃음
         mat = new Material(mats_Face[textureIndex]); // 개별 인스턴스로 변경
         ApplyMaterial(); // 변경 사항 적용
     }
