@@ -32,15 +32,18 @@ public class ClockWork : InteractableObject
 
     public void ChargingBattery()
     {
-        if (clockBattery.fMaxClockBattery > clockBattery.fCurClockBattery && !clockBattery.bDoing)
+        if(clockBattery != null)
         {
-            //Debug.Log("태엽 돌리는 중");
-            clockBattery.fCurClockBattery += 1;
-            //transform.Rotate(Vector3.forward * 80f * Time.deltaTime);
-            clockBattery.clockWork = this.gameObject;
-            canInteract = false;
+            if (clockBattery.fMaxClockBattery > clockBattery.fCurClockBattery && !clockBattery.bDoing)
+            {
+                //Debug.Log("태엽 돌리는 중");
+                clockBattery.fCurClockBattery += 1;
+                //transform.Rotate(Vector3.forward * 80f * Time.deltaTime);
+                clockBattery.clockWork = this.gameObject;
+                canInteract = false;
+            }
+            if (clockBattery.fMaxClockBattery <= clockBattery.fCurClockBattery) clockBattery.bBatteryFull = true;
         }
-        if (clockBattery.fMaxClockBattery <= clockBattery.fCurClockBattery) clockBattery.bBatteryFull = true;
     }
 
     public void EndCharging_To_BatteryStart()

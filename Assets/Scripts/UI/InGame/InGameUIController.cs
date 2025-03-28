@@ -55,7 +55,8 @@ public class InGameUIController : MonoBehaviour
 
     private void Start()
     {
-        FadeOutImageEffect();
+        if (!bFast) FadeOutImageEffect();
+
         Instance = this; 
     }
 

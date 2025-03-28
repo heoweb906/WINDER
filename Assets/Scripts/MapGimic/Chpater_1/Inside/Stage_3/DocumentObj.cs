@@ -14,13 +14,7 @@ public class DocumentObj : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            ChangeToColorObj();
-        }
-    }
+  
 
 
     public void ChangeToColorObj_()
