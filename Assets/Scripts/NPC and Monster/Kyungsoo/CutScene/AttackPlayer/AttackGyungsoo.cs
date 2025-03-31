@@ -30,14 +30,14 @@ public class AttackGyungsoo : MonoBehaviour
 
     IEnumerator CutScencStart_Attack()
     {
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(1.0f);
 
         anim.SetTrigger("doAttackPlayer");
         cineChanger.CameraChange();
         cameraShake.TriggerStrongShake(2f, 0.6f);
 
 
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(1f);
 
 
         cart.enabled = true;
@@ -51,7 +51,12 @@ public class AttackGyungsoo : MonoBehaviour
     }
     private void CutSceneStop()
     {
-        Debug.Log("asdddddddddddddddd");
+        for(int i = 0; i < objCut.Length; ++i)
+        {
+            Destroy(objCut[i]);
+        }
+
+
         GameAssistManager.Instance.GetPlayerScript().SetCanExit(true);
         GameAssistManager.Instance.GetPlayerScript().SetPlayerDirectionLock(false, null);
 

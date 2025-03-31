@@ -1,36 +1,42 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using DG.Tweening;
 using UnityEngine;
 
-// #. NPC가 플레이어의 뒤쪽으로 반원을 그리며 이동하는 상태
 public class NPC_Simple_ThankRotatePlayerClockWork : NPC_Simple_State
 {
     public NPC_Simple_ThankRotatePlayerClockWork(NPC_Simple npc, NPC_Simple_StateMachine machine) : base(npc, machine) { }
 
     private bool bStart = false;
+    private bool bHasFinishedRotation = false;
+    private Quaternion targetRotation;
 
     public override void OnEnter()
     {
         base.OnEnter();
-        Debug.Log("진입 완료");
+
+        GameAssistManager.Instance.PlayerInputLockOn();
+
+        npc.GetAnimator().SetBool("Bool_Walk", true);
+        npc.GetAnimator().SetInteger("Walk_Num", npc.iAnimWalking);
 
         npc.GetNav().isStopped = false;
         npc.GetNav().autoBraking = false;
 
-        npc.checkPoints = new Transform[2];
+        npc.checkPoints = new Transform[3];
         GameObject objPlayer = npc.GetPlayerObject();
 
         // 1. 첫 번째 목표 위치 계산
         Vector3 position1 = objPlayer.transform.position + objPlayer.transform.right + objPlayer.transform.forward * 1f;
-        GameObject tempObject1 = new GameObject("Position1");
-        tempObject1.transform.position = position1; // 새로운 GameObject로 위치 설정
-        npc.checkPoints[0] = tempObject1.transform; // 배열에 저장
+        npc.checkPoints[0] = new GameObject().transform; // 임시 Transform 생성
+        npc.checkPoints[0].position = position1; // 위치만 설정하고 GameObject는 사용 안 함
 
         // 2. 두 번째 목표 위치 계산
         Vector3 position2 = objPlayer.transform.position + objPlayer.transform.right + objPlayer.transform.forward * -1f;
-        GameObject tempObject2 = new GameObject("Position2");
-        tempObject2.transform.position = position2; // 새로운 GameObject로 위치 설정
-        npc.checkPoints[1] = tempObject2.transform; // 배열에 저장
+        npc.checkPoints[1] = new GameObject().transform; // 임시 Transform 생성
+        npc.checkPoints[1].position = position2; // 위치만 설정하고 GameObject는 사용 안 함
+
+        Vector3 position3 = objPlayer.transform.position + objPlayer.transform.forward * -1f;
+        npc.checkPoints[2] = new GameObject().transform; // 임시 Transform 생성
+        npc.checkPoints[2].position = position3;
 
         // 배열 내 위치 출력
         for (int i = 0; i < npc.checkPoints.Length; i++)
@@ -38,7 +44,9 @@ public class NPC_Simple_ThankRotatePlayerClockWork : NPC_Simple_State
             Debug.Log($"Position {i + 1}: {npc.checkPoints[i].position}");
         }
 
-        npc.GetAnimator().SetInteger("Walk_Num", npc.iAnimWalking);
+        npc.CurrentCheckPointIndex = 0; // 시작할 때 첫 번째 체크포인트부터
+
+        MoveToNextCheckPoint(); // 첫 번째 체크포인트로 이동
 
         bStart = true;
     }
@@ -47,34 +55,29 @@ public class NPC_Simple_ThankRotatePlayerClockWork : NPC_Simple_State
     {
         base.OnFixedUpdate();
 
-        Debug.Log("asdasdasdasdasd");
-
-        // checkPoints 배열이 null이거나 길이가 0일 경우 빠져나옵니다.
-        if (npc.checkPoints == null || npc.checkPoints.Length == 0)
+        if (bStart)
         {
-            Debug.Log("[OnFixedUpdate] checkPoints가 초기화되지 않았습니다.");
-            return;
-        }
-
-        if (npc.GetNav().enabled)
-        {
-            // 현재 목표 지점과 NPC의 거리 확인
-            float distance = Vector3.Distance(npc.transform.position, npc.GetNav().destination);
-            Debug.Log($"[OnFixedUpdate] 현재 위치: {npc.transform.position}, 목표 위치: {npc.GetNav().destination}, 거리: {distance}");
-
-            // 목표 지점 도달 시 체크포인트로 이동
-            if (distance <= npc.GetNav().stoppingDistance)
+            if (npc.GetNav().enabled)
             {
-                if (npc.CurrentCheckPointIndex < npc.checkPoints.Length)
+                float distance = Vector3.Distance(npc.transform.position, npc.GetNav().destination);
+
+                // 목표 지점 도달 시 다음 체크포인트로 이동
+                if (distance <= npc.GetNav().stoppingDistance)
                 {
-                    MoveToNextCheckPoint();
                     npc.CurrentCheckPointIndex++;
-                    Debug.Log($"[OnFixedUpdate] 이동 시작: {npc.checkPoints[npc.CurrentCheckPointIndex].position}");
-                }
-                else
-                {
-                    Debug.Log("이동 종료!!!");
-                    // 종료 후 처리할 부분이 있다면 추가하세요.
+
+                    if (npc.CurrentCheckPointIndex < npc.checkPoints.Length)
+                    {
+                        MoveToNextCheckPoint();
+                    }
+                    else
+                    {
+                        bStart = false;
+
+                        npc.GetAnimator().SetTrigger("ddddStop");
+                        npc.GetAnimator().SetBool("Bool_Walk", false);
+                        LookAtPlayerAndExecuteFunction();
+                    }
                 }
             }
         }
@@ -89,17 +92,39 @@ public class NPC_Simple_ThankRotatePlayerClockWork : NPC_Simple_State
         }
     }
 
+    private void LookAtPlayerAndExecuteFunction()
+    {
+        GameObject objPlayer = npc.GetPlayerObject();
 
+        // NPC가 플레이어를 바라보도록 회전
+        Vector3 directionToPlayer = objPlayer.transform.position - npc.transform.position;
+        directionToPlayer.y = 0; // Y축 회전 제외 (수평 회전만)
+        targetRotation = Quaternion.LookRotation(directionToPlayer);
 
+        // DOTween을 사용하여 부드럽게 회전하고, 딜레이 후 함수 실행
+        float rotationSpeed = 1f;
+        npc.transform.DORotateQuaternion(targetRotation, rotationSpeed)
+            .SetDelay(1.5f) // 회전 후 1초 딜레이
+            .OnComplete(() =>
+            {
+               
+                npc.GetAnimator().SetTrigger("doRoateTaeyubStart");
+
+                // 2초 후 다른 함수 실행
+                DOVirtual.DelayedCall(3f, () =>
+                {
+                    // 2초 후 실행할 함수 호출
+                    GameAssistManager.Instance.PlayerInputLockOff();
+                    npc.GetAnimator().SetTrigger("doRoateTaeyubEnd");
+                    machine.OnStateChange(machine.IDLEState);
+                });
+            });
+    }
 
 
     public override void OnExit()
     {
         base.OnExit();
         Debug.Log("종료되어 버렸습니다.");
-
-        // npc.GetNav().isStopped = true;
     }
-
-
 }

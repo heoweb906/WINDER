@@ -53,7 +53,7 @@ public class TrackingHead_ToPlayer : MonoBehaviour
         }
         else
         {
-            Debug.Log("두리번거리는 중");
+            // Debug.Log("두리번거리는 중");
 
             // 플레이어를 놓쳤다면 다시 부드러운 회전을 허용
             hasRotated = false;

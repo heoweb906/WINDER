@@ -51,6 +51,8 @@ public class NPC_Simple : MonoBehaviour
         Init();
     }
 
+
+
     // NPC를 풀에서 꺼냈을 때마다 초기화하도록 OnEnable()에 ResetState() 호출
     private void OnEnable()
     {
@@ -91,6 +93,7 @@ public class NPC_Simple : MonoBehaviour
             Debug.Log("심장이 비어있습니다");
         }
     }
+
 
     // ResetState()를 통해 풀에서 재사용 시 필요한 변수들을 재설정
     public void ResetState()

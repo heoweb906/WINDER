@@ -6,9 +6,8 @@ public class NPC_Simple_GrappedState : NPC_Simple_State
 {
     public NPC_Simple_GrappedState(NPC_Simple npc, NPC_Simple_StateMachine machine) : base(npc, machine) { }
 
-
-    private float elapsedTime; // 시간 측정용 변수
-    private const float duration = 1.5f; // 2초 후에 상태 변경
+    private float timer = 0f;
+    private bool hasExecuted = false; // 한 번만 실행되도록 체크
 
 
     public override void OnEnter()
@@ -16,12 +15,8 @@ public class NPC_Simple_GrappedState : NPC_Simple_State
         base.OnEnter();
 
 
-        npc.GetNav().radius = 0.5f;
-        npc.GetAnimator().SetTrigger("doReactionGrapped");
-
-        Debug.Log("NPC가 잡힌 상태가 됨");
-
-        // elapsedTime = 0f; // 상태 진입 시 시간 초기화
+        timer = 0f; // 타이머 초기화
+        hasExecuted = false; // 실행 여부 초기화
     }
 
 
@@ -29,13 +24,17 @@ public class NPC_Simple_GrappedState : NPC_Simple_State
     {
         base.OnUpdate();
 
-        //elapsedTime += Time.deltaTime;
 
-        //// 2초가 지나면 ChangeStateNPC 실행
-        //if (elapsedTime >= duration)
-        //{
-        //    ChangeStateNPC();
-        //}
+
+        timer += Time.deltaTime; // 시간 증가
+
+        if (timer >= 1f && !hasExecuted) // 1초가 지나고 한 번만 실행
+        {
+            machine.OnStateChange(machine.ThankState_RotatePlayerClockWork);
+           
+            hasExecuted = true;
+        }
+
     }
 
     public override void OnFixedUpdate()
@@ -48,6 +47,9 @@ public class NPC_Simple_GrappedState : NPC_Simple_State
     {
         base.OnExit();
     }
+
+
+
 
 
   

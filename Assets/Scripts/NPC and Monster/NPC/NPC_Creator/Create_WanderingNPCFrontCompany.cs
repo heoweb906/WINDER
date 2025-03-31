@@ -18,34 +18,32 @@ public class Create_WanderingNPCFrontCompany : MonoBehaviour
     public WayPoints positionLast;          // 마지막 순회 지점들
 
 
+
     private int iRandNum;
-    private bool isSpawning = true;
+    public bool isSpawning;
 
     private List<int> previousRandNums = new List<int>();
 
     void Start()
     {
-        isSpawning = true;
         if (positionArray != null) StartCoroutine(SpawnerNPCs_1());
 
     }
-
     IEnumerator SpawnerNPCs_1()
     {
         while (isSpawning)
         {
-            float randomValue = Random.value; // 0.0 이상 1.0 미만의 난수
+            float randomValue = Random.value;
             int fRandomNPC = (randomValue < 0.95f) ? 0 : 1;
 
             int randomIndex = Random.Range(0, positionArray[0].points.Length);
             Transform spawnPosition = positionArray[0].points[randomIndex];
 
-
             GameObject npc = Instantiate(NPC_Wandering[fRandomNPC], spawnPosition.position, Quaternion.identity);
             npc.transform.SetParent(transform);
-            NPC_Simple nPC_Wanderring = npc.GetComponent<NPC_Simple>();
 
-            // 리스트를 사용하여 목표 지점들을 추가
+            NPC_Simple nPC_Wandering = npc.GetComponent<NPC_Simple>();
+
             List<Transform> tempCheckpoints = new List<Transform>();
 
             int newRandNum = GetUniqueRandom(positionArray[2].points.Length);
@@ -58,18 +56,38 @@ public class Create_WanderingNPCFrontCompany : MonoBehaviour
             randomIndex = Random.Range(0, positionLast.points.Length);
             tempCheckpoints.Add(positionLast.points[randomIndex]);
 
-            nPC_Wanderring.checkPoints = tempCheckpoints.ToArray();
-            //int lastPointIndex = Random.Range(0, positionLast.points.Length);
-            //tempCheckpoints.Add(positionLast.points[lastPointIndex]);
-
-            //nPC_Wanderring.checkPoints = tempCheckpoints.ToArray();
-
-            // 손수민
+            nPC_Wandering.checkPoints = tempCheckpoints.ToArray();
 
             yield return new WaitForSeconds(spawnInterval);
         }
     }
 
+
+
+    public void NPCCreatOff_Sacred()
+    {
+        isSpawning = false;
+
+        foreach (NPC_Simple npcScript in GetComponentsInChildren<NPC_Simple>())
+        {
+            npcScript.machine.OnStateChange(npcScript.machine.ScaredState);
+        }
+
+    }
+
+    public void NPCCreatOn()
+    {
+        isSpawning = true;
+
+        foreach (NPC_Simple npcScript in GetComponentsInChildren<NPC_Simple>())
+        {
+            npcScript.machine.OnStateChange(npcScript.machine.IDLEState);
+        }
+
+    }
+        
+
+  
 
     int GetUniqueRandom(int maxValue)
     {

@@ -37,7 +37,10 @@ public class GuardM : MonoBehaviour
 
     // 공격
     public Transform transformGrabPlayer; 
-    public float fAttackRange; 
+    public float fAttackRange;
+
+    [Header("회사 앞 경비병이 사용할 컴포넌트들")]
+    public Create_WanderingNPCFrontCompany creatorNPC;
 
     [Header("배회 경비병이 사용할 컴포넌트들")]
     public Transform transformStart;

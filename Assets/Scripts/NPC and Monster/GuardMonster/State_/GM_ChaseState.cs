@@ -14,6 +14,15 @@ public class GM_ChaseState : GuardMState
     {
         base.OnEnter();
 
+        Debug.Log("플레이어 추격 시작");
+
+        if (guardM.creatorNPC != null)
+        {
+            Debug.Log("공포에 떨어라");
+            guardM.creatorNPC.NPCCreatOff_Sacred();
+        }
+           
+
         guardM.trackingHead.bFindPlayer = true;
         guardM.nav.isStopped = true;
         guardM.anim.SetTrigger("doFindPlayer");

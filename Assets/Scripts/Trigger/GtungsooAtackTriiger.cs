@@ -5,8 +5,14 @@ using UnityEngine;
 public class GtungsooAtackTriiger : MonoBehaviour
 {
     public GameObject gyungsoo;
+    private BoxCollider boxCollider;
 
     private bool bTrigger = false;
+
+    private void Awake()
+    {
+        boxCollider = GetComponent<BoxCollider>();
+    }
 
     private void OnTriggerExit(Collider other)
     {
@@ -21,6 +27,7 @@ public class GtungsooAtackTriiger : MonoBehaviour
 
     IEnumerator StopPlayer()
     {
+        boxCollider.isTrigger = false;
         GameAssistManager.Instance.PlayerInputLockOn();
         yield return new WaitForSeconds(1f);
         GameAssistManager.Instance.PlayerInputLockOff();

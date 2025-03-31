@@ -8,6 +8,7 @@ public class Pictre_Succes : MonoBehaviour
     private CarriedObject carriedOj;
     private Rigidbody rigid;
 
+
     private void Awake()
     {
         carriedOj = GetComponent<CarriedObject>();

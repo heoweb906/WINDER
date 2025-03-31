@@ -10,18 +10,12 @@ public class NPC_Simple_WalkState : NPC_Simple_State
     {
         base.OnEnter();
 
-        Debug.Log("WalkState 진입");
+        // Debug.Log("WalkState 진입");
 
         // npc.GetNav().radius = 0.26f;
         npc.GetNav().isStopped = false;
         npc.GetNav().autoBraking = false;
 
-        if (npc.bSad) npc.GetNav().speed = 0.5f;
-        else
-        {
-            //if (npc.iAnimWalking == 0)
-            //    npc.GetNav().speed = 0.7f;
-        }
         npc.GetAnimator().SetInteger("Walk_Num", npc.iAnimWalking);
 
 
