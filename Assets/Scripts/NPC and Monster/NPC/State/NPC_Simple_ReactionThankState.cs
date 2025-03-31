@@ -44,6 +44,8 @@ public class NPC_Simple_ReactionThankState : NPC_Simple_State
     {
         base.OnUpdate();
 
+        Debug.Log("감사하는 상태가 동작중입니다. ");
+
         elapsedTime += Time.deltaTime;
 
         // 2초가 지나면 ChangeStateNPC 실행

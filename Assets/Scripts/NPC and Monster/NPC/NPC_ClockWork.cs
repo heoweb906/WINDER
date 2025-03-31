@@ -13,7 +13,6 @@ public class NPC_ClockWork : ClockWork
     {
         npcHeart.machine.OnStateChange(npcHeart.machine.GrappedState);
 
-     
 
     }
 

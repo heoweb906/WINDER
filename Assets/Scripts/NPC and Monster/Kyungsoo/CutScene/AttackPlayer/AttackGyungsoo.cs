@@ -9,24 +9,35 @@ public class AttackGyungsoo : MonoBehaviour
     public Animator anim;
     public CinemachineDollyCart cart;
 
+
     public float fDissapointTime;
-    
-  
+
+
+    public CineCameraChager cineChanger;
+    public RoadCarCreator_City roadCarCreatorCity;
+    public HandheldCamera_DollyCart cameraShake;
+    public GameObject[] objCut;
+
+
 
 
     public void CutScencStart()
     {
+        
+        roadCarCreatorCity.bCarCreate = true;
         nowCoroutine = StartCoroutine(CutScencStart_Attack());
     }
 
     IEnumerator CutScencStart_Attack()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.2f);
 
         anim.SetTrigger("doAttackPlayer");
+        cineChanger.CameraChange();
+        cameraShake.TriggerStrongShake(2f, 0.6f);
 
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(4f);
 
 
         cart.enabled = true;
@@ -35,10 +46,16 @@ public class AttackGyungsoo : MonoBehaviour
 
         yield return new WaitForSeconds(fDissapointTime);
 
+
         CutSceneStop();
     }
     private void CutSceneStop()
     {
+        Debug.Log("asdddddddddddddddd");
+        GameAssistManager.Instance.GetPlayerScript().SetCanExit(true);
+        GameAssistManager.Instance.GetPlayerScript().SetPlayerDirectionLock(false, null);
+
+
         StopCoroutine(nowCoroutine);
         Destroy(gameObject);
     }

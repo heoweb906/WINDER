@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class P_UC_FallDown : P_UnControllable
 {
@@ -10,7 +11,7 @@ public class P_UC_FallDown : P_UnControllable
     {
         base.OnEnter();
         machine.StartAnimation(player.playerAnimationData.UC_FallDownParameterHash);
-        ;
+        player.transform.DOMove(player.transform.position - player.transform.forward, 0.5f);
     }
 
     public override void OnExit()
@@ -25,8 +26,9 @@ public class P_UC_FallDown : P_UnControllable
     }
     public override void SetDirection()
     {
-        if(!player.bCanExit) return;
-        if(Input.GetButton("Horizontal") || Input.GetButton("Vertical") || Input.GetButton("Fire1")){
+        if (!player.bCanExit) return;
+        if (Input.GetButton("Horizontal") || Input.GetButton("Vertical") || Input.GetButton("Fire1"))
+        {
             machine.OnStateChange(machine.UC_WakeUpState);
         }
         return;

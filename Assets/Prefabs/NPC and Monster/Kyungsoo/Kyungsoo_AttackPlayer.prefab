@@ -1651,6 +1651,7 @@ Transform:
   - {fileID: 1543558876965537841}
   - {fileID: 1732373924600946088}
   - {fileID: 3198760771231309392}
+  - {fileID: 7575933769155149363}
   m_Father: {fileID: 35412459761700324}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &7213099764354626646
@@ -2084,7 +2085,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5045176016000221972}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.82456976, z: -0, w: 0.5657604}
+  m_LocalRotation: {x: 0, y: -0.8245707, z: 0, w: 0.5657589}
   m_LocalPosition: {x: -8.696329, y: -0.74999976, z: -0.64860153}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2130,6 +2131,10 @@ MonoBehaviour:
   anim: {fileID: 7213099764354626646}
   cart: {fileID: 7958886392572424061}
   fDissapointTime: 4
+  cineChanger: {fileID: 0}
+  roadCarCreatorCity: {fileID: 0}
+  cameraShake: {fileID: 0}
+  objCut: []
 --- !u!1 &5056829570039605543
 GameObject:
   m_ObjectHideFlags: 0
@@ -2795,6 +2800,37 @@ Transform:
   - {fileID: 3545028064356579716}
   m_Father: {fileID: 6379916962605214028}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7082322432875313326
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7575933769155149363}
+  m_Layer: 0
+  m_Name: Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7575933769155149363
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7082322432875313326}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.546}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1726232334776082124}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7122492483954837673
 GameObject:
   m_ObjectHideFlags: 0
@@ -2901,7 +2937,7 @@ GameObject:
   - component: {fileID: 3198760771231309392}
   - component: {fileID: 7344714136210711404}
   - component: {fileID: 5149002157875558478}
-  - component: {fileID: 2257923231760460786}
+  - component: {fileID: 892774269617234508}
   m_Layer: 8
   m_Name: spring
   m_TagString: Untagged
@@ -3000,7 +3036,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.025564414, y: 0.11793438, z: 0.14383428}
   m_Center: {x: -0.00000016522063, y: 0.041758604, z: -0.00041069463}
---- !u!114 &2257923231760460786
+--- !u!114 &892774269617234508
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3016,11 +3052,12 @@ MonoBehaviour:
   canInteract: 1
   isParts: 0
   clockBattery: {fileID: 0}
-  clockWorkType: 1
+  clockWorkType: 3
   plusClockWorksList: []
   isSingleEvent: 0
   fDistanceOffset: 0
   gyungsoo: {fileID: 9193007947151562046}
+  obj_Kyungsoo: {fileID: 4298873213510638099}
 --- !u!1 &7485233239115696050
 GameObject:
   m_ObjectHideFlags: 0

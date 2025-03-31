@@ -9,6 +9,9 @@ public class NPC_Simple_WalkState : NPC_Simple_State
     public override void OnEnter()
     {
         base.OnEnter();
+
+        Debug.Log("WalkState 진입");
+
         // npc.GetNav().radius = 0.26f;
         npc.GetNav().isStopped = false;
         npc.GetNav().autoBraking = false;

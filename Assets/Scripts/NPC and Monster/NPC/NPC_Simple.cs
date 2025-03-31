@@ -169,4 +169,13 @@ public class NPC_Simple : MonoBehaviour
         anim.SetTrigger("doDrop");
     }
 
+
+    
+
+
+    // 
+    public GameObject GetPlayerObject()
+    {
+        return GameAssistManager.Instance.GetPlayer();
+    }
 }

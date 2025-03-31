@@ -60,6 +60,7 @@ public class InsideClearChecker_1 : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
 
+
         Renderer renderer = colorObj.GetComponent<Renderer>();
 
         if (renderer != null)

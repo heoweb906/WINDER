@@ -143,9 +143,9 @@ public class P_GroundState : PlayerMovementState
                     float angle = player.curClockWork.transform.eulerAngles.y * Mathf.Deg2Rad;
                     player.targetPos = player.curClockWork.transform.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * (player.clockWorkInteractionDistance_Wall + player.curClockWork.fDistanceOffset);
                 }
-                else if (player.curClockWork.GetClockWorkType() == ClockWorkType.NPC || player.curClockWork.GetClockWorkType() == ClockWorkType.KyungSoo)
+                else if (player.curClockWork.GetClockWorkType() == ClockWorkType.KyungSoo)
                 {
-                    Transform npcPos = player.curClockWork.gameObject.GetComponent<NPC_ClockWork>().NPC.transform;
+                    Transform npcPos = player.curClockWork.gameObject.GetComponent<KyungsooClockWork>().obj_Kyungsoo.transform;
                     float angle = (npcPos.eulerAngles.y+180) * Mathf.Deg2Rad;
                     player.targetPos = npcPos.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * player.clockWorkInteractionDistance_Wall;
                 }

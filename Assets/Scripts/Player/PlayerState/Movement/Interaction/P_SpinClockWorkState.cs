@@ -14,6 +14,10 @@ public class P_SpinClockWorkState : P_InteractionState
         machine.StartAnimation(player.playerAnimationData.SpinClockWorkParameterHash);
         if(player.curClockWork.clockWorkType == ClockWorkType.KyungSoo){
             player.playerAnim.speed = 0.1f;
+
+            KyungsooClockWork kyungsoo_ = player.curClockWork.GetComponent<KyungsooClockWork>();
+
+            kyungsoo_.KyungsooAnimStart();
         }
         else{
             player.playerAnim.speed = 1f;
@@ -25,7 +29,10 @@ public class P_SpinClockWorkState : P_InteractionState
     {
         base.OnExit();
         machine.StopAnimation(player.playerAnimationData.SpinClockWorkParameterHash);
-        player.curClockWork.EndCharging_To_BatteryStart();
+        if (player.curClockWork.clockWorkType != ClockWorkType.KyungSoo)
+        {
+            player.curClockWork.EndCharging_To_BatteryStart();
+        }
         // player.curClockWork = null;
         player.curInteractableObject = null;
         player.curClockWork.GetComponent<BoxCollider>().isTrigger = false;

@@ -12,6 +12,7 @@ public class NPC_Simple_StateMachine : StateMachine
     public NPC_Simple_WalkState WalkState { get; private set; }
     public NPC_Simple_GrappedState GrappedState { get; private set; }
 
+
     public NPC_Simple_ReactionThankState ThankState { get; private set; }
     public NPC_Simple_ThankRotatePlayerClockWork ThankState_RotatePlayerClockWork { get; private set; }
 

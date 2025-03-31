@@ -11,6 +11,7 @@ public class RoadCarCreator_City : MonoBehaviour
     public float fCreateInterval;
     public float fIntervalVariance;
     public GameObject[] Cars;
+    public bool bCarCreate;
 
 
     private void Awake()
@@ -21,15 +22,20 @@ public class RoadCarCreator_City : MonoBehaviour
 
     private void Update()
     {
-        fTimer += Time.deltaTime;
-
-        float randomInterval = fCreateInterval + Random.Range(-fIntervalVariance, fIntervalVariance);
-
-        if (fTimer >= randomInterval)
+        if(bCarCreate)
         {
-            CreateCarAtPath();
-            fTimer = 0f;
+            fTimer += Time.deltaTime;
+
+            float randomInterval = fCreateInterval + Random.Range(-fIntervalVariance, fIntervalVariance);
+
+            if (fTimer >= randomInterval)
+            {
+                CreateCarAtPath();
+                fTimer = 0f;
+            }
         }
+
+    
     }
 
     private void CreateCarAtPath()

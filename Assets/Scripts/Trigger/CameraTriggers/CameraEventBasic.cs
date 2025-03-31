@@ -67,6 +67,7 @@ public class CameraEvent : MonoBehaviour
 
 
 
+
             yield return new WaitForSeconds(1.0f);
             iEventTime -= 1;
         }
