@@ -174,12 +174,6 @@ public class Player : MonoBehaviour
     private void Update()
     {
         machine?.OnStateUpdate();
-        if(Input.GetKeyDown(KeyCode.X)){
-            machine.OnStateChange(machine.UC_WakeUpState);
-        }
-        if(Input.GetKeyDown(KeyCode.C)){
-            machine.OnStateChange(machine.UC_FallDownState);
-        }
     }
 
     private void FixedUpdate()
