@@ -102,6 +102,8 @@ public class Player : MonoBehaviour
     public float playerGrapRotateLerpSpeed;
     [SerializeField, Range(0, 60)]
     public float playerGrapMoveSpeed;
+    [Header("SingleEvent")]
+    public SingleEventObject curSingleEventObject;
 
     [Header("Climb")]
     public float cliffCheckRayDistance = 1f; // 탐지 반경
@@ -384,6 +386,15 @@ public class Player : MonoBehaviour
         if(isDirectionLock){
             directionLockPos = _obj.transform;
         }
+    }
+
+    public void SetWakeUpAfterDelay(float delay){
+        StartCoroutine(C_SetWakeUpAfterDelay(delay));
+    }
+    IEnumerator C_SetWakeUpAfterDelay(float delay){
+        yield return new WaitForSeconds(delay);
+        machine.OnStateChange(machine.UC_WakeUpState);
+        bCanExit = false;
     }
 
 

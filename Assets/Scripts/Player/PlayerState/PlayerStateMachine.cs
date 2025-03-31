@@ -55,6 +55,9 @@ public class PlayerStateMachine : StateMachine
 
     public P_PutPartsState PutPartsState { get; private set; }
 
+    public P_UC_SingleEvent UC_SingleEventState { get; private set; }
+    public P_UC_WheelChair UC_WheelChairState { get; private set; }
+
     public PlayerStateMachine(Player _player)
     {
         player = _player;
@@ -108,6 +111,9 @@ public class PlayerStateMachine : StateMachine
         PullState = new P_PullState(player, this);
 
         PutPartsState = new P_PutPartsState(player, this);
+
+        UC_SingleEventState = new P_UC_SingleEvent(player, this);
+        UC_WheelChairState = new P_UC_WheelChair(player, this);
 
         CurrentState = IdleState;
         CurrentState.OnEnter();

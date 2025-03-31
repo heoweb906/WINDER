@@ -194,9 +194,8 @@ public class P_GroundState : PlayerMovementState
                     machine.OnStateChange(machine.GrabIdleState);
                 else if (player.curInteractableObject.type == InteractableType.SingleEvent)
                 {
-                    player.curInteractableObject.ActiveEvent();
-                    player.curInteractableObject = null;
-                    player.isGoToTarget = false;
+                    player.curSingleEventObject = player.curInteractableObject.GetComponent<SingleEventObject>();
+                    machine.OnStateChange(machine.UC_SingleEventState);
                 }
                 else if (player.curInteractableObject.type == InteractableType.Carrried && player.partsArea != null)
                 {

@@ -71,6 +71,8 @@ public class PlayerAnimationData
     [SerializeField] private string grabIdleParameterName = "isGrabIdle";
     [SerializeField] private string pullParameterName = "isPull";
 
+    [SerializeField] private string SingleEventParameterName = "isSingleEvent";
+    [SerializeField] private string WheelChairParameterName = "isWheelChair";
 
     public int GroundParameterHash { get; private set; }
     public int OnAirParameterHash { get; private set; }
@@ -128,6 +130,10 @@ public class PlayerAnimationData
     public int GrabIdleParameterHash { get; private set; }
     public int PullParameterHash { get; private set; }
 
+    public int SingleEventParameterHash { get; private set; }
+    public int WheelChairParameterHash { get; private set; }
+
+
     public void Initialize()
     {
         GroundParameterHash = Animator.StringToHash(groundParameterName);
@@ -182,6 +188,9 @@ public class PlayerAnimationData
         PushParameterHash = Animator.StringToHash(pushParameterName);
         GrabIdleParameterHash = Animator.StringToHash(grabIdleParameterName);
         PullParameterHash = Animator.StringToHash(pullParameterName);
+
+        SingleEventParameterHash = Animator.StringToHash(SingleEventParameterName);
+        WheelChairParameterHash = Animator.StringToHash(WheelChairParameterName);
     }
 
 }
