@@ -162,9 +162,16 @@ public class NPC_Simple : MonoBehaviour
         clockWork.ClockWorkRotate();
     }
 
+
+    public int avoid_Num;
+
     public void SetAvoidState()
     {
         anim.SetTrigger("doAvoid");
+        anim.SetInteger("Avoid_Num", avoid_Num);
+        bWalking = false;
+        anim.SetBool("Bool_Walk", bWalking);
+
     }
 
     public void SetDropState()
