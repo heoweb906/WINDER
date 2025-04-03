@@ -16,7 +16,6 @@ public class CineCameraChager : MonoBehaviour
     private CinemachineBrain cineBrain;
 
 
-
     private void Awake()
     {
         mainCamera = Camera.main;
