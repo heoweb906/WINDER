@@ -5,7 +5,7 @@ public class Camera_MaxMinFollow : CameraObj
 {
     private Transform player;  // 추적할 플레이어의 Transform
     public Vector3 offset;     // 카메라와 플레이어 간의 오프셋
-    public Vector3 rotationOffset; // 카메라의 회전 오프셋
+    // public Vector3 rotationOffset; // 카메라의 회전 오프셋
     public float smoothSpeed;  // 카메라 이동 속도
 
     public Vector3 maxPosition; // 카메라의 최대 위치 제한

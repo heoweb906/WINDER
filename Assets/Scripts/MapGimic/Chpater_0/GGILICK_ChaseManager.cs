@@ -1,5 +1,7 @@
+using NUnit.Framework.Constraints;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class GGILICK_ChaseManager : MonoBehaviour
@@ -44,6 +46,11 @@ public class GGILICK_ChaseManager : MonoBehaviour
     [SerializeField] private float fallingDuration = 2.0f; // 낙하 지속 시간
     [SerializeField] private float lyingDuration = 5.0f;   // 낙하 후 누워있는 시간
 
+    public CineCameraChager cineChager;   // 끼릭이의 모습을 보여줌
+    public Transform transformTeleport_FrontGgilick;     // 플레이어 순간이동 위치
+
+
+
     [SerializeField] private List<GlassWall> glassWalls;
 
     
@@ -72,7 +79,19 @@ public class GGILICK_ChaseManager : MonoBehaviour
 
         animator = ggilick.GetComponent<Animator>();
     }
-    
+
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+            TransitionToState(ChaseState.Falling);
+        }
+    }
+
+
+
+
     private void FixedUpdate()
     {
         UpdateState();
@@ -309,6 +328,10 @@ public class GGILICK_ChaseManager : MonoBehaviour
                     glassWall.CrashGlassWall();
                 }
                 playerTransform.GetComponent<Player>().SetFallingState();
+
+
+                StartCoroutine(PlayerTeleport());
+
                 break;
                 
             case ChaseState.Lying:
@@ -357,6 +380,36 @@ public class GGILICK_ChaseManager : MonoBehaviour
         return currentState;
     }
     
+
+    IEnumerator PlayerTeleport()
+    {
+        yield return new WaitForSeconds(2f);
+
+        InGameUIController.Instance.FadeInOutImage(1f, 0.5f);
+
+        yield return new WaitForSeconds(2f);
+        cineChager.CameraChange();
+        Vector3 teleportPosition = transformTeleport_FrontGgilick.position;    // 플레이어랑 카메라 순간이동
+        Vector3 playerPosition = GameAssistManager.Instance.GetPlayer().transform.position;
+        GameAssistManager.Instance.GetPlayer().transform.position = teleportPosition; // 플레이어를 순간이동
+
+
+        GameAssistManager.Instance.GetPlayerScript().SetFallDownState();
+        GameAssistManager.Instance.GetPlayerScript().SetCanExit(false);
+
+        yield return new WaitForSeconds(2f);
+       
+        InGameUIController.Instance.FadeInOutImage(0f, 2f);
+
+        yield return new WaitForSeconds(2f);
+
+
+        GameAssistManager.Instance.GetPlayerScript().SetCanExit(true);
+    }
+
+
+
+
     // 필요시 충돌 효과를 재생하는 메서드 추가
     /*
     private void PlayCollisionEffect()
@@ -368,4 +421,7 @@ public class GGILICK_ChaseManager : MonoBehaviour
         // Instantiate(collisionParticle, transform.position, Quaternion.identity);
     }
     */
+
+
+
 }

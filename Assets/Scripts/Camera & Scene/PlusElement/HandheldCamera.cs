@@ -2,32 +2,42 @@ using UnityEngine;
 
 public class HandheldCamera : MonoBehaviour
 {
-    
-    public float rotationAmount; // Amount of rotation
-    public float rotationSpeed; // Rotation speed
+    public float rotationAmount = 1f; // 흔들림 크기
+    public float rotationSpeed = 1f; // 흔들림 속도
 
-    private Quaternion originalRotation;
-    private Camera_PlayerFollow camera_PlayerFollow;
-    private Camera_MaxMinFollow camera_MaxMinFollow; 
+    private Quaternion baseRotation; // 원래 카메라 회전값
+    private CameraObj currentCamera; // 현재 활성화된 카메라
 
     private void Start()
     {
-        camera_PlayerFollow = GetComponent<Camera_PlayerFollow>();
-        camera_MaxMinFollow = GetComponent<Camera_MaxMinFollow>();
-        // 초기 로테이션 저장
+        // 현재 활성화된 카메라 찾기
+        currentCamera = GetComponent<CameraObj>();
+        //if (currentCamera == null)
+        //{
+        //    currentCamera = GetComponent<Camera_MaxMinFollow>();
+        //}
 
-        if(camera_PlayerFollow != null) originalRotation = Quaternion.Euler(camera_PlayerFollow.rotationOffset);
-        else if(camera_MaxMinFollow != null) originalRotation = Quaternion.Euler(camera_MaxMinFollow.rotationOffset);
+        // 기본 회전값 설정
+        if (currentCamera != null)
+        {
+            baseRotation = Quaternion.Euler(currentCamera.rotationOffset);
+        }
+        else
+        {
+            baseRotation = transform.rotation;
+        }
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
+        if (currentCamera == null) return;
+
         // Perlin Noise를 사용해 흔들림 값 계산
         float xRotation = (Mathf.PerlinNoise(Time.time * rotationSpeed, 0) - 0.5f) * 2 * rotationAmount;
         float yRotation = (Mathf.PerlinNoise(0, Time.time * rotationSpeed) - 0.5f) * 2 * rotationAmount;
 
-        // 현재 로테이션에 흔들림 효과 추가
+        // 기존 회전에 흔들림 효과 추가
         Quaternion shakeRotation = Quaternion.Euler(xRotation, yRotation, 0);
-        transform.localRotation = originalRotation * shakeRotation;
+        transform.rotation = baseRotation * shakeRotation;
     }
 }

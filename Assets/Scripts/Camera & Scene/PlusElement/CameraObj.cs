@@ -11,6 +11,7 @@ public class CameraObj : MonoBehaviour
     public float duration; // 지속 시간
     [Space(50f)]
 
+    public Vector3 rotationOffset; // 카메라의 회전 오프셋
     private GameObject emptyObj;
 
 
