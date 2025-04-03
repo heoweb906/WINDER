@@ -31,7 +31,7 @@ public class StampMacine : ClockBattery, IPartsOwner
     public override void TurnOffObj()
     {
         base.TurnOffObj();
-
+        
        
         if (nowCoroutine != null) StopCoroutine(nowCoroutine);
 

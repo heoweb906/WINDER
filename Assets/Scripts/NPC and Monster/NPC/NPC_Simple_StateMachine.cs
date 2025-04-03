@@ -62,10 +62,10 @@ public class NPC_Simple_StateMachine : StateMachine
         CurrentState.OnUpdate();
 
 
-        if(Input.GetKeyDown(KeyCode.Y))
-        {
-            npc.machine.OnStateChange(npc.machine.ThankState_RotatePlayerClockWork);
-        }
+        //if(Input.GetKeyDown(KeyCode.Y))
+        //{
+        //    npc.machine.OnStateChange(npc.machine.ThankState_RotatePlayerClockWork);
+        //}
     }
 
     public override void OnStateFixedUpdate()

@@ -13,6 +13,14 @@ public class GGILICK_ClockWork : InteractableObject
         type = InteractableType.SingleEvent;
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+            InsideAssist.Instance.StartDirect_1();
+        }
+    }
+
 
     public override void ActiveEvent()
     {

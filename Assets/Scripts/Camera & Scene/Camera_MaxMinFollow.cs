@@ -22,20 +22,27 @@ public class Camera_MaxMinFollow : CameraObj
 
     void FixedUpdate()
     {
-        // 플레이어의 위치에 오프셋을 더한 목표 위치
-        Vector3 targetPosition = player.position + offset;
+        if(!GameAssistManager.Instance.GetBoolPlayerDie())
+        {
+            // 플레이어의 위치에 오프셋을 더한 목표 위치
+            Vector3 targetPosition = player.position + offset;
 
-        // 목표 위치를 minPosition과 maxPosition으로 제한
-        targetPosition.x = Mathf.Clamp(targetPosition.x, minPosition.x, maxPosition.x);
-        targetPosition.y = Mathf.Clamp(targetPosition.y, minPosition.y, maxPosition.y);
-        targetPosition.z = Mathf.Clamp(targetPosition.z, minPosition.z, maxPosition.z);
+            // 목표 위치를 minPosition과 maxPosition으로 제한
+            targetPosition.x = Mathf.Clamp(targetPosition.x, minPosition.x, maxPosition.x);
+            targetPosition.y = Mathf.Clamp(targetPosition.y, minPosition.y, maxPosition.y);
+            targetPosition.z = Mathf.Clamp(targetPosition.z, minPosition.z, maxPosition.z);
 
-        // 부드럽게 카메라를 목표 위치로 이동
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, targetPosition, smoothSpeed);
-        transform.position = smoothedPosition;
+            // 부드럽게 카메라를 목표 위치로 이동
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, targetPosition, smoothSpeed);
+            transform.position = smoothedPosition;
 
-        // 카메라의 회전 설정
-        //Quaternion targetRotation = Quaternion.Euler(rotationOffset);
-        //transform.rotation = targetRotation;
+            // 카메라의 회전 설정
+            //Quaternion targetRotation = Quaternion.Euler(rotationOffset);
+            //transform.rotation = targetRotation;
+        }
+
+
+
+
     }
 }

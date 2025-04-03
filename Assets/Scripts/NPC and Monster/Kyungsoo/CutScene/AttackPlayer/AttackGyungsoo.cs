@@ -30,7 +30,7 @@ public class AttackGyungsoo : MonoBehaviour
 
     IEnumerator CutScencStart_Attack()
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.2f);
 
         anim.SetTrigger("doAttackPlayer");
         cineChanger.CameraChange();

@@ -14,13 +14,6 @@ public class GyungSooWalkStartTrigger : MonoBehaviour
 
 
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            CutScencStart();
-        }
-    }
 
 
     public void CutScencStart()

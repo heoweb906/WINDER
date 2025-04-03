@@ -26,14 +26,6 @@ public class HandheldCamera_DollyCart : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        // Y 키를 누르면 강한 흔들림 실행!
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            TriggerStrongShake(amount, fTime);
-        }
-    }
 
     void FixedUpdate()
     {

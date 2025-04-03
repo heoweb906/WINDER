@@ -19,7 +19,7 @@ public class InsideAssist : MonoBehaviour
     public GameObject nowCamera;        // 카메라?
 
 
-    [Header("자동타 생성 관련")]
+    [Header("자동차 생성 관련")]
     public bool bCanCarCreate;
     public CinemachineSmoothPath Path_Special;
     public CinemachineSmoothPath[] path;
@@ -38,8 +38,6 @@ public class InsideAssist : MonoBehaviour
         {
             StartCoroutine(StartInsideAgain());
         }
-
-     
     }
 
     private void Update()
@@ -77,8 +75,10 @@ public class InsideAssist : MonoBehaviour
     }
     IEnumerator InsideOn_GGILICK()
     {
-        Rigidbody rigid = GameAssistManager.Instance.player.GetComponent<Rigidbody>();
-        rigid.constraints = RigidbodyConstraints.FreezePositionY;
+        GameAssistManager.Instance.PlayerInputLockOn();
+
+        //Rigidbody rigid = GameAssistManager.Instance.player.GetComponent<Rigidbody>();
+        //rigid.constraints = RigidbodyConstraints.FreezePositionY;
 
         yield return new WaitForSeconds(1.2f);
 
@@ -89,11 +89,11 @@ public class InsideAssist : MonoBehaviour
         GameAssistManager.Instance.AnimateFogDensity(0f, 2f);
         GameAssistManager.Instance.AnimateAmbientIntensity(0.3f, 2f);
 
+
         yield return new WaitForSeconds(3.5f);  // 카메라 보간 시간이랑 어느 정도 안맞추면 
                                                 // 다음 플레이어 이동 시 뚝 끊기는 것처럼 보임
 
 
-     
         Vector3 teleportPosition = transformTeleport_Inside.position;    // 플레이어랑 카메라 순간이동
         Vector3 playerPosition = GameAssistManager.Instance.GetPlayer().transform.position;
         Vector3 offset = nowCamera.transform.position - playerPosition; // 플레이어와 gamObject 간의 상대적 위치
@@ -112,17 +112,21 @@ public class InsideAssist : MonoBehaviour
 
 
         yield return new WaitForSeconds(3.0f);
-        rigid.constraints = RigidbodyConstraints.None; // FreezePosition X, Y, Z 모두 false
-        rigid.constraints = RigidbodyConstraints.FreezeRotationX |
-                            RigidbodyConstraints.FreezeRotationY |
-                            RigidbodyConstraints.FreezeRotationZ;
 
-       
-    
-        yield return new WaitForSeconds(1f);
+        //rigid.constraints = RigidbodyConstraints.None; // FreezePosition X, Y, Z 모두 false
+        //rigid.constraints = RigidbodyConstraints.FreezeRotationX |
+        //                    RigidbodyConstraints.FreezeRotationY |
+        //                    RigidbodyConstraints.FreezeRotationZ;
+
 
         InGameUIController.Instance.FadeInOutImage(1f, 2f);
+
+        yield return new WaitForSeconds(1f);
+
+        
         GameAssistManager.Instance.InsideOutEffect();
+
+
 
         yield return new WaitForSeconds(2.5f);
 
@@ -140,12 +144,16 @@ public class InsideAssist : MonoBehaviour
 
 
 
-
         yield return new WaitForSeconds(3f);
 
         cineChager_2.CameraChange();
 
-        yield return new WaitForSeconds(6f);
+
+       
+        yield return new WaitForSeconds(5.8f);
+        GameAssistManager.Instance.PlayerInputLockOff();
+
+        yield return new WaitForSeconds(0.2f);
 
         CreateCarFrontPlayer();
 
