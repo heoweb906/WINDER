@@ -91,7 +91,7 @@ public class PlayerMovementState : BaseState
         Vector3 gravity;
 
 
-        if (IsOnSlope()) // 경사로라면 경사에 맞춰서 방향값 세팅
+        if (IsOnSlope() && machine.CurrentState is not P_OnAirState) // 경사로라면 경사에 맞춰서 방향값 세팅
         {
             velocity = AdjustDirectionToSlope(player.curDirection);
             gravity = Vector3.zero;
