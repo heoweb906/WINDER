@@ -27,7 +27,11 @@ public class P_UnControllable : PlayerMovementState
     {
         return;
     }
-
+    
+    public override void OnTriggerExit(Collider other)
+    {
+        return;
+    }
     public override void OnAnimationExitEvent()
     {
         base.OnAnimationExitEvent();

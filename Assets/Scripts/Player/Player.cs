@@ -376,7 +376,9 @@ public class Player : MonoBehaviour
         machine.OnStateChange(machine.UC_WakeUpState);
     }
     
-
+    public void SetFallingState(){
+        machine.OnStateChange(machine.UC_FallingState);
+    }
     public bool bCanExit = false;
     public void SetCanExit(bool _bool){
         bCanExit = _bool;
@@ -396,6 +398,7 @@ public class Player : MonoBehaviour
         machine.OnStateChange(machine.UC_WakeUpState);
         bCanExit = false;
     }
+
 
 
 }

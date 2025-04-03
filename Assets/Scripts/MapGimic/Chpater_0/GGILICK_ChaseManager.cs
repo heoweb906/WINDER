@@ -307,6 +307,7 @@ public class GGILICK_ChaseManager : MonoBehaviour
                 {
                     glassWall.CrashGlassWall();
                 }
+                playerTransform.GetComponent<Player>().SetFallingState();
                 break;
                 
             case ChaseState.Lying:
