@@ -106,7 +106,7 @@ public class GGILICK_ChaseManager : MonoBehaviour
                 }
                 
                 // 낙하 지점에 도달했는지 확인 (z축 기준)
-                if (endPoint != null && ggilick.transform.position.z <= endPoint.position.z)
+                if (endPoint != null && ggilick.transform.position.z >= endPoint.position.z)
                 {
                     TransitionToState(ChaseState.Falling);
                 }
@@ -198,16 +198,16 @@ public class GGILICK_ChaseManager : MonoBehaviour
             float slopeStartZ = slopeStartObject.position.z;
             float slopeEndZ = slopeEndObject.position.z;
             
-            // 시작과 끝 지점 순서를 정규화 (시작이 더 큰 값, 끝이 더 작은 값)
-            if (slopeStartZ < slopeEndZ)
+            // 시작과 끝 지점 순서를 정규화 (시작이 더 작은 값, 끝이 더 큰 값)
+            if (slopeStartZ > slopeEndZ)
             {
                 float temp = slopeStartZ;
                 slopeStartZ = slopeEndZ;
                 slopeEndZ = temp;
             }
             
-            // -z 방향 이동에 맞게 경사로 체크
-            isOnSlope = currentZ <= slopeStartZ && currentZ >= slopeEndZ;
+            // +z 방향 이동에 맞게 경사로 체크
+            isOnSlope = currentZ >= slopeStartZ && currentZ <= slopeEndZ;
             
             // 경사로에 있을 경우 y축 이동 추가
             if (isOnSlope)
@@ -220,7 +220,7 @@ public class GGILICK_ChaseManager : MonoBehaviour
                 
                 // 진행 방향에 따라 올라가거나 내려가는 y 이동 계산
                 // 기울기를 음수로 적용 (경사로 각도의 반대)
-                float slopeAngleRad = -slopeXRotation * Mathf.Deg2Rad; // 각도를 라디안으로 변환
+                float slopeAngleRad = slopeXRotation * Mathf.Deg2Rad; // 부호 변경: 음수에서 양수로
                 
                 // z 이동 거리에 따른 y 변화량 계산 (탄젠트 이용)
                 float yOffset = movement.z * Mathf.Tan(slopeAngleRad);
