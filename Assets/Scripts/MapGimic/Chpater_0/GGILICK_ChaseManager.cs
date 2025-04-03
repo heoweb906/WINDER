@@ -57,6 +57,7 @@ public class GGILICK_ChaseManager : MonoBehaviour
     
     private void Start()
     {
+        playerTransform = GameAssistManager.Instance.GetPlayer().transform;
         // 플레이어 참조 확인
         if (playerTransform == null)
         {
