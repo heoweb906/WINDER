@@ -383,6 +383,9 @@ public class GGILICK_ChaseManager : MonoBehaviour
 
     IEnumerator PlayerTeleport()
     {
+        InGameUIController.Instance.bIsUIDoing = true;
+
+
         yield return new WaitForSeconds(2f);
 
         InGameUIController.Instance.FadeInOutImage(1f, 0.5f);
@@ -404,6 +407,7 @@ public class GGILICK_ChaseManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
 
+        InGameUIController.Instance.bIsUIDoing = false;
         GameAssistManager.Instance.GetPlayerScript().SetCanExit(true);
     }
 

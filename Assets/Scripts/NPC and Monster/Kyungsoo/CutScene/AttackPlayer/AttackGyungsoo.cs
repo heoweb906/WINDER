@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class AttackGyungsoo : MonoBehaviour
 {
+    public CameraObj returnCameraObj;
+
     private Coroutine nowCoroutine;
     public Animator anim;
     public CinemachineDollyCart cart;
@@ -23,7 +25,10 @@ public class AttackGyungsoo : MonoBehaviour
 
     public void CutScencStart()
     {
-        
+        returnCameraObj.duration = 0.2f;
+
+
+
         roadCarCreatorCity.bCarCreate = true;
         nowCoroutine = StartCoroutine(CutScencStart_Attack());
     }
@@ -32,9 +37,11 @@ public class AttackGyungsoo : MonoBehaviour
     {
         yield return new WaitForSeconds(1.2f);
 
+
         anim.SetTrigger("doAttackPlayer");
         cineChanger.CameraChange();
-        cameraShake.TriggerStrongShake(2f, 0.6f);
+        yield return new WaitForEndOfFrame();
+        cameraShake.TriggerStrongShake(4f, 0.6f);
 
 
         yield return new WaitForSeconds(1f);

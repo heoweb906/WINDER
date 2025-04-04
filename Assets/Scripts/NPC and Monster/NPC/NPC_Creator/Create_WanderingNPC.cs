@@ -81,8 +81,17 @@ public class Create_WanderingNPC : MonoBehaviour
         {
             if (!bReverse)
             {
-                float randomValue = Random.value;
-                int fRandomNPC = (randomValue < 0.95f) ? 0 : 1;
+                float randomValue = Random.value; // 0.0f ~ 1.0f 범위
+                int fRandomNPC;
+
+                if (randomValue < 0.5f)          // 50%
+                    fRandomNPC = 0;
+                else if (randomValue < 0.9f)     // 그다음 40%
+                    fRandomNPC = 1;
+                else                             // 나머지 10%
+                    fRandomNPC = 2;
+
+
                 int randomIndex = Random.Range(0, positionArray[0].points.Length);
                 Transform spawnPosition = positionArray[0].points[randomIndex];
 
@@ -103,8 +112,18 @@ public class Create_WanderingNPC : MonoBehaviour
             }
             else
             {
-                float randomValue = Random.value;
-                int fRandomNPC = (randomValue < 0.95f) ? 0 : 1;
+                float randomValue = Random.value; // 0.0f ~ 1.0f 범위
+                int fRandomNPC;
+
+                if (randomValue < 0.5f)          // 50%
+                    fRandomNPC = 0;
+                else if (randomValue < 0.9f)     // 그다음 40%
+                    fRandomNPC = 1;
+                else                             // 나머지 10%
+                    fRandomNPC = 2;
+
+
+
                 int lastIndex = positionArray.Length - 1;
                 int randomIndex = Random.Range(0, positionArray[lastIndex].points.Length);
                 Transform spawnPosition = positionArray[lastIndex].points[randomIndex];

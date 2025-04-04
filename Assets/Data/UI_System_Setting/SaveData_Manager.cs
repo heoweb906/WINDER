@@ -22,7 +22,7 @@ public class SettingsData
 
     // #. 게임 최초 실행, 내면 세계 진입 여부
     public bool bFirstStart;
-    public bool bInside;
+    public int iInsideNum;      
 }
 
 [System.Serializable]
@@ -233,13 +233,13 @@ public class SaveData_Manager : MonoBehaviour
     }
     //===================================================================================================
 
-    public void SetBoolInside(bool bbb)
+    public void SetIntInside(int iTemp)
     {
-        settingsData.bInside = bbb;
+        settingsData.iInsideNum = iTemp;
     }
-    public bool GetBoolInside()
+    public int GetIntInside()
     {
-        return settingsData.bInside;
+        return settingsData.iInsideNum;
     }
     //===================================================================================================
     // Save and load methods
@@ -276,7 +276,7 @@ public class SaveData_Manager : MonoBehaviour
             settingsData.iCameraNum = 0;
 
             settingsData.bFirstStart = false;
-            settingsData.bInside = false;
+            settingsData.iInsideNum = 0;
           
 
             SaveSettings();
@@ -303,7 +303,7 @@ public class SaveData_Manager : MonoBehaviour
         settingsData.iCameraNum = 0;
 
         settingsData.bFirstStart = false;
-        settingsData.bInside = false;
+        settingsData.iInsideNum = 0;
 
 
         SaveSettings();
@@ -335,7 +335,7 @@ public class SaveData_Manager : MonoBehaviour
         Debug.Log($"Camera Number: {settingsData.iCameraNum}");
         Debug.Log($"First Start: {settingsData.bFirstStart}");
 
-        Debug.Log($"NOw Inside : {settingsData.bInside}");
+        Debug.Log($"NOw Inside : {settingsData.iInsideNum}");
         
 
         Debug.Log("=====================");
@@ -353,7 +353,7 @@ public class SaveData_Manager : MonoBehaviour
 
 
         settingsData.bFirstStart = false;
-        settingsData.bInside = false;
+        settingsData.iInsideNum = 0;
 
     }
 

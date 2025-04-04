@@ -78,15 +78,17 @@ public class NPC_Simple : MonoBehaviour
         anim.SetBool("Bool_Sad", bSad);
         anim.SetBool("Bool_ActionEvent", bActionEventNPC);
 
-        if (npcClockWork != null)
-            npcClockWork.canInteract = bSad;
+        //if (npcClockWork != null)
+        //    npcClockWork.canInteract = bSad;
 
         machine = new NPC_Simple_StateMachine(this);
 
+        npcHeart.machine = machine;
+        npcHeart.SetAnimator(anim);
+
         if (npcHeart != null)
         {
-            npcHeart.machine = machine;
-            npcHeart.SetAnimator(anim);
+          
         }
         else
         {

@@ -6,7 +6,7 @@ public class NPC_Simple_ThankRotatePlayerClockWork : NPC_Simple_State
     public NPC_Simple_ThankRotatePlayerClockWork(NPC_Simple npc, NPC_Simple_StateMachine machine) : base(npc, machine) { }
 
     private bool bStart = false;
-    private bool bHasFinishedRotation = false;
+    public bool bHasFinishedRotation = false;
     private Quaternion targetRotation;
 
     public override void OnEnter()
