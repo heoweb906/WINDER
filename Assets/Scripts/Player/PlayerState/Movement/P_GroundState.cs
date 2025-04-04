@@ -24,7 +24,7 @@ public class P_GroundState : PlayerMovementState
             || machine.CheckCurrentState(machine.SoftStopState) || machine.CheckCurrentState(machine.HardStopState)
             || machine.CheckCurrentState(machine.RunningState) || machine.CheckCurrentState(machine.WalkingState)))
         {
-            if (player.isRun && !player.isDirectionLock)
+            if (player.isRun)
                 machine.OnStateChange(machine.RunningState);
             else
                 machine.OnStateChange(machine.WalkingState);
@@ -49,11 +49,10 @@ public class P_GroundState : PlayerMovementState
     public void CheckInputJump()
     {
 
-        if (Input.GetButtonDown("Jump") && !player.isDirectionLock)
+        if (Input.GetButtonDown("Jump"))
         {
             if (!player.isCarryObject)
             {
-                player.rigid.velocity = new Vector3(player.rigid.velocity.x, 0, player.rigid.velocity.z);
                 if (GetCurDirection() == Vector3.zero)
                 {
                     machine.OnStateChange(machine.JumpStartIdleState);
@@ -73,20 +72,12 @@ public class P_GroundState : PlayerMovementState
                 }
                 else
                 {
-                    if(player.curCarriedObject.carriedObjectType == CarriedObjectType.Normal && !player.isLockCarryObject)
-                    {
-                        machine.OnStateChange(machine.ThrowState);
-                    }
-                    else if(player.curCarriedObject.carriedObjectType == CarriedObjectType.Guitar)
-                    {
-                        machine.OnStateChange(machine.GuitarBrokenState);
-                    }
+                    machine.OnStateChange(machine.ThrowState);
                     Debug.Log("파츠 못찾음");
                 }
             }
         }
-        else if (Input.GetButton("Jump") && player.curInteractableObject != null&& !player.playerAnim.IsInTransition(0) 
-            && player.partsArea != null && player.partsArea.BCanInteract)
+        else if (Input.GetButton("Jump") && player.curInteractableObject != null&& !player.playerAnim.IsInTransition(0) && player.partsArea != null)
         {
             if (Vector3.Distance(new Vector3(player.targetPos.x, 0, player.targetPos.z), new Vector3(player.transform.position.x, 0, player.transform.position.z)) < 0.03f)
             {
@@ -106,7 +97,7 @@ public class P_GroundState : PlayerMovementState
 
     public void CheckPutDownObject()
     {
-        if (player.isCarryObject && machine.CurrentState is not P_MoveStopState && !Input.GetButton("Fire1") && !player.playerAnim.IsInTransition(0) && !player.isLockCarryObject)
+        if (player.isCarryObject && machine.CurrentState is not P_MoveStopState && !Input.GetButton("Fire1") && !player.playerAnim.IsInTransition(0))
         {
             machine.OnStateChange(machine.PutDownState);
         }
@@ -126,30 +117,23 @@ public class P_GroundState : PlayerMovementState
             {
                 player.curClockWork = player.curInteractableObject.GetComponent<ClockWork>();
 
-                player.curClockWork.GrapClockWorkOn();
-
                 if (player.curClockWork.GetClockWorkType() == ClockWorkType.Floor)
                 {
                     float angle = player.curClockWork.transform.eulerAngles.y * Mathf.Deg2Rad;
                     Vector3 pos1 = player.curClockWork.transform.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * player.clockWorkInteractionDistance_Floor;
                     Vector3 pos2 = player.curClockWork.transform.position + (-new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * player.clockWorkInteractionDistance_Floor);
+                    //Debug.Log((pos1 - player.transform.position).magnitude + "//" + (pos2 - player.transform.position).magnitude);
 
                     player.targetPos = (pos1 - player.transform.position).magnitude >= (pos2 - player.transform.position).magnitude ? pos2 : pos1;
+                    Debug.Log(player.targetPos);
 
                     //player.targetPos = player.curClockWork.transform.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * player.clockWorkInteractionDistance_Floor;
                 }
                 else if (player.curClockWork.GetClockWorkType() == ClockWorkType.Wall)
                 {
                     float angle = player.curClockWork.transform.eulerAngles.y * Mathf.Deg2Rad;
-                    player.targetPos = player.curClockWork.transform.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * (player.clockWorkInteractionDistance_Wall + player.curClockWork.fDistanceOffset);
+                    player.targetPos = player.curClockWork.transform.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * player.clockWorkInteractionDistance_Wall;
                 }
-                else if (player.curClockWork.GetClockWorkType() == ClockWorkType.KyungSoo)
-                {
-                    Transform npcPos = player.curClockWork.gameObject.GetComponent<KyungsooClockWork>().obj_Kyungsoo.transform;
-                    float angle = (npcPos.eulerAngles.y+180) * Mathf.Deg2Rad;
-                    player.targetPos = npcPos.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)).normalized * player.clockWorkInteractionDistance_Wall;
-                }
-
             }
             else if (player.curInteractableObject.type == InteractableType.Carrried && player.partsArea == null)
             {
@@ -183,7 +167,7 @@ public class P_GroundState : PlayerMovementState
             {
                 if (player.curInteractableObject.type == InteractableType.ClockWork)
                 {
-                    if (player.curClockWork.GetClockWorkType() == ClockWorkType.Wall || player.curClockWork.GetClockWorkType() == ClockWorkType.NPC || player.curClockWork.GetClockWorkType() == ClockWorkType.KyungSoo)
+                    if (player.curClockWork.GetClockWorkType() == ClockWorkType.Wall)
                         machine.OnStateChange(machine.SpinClockWorkWallState);
                     else if (player.curClockWork.GetClockWorkType() == ClockWorkType.Floor)
                         machine.OnStateChange(machine.SpinClockWorkFloorState);
@@ -194,8 +178,9 @@ public class P_GroundState : PlayerMovementState
                     machine.OnStateChange(machine.GrabIdleState);
                 else if (player.curInteractableObject.type == InteractableType.SingleEvent)
                 {
-                    player.curSingleEventObject = player.curInteractableObject.GetComponent<SingleEventObject>();
-                    machine.OnStateChange(machine.UC_SingleEventState);
+                    player.curInteractableObject.ActiveEvent();
+                    player.curInteractableObject = null;
+                    player.isGoToTarget = false;
                 }
                 else if (player.curInteractableObject.type == InteractableType.Carrried && player.partsArea != null)
                 {
@@ -220,23 +205,7 @@ public class P_GroundState : PlayerMovementState
     public override void SetDirection()
     {
         if (!player.isGoToTarget)
-        {
             base.SetDirection();
-            if (player.isDirectionLock)
-            {
-                Vector3 directionToLockPos = player.directionLockPos.position - player.transform.position;
-                directionToLockPos.y = 0;
-                float dot = Vector3.Dot(player.curDirection.normalized, directionToLockPos.normalized);
-                if (dot < 0.7f)
-                {
-                    player.curDirection = Vector3.zero;
-                }
-                else
-                {
-                    player.curDirection = directionToLockPos.normalized;
-                }
-            }
-        }
         else
         {
             player.curDirection = player.targetPos - player.transform.position;
@@ -246,7 +215,7 @@ public class P_GroundState : PlayerMovementState
     public bool FindClosestInteractableObject()
     {
         int interactableLayer = 1 << LayerMask.NameToLayer("Interactable");
-        Collider[] hitColliders = Physics.OverlapSphere(player.transform.position + new Vector3(0, 1f, 0), player.detectionRadius, interactableLayer);
+        Collider[] hitColliders = Physics.OverlapSphere(player.transform.position, player.detectionRadius, interactableLayer);
         player.curInteractableObject = null;
         player.partsArea = null;
 
@@ -260,8 +229,7 @@ public class P_GroundState : PlayerMovementState
             if (detectedObject != null && detectedObject.canInteract)
             {
                 float distance = Vector3.Distance(player.transform.position, collider.transform.position);
-                float heightDiff = collider.transform.position.y - player.transform.position.y;
-                if (distance < closestDistance && heightDiff > -0.05f && heightDiff < 2f)
+                if (distance < closestDistance)
                 {
                     closestDistance = distance;
                     player.curInteractableObject = detectedObject; 
@@ -272,11 +240,10 @@ public class P_GroundState : PlayerMovementState
         foreach (Collider collider in hitColliders)
         {
             PartsArea detectedObject = collider.GetComponent<PartsArea>();
-            if (detectedObject != null && detectedObject.Parts != null && detectedObject.BCanInteract)
+            if (detectedObject != null && detectedObject.Parts != null)
             {
                 float distance = Vector3.Distance(player.transform.position, collider.transform.position);
-                float heightDiff = collider.transform.position.y - player.transform.position.y;
-                if (distance < closestDistance && heightDiff > -0.05f && heightDiff < 2f)
+                if (distance < closestDistance)
                 {
                     closestDistance = distance;
                     player.partsArea = detectedObject;
@@ -287,6 +254,8 @@ public class P_GroundState : PlayerMovementState
 
         if (player.curInteractableObject != null)
         {
+            if (player.partsArea == null)
+                Debug.Log("!!!!!!!!!!");
             return true;
             // 여기에서 추가적인 로직을 구현할 수 있습니다.
         }
@@ -307,11 +276,10 @@ public class P_GroundState : PlayerMovementState
         foreach (Collider collider in hitColliders)
         {
             PartsArea detectedObject = collider.GetComponent<PartsArea>();
-            if (detectedObject != null && detectedObject.Parts == null && detectedObject.BCanInteract)
+            if (detectedObject != null && detectedObject.Parts == null)
             {
                 float distance = Vector3.Distance(player.transform.position, collider.transform.position);
-                float heightDiff = collider.transform.position.y - player.transform.position.y;
-                if (distance < closestDistance && heightDiff > -0.05f && heightDiff < 2f)
+                if (distance < closestDistance)
                 {
                     closestDistance = distance;
                     player.partsArea = detectedObject; // 가장 가까운 ClockWork 참조 저장

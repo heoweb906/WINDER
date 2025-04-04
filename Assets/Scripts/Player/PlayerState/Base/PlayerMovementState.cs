@@ -91,7 +91,7 @@ public class PlayerMovementState : BaseState
         Vector3 gravity;
 
 
-        if (IsOnSlope() && machine.CurrentState is not P_OnAirState) // 경사로라면 경사에 맞춰서 방향값 세팅
+        if (IsOnSlope()) // 경사로라면 경사에 맞춰서 방향값 세팅
         {
             velocity = AdjustDirectionToSlope(player.curDirection);
             gravity = Vector3.zero;
@@ -162,7 +162,8 @@ public class PlayerMovementState : BaseState
     {
         var nextFramePlayerPosition = player.raycastOrigin.transform.position + player.curDirection * _moveSpeed * Time.fixedDeltaTime;
 
-        if (Physics.Raycast(nextFramePlayerPosition, Vector3.down, out RaycastHit hitInfo, 1f, player.groundLayer))
+        int layerMask = ~((1 << LayerMask.NameToLayer("Carry")) | (1 << LayerMask.NameToLayer("Ignore Raycast")));
+        if (Physics.Raycast(nextFramePlayerPosition, Vector3.down, out RaycastHit hitInfo, 1f, layerMask))
         {
             return Vector3.Angle(Vector3.up, hitInfo.normal);
         }

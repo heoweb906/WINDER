@@ -21,7 +21,6 @@ public class Button_ReturnMenu : InGameButton
         base.ImplementButton();
 
         SaveData_Manager.Instance.SaveSettings();
-        ingameUIController.bNowSceneChange = true;
         ingameUIController.ChangeScene("MainMenu");
 
     }

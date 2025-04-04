@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
-using System.Drawing;
 
 public class GM_ChaseState : GuardMState
 {
@@ -14,20 +13,11 @@ public class GM_ChaseState : GuardMState
     {
         base.OnEnter();
 
-        Debug.Log("플레이어 추격 시작");
-
-        if (guardM.creatorNPC != null)
-        {
-            Debug.Log("공포에 떨어라");
-            guardM.creatorNPC.NPCCreatOff_Sacred();
-        }
-           
-
         guardM.trackingHead.bFindPlayer = true;
         guardM.nav.isStopped = true;
         guardM.anim.SetTrigger("doFindPlayer");
 
-        guardM.StartGuardCoroutine(AssistAnim(1.1f));
+        guardM.StartGuardCoroutine(AssistAnim(1.4f));
     }
 
     
@@ -41,39 +31,24 @@ public class GM_ChaseState : GuardMState
             guardM.nav.isStopped = false;
             if (guardM.area.playerPosition != null && guardM.area.isPlayerInArea)
             {
-                guardM.nav.SetDestination(GameAssistManager.Instance.GetPlayer().transform.position /*guardM.area.playerPosition.position*/);
-
-                float distanceToTarget = Vector3.Distance(guardM.transform.position, guardM.area.playerPosition.position);
-                if (distanceToTarget <= guardM.fAttackRange)
+                if (!guardM.IsObstacleBetween())
                 {
-                    Debug.Log(GameAssistManager.Instance.GetPlayerScript().machine.CurrentState);
+                    guardM.nav.SetDestination(GameAssistManager.Instance.GetPlayer().transform.position /*guardM.area.playerPosition.position*/); 
 
-                    if(GameAssistManager.Instance.GetPlayer().transform.parent == null)
+                    float distanceToTarget = Vector3.Distance(guardM.transform.position, guardM.area.playerPosition.position);
+                    if (distanceToTarget <= guardM.fAttackRange)
                     {
                         bAnimEnd = false;
                         guardM.nav.isStopped = true;
                         machine.OnStateChange(machine.AttackState);
                     }
-                    else
-                    {
-                        bAnimEnd = false;
-                        guardM.nav.isStopped = true;
-                        machine.OnStateChange(machine.BackHomeState);
-                    }
-                     
-                  
                 }
-
-                //if (!guardM.IsObstacleBetween())
-                //{
-                    
-                //}
-                //else
-                //{
-                //    bAnimEnd = false;
-                //    guardM.nav.isStopped = true;
-                //    machine.OnStateChange(machine.BackHomeState);
-                //}
+                else
+                {
+                    bAnimEnd = false;
+                    guardM.nav.isStopped = true;
+                    machine.OnStateChange(machine.BackHomeState);
+                }
 
 
             }

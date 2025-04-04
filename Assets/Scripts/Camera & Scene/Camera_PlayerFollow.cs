@@ -31,16 +31,4 @@ public class Camera_PlayerFollow : CameraObj
             transform.rotation = targetRotation;
         }
     }
-
-
-    public Transform GetPlayer()
-    {
-        return player;
-    }
-
-    public void SetPlayer(Transform newPlayer)
-    {
-        player = newPlayer;
-    }
-
 }

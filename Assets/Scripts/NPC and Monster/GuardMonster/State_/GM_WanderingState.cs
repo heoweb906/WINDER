@@ -76,15 +76,12 @@ public class GM_WanderingState : GuardMState
             guardM.nav.isStopped = true; // 멈추기
             guardM.anim.SetBool("isWalking", false);
 
-            yield return new WaitForSeconds(4.7f);
+            yield return new WaitForSeconds(4.8f);
 
             guardM.anim.SetTrigger("doLookAroundEnd"); ;
+            guardM.nav.isStopped = false; // 다시 이동 시작
             guardM.anim.SetBool("isWalking", true); // 걷기 애니메이션 재개
             bIsWaiting = false;
-
-            yield return new WaitForSeconds(0.35f);
-
-            guardM.nav.isStopped = false; // 다시 이동 시작
         }
     }
 

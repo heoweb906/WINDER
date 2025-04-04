@@ -6,17 +6,18 @@ public class NPC_Simple_GrappedState : NPC_Simple_State
 {
     public NPC_Simple_GrappedState(NPC_Simple npc, NPC_Simple_StateMachine machine) : base(npc, machine) { }
 
-    private float timer = 0f;
-    private bool hasExecuted = false; // 한 번만 실행되도록 체크
+
+    private float elapsedTime; // 시간 측정용 변수
+    private const float duration = 1.5f; // 2초 후에 상태 변경
 
 
     public override void OnEnter()
     {
         base.OnEnter();
 
+        npc.GetAnimator().SetTrigger("doReactionGrapped");
 
-        timer = 0f; // 타이머 초기화
-        hasExecuted = false; // 실행 여부 초기화
+        elapsedTime = 0f; // 상태 진입 시 시간 초기화
     }
 
 
@@ -24,17 +25,13 @@ public class NPC_Simple_GrappedState : NPC_Simple_State
     {
         base.OnUpdate();
 
+        elapsedTime += Time.deltaTime;
 
-
-        timer += Time.deltaTime; // 시간 증가
-
-        if (timer >= 1f && !hasExecuted) // 1초가 지나고 한 번만 실행
+        // 2초가 지나면 ChangeStateNPC 실행
+        if (elapsedTime >= duration)
         {
-            machine.OnStateChange(machine.ThankState_RotatePlayerClockWork);
-           
-            hasExecuted = true;
+            ChangeStateNPC();
         }
-
     }
 
     public override void OnFixedUpdate()
@@ -49,10 +46,22 @@ public class NPC_Simple_GrappedState : NPC_Simple_State
     }
 
 
+    private void ChangeStateNPC()
+    {
+        npc.bSad = false;
+        npc.GetAnimator().SetBool("Bool_Sad",false);
 
 
+        if (npc.bClockWorkEventNPC)
+        {
 
-  
+
+        }
+        else
+        {
+            machine.OnStateChange(machine.ThankState);
+        }
+    }
 
     
 }

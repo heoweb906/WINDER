@@ -2,32 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPC_ClockWork : ClockWork
+public class NPC_ClockWork : InteractableObject
 {
-    public NPCHeart npcHeart;
+    public NPC_Simple_StateMachine machine;
 
-    public GameObject NPC;
-
-    
-    public override void GrapClockWorkOn()
+    private void Start()
     {
-        npcHeart.machine.OnStateChange(npcHeart.machine.GrappedState);
-
-
+        type = InteractableType.SingleEvent;
     }
 
 
-    public override void ClockWorkRotate(float fRotateDirection = 1f, float fRotateSpeed_Wall = 0.3f, float fRotateSpeed_Floor = 0.8f)
+    public override void ActiveEvent()
     {
-        base.ClockWorkRotate();
+        canInteract = false;
 
-        Debug.Log("ÅÂ¿± È¸Àü!!!");
-
-        npcHeart.GetAnimator().SetTrigger("doClockWorkStop");
+        machine.OnStateChange(machine.GrappedState);
     }
-
-
-  
 
 
 

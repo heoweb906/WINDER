@@ -15,9 +15,6 @@ public class PlayerStateMachine : StateMachine
     public P_UnControllable UnControllableState { get; private set; }
     public P_UC_Idle UC_IdleState { get; private set; }
     public P_UC_Die UC_DieState { get; private set; }
-    public P_UC_FallDown UC_FallDownState { get; private set; }
-    public P_UC_WakeUp UC_WakeUpState { get; private set; }
-    public P_UC_Falling UC_FallingState { get; private set; }
 
     public P_IdleState IdleState { get; private set; }
     public P_SoftLandingState SoftLandingState { get; private set; }
@@ -47,16 +44,13 @@ public class PlayerStateMachine : StateMachine
     public P_PutDownState PutDownState { get; private set; }
     public P_RemovePartsState RemovePartsState { get; private set; }
     public P_ThrowState ThrowState { get; private set; }
-    public P_GuitarBrokenState GuitarBrokenState { get; private set; }
+
     public P_GrabState GrabState { get; private set; }
     public P_GrabIdleState GrabIdleState { get; private set; }
     public P_PushState PushState { get; private set; }
     public P_PullState PullState { get; private set; }
 
     public P_PutPartsState PutPartsState { get; private set; }
-
-    public P_UC_SingleEvent UC_SingleEventState { get; private set; }
-    public P_UC_WheelChair UC_WheelChairState { get; private set; }
 
     public PlayerStateMachine(Player _player)
     {
@@ -73,9 +67,7 @@ public class PlayerStateMachine : StateMachine
         UnControllableState = new P_UnControllable(player, this);
         UC_IdleState = new P_UC_Idle(player, this);
         UC_DieState = new P_UC_Die(player, this);
-        UC_FallDownState = new P_UC_FallDown(player, this);
-        UC_WakeUpState = new P_UC_WakeUp(player, this);
-        UC_FallingState = new P_UC_Falling(player, this);
+
         IdleState = new P_IdleState(player, this);
         SoftLandingState = new P_SoftLandingState(player, this);
         MoveLandingState = new P_MoveLandingState(player, this);
@@ -103,16 +95,13 @@ public class PlayerStateMachine : StateMachine
         PutDownState = new P_PutDownState(player, this);
         RemovePartsState = new P_RemovePartsState(player, this);
         ThrowState = new P_ThrowState(player, this);
-        GuitarBrokenState = new P_GuitarBrokenState(player, this);
+
         GrabState = new P_GrabState(player, this);
         GrabIdleState = new P_GrabIdleState(player, this);
         PushState = new P_PushState(player, this);
         PullState = new P_PullState(player, this);
 
         PutPartsState = new P_PutPartsState(player, this);
-
-        UC_SingleEventState = new P_UC_SingleEvent(player, this);
-        UC_WheelChairState = new P_UC_WheelChair(player, this);
 
         CurrentState = IdleState;
         CurrentState.OnEnter();

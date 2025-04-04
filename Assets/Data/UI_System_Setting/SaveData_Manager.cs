@@ -14,15 +14,13 @@ public class SettingsData
     public bool bFullScreen; // FullScreen 상태인지 아닌지
     public ResolutionSettings Resolution = new ResolutionSettings();
 
-    // #. 게임 진척도 관련 데이터
-    public int iClearStageNum;      
-    public string sSceneName;       
-    public int iTransformRespawn;   
-    public int iCameraNum;
 
-    // #. 게임 최초 실행, 내면 세계 진입 여부
+    // #. 게임 진척도 관련 데이터
+    public int iClearStageNum;
+    public string sSceneName;
+    public int iTransformRespawn;
+    public int iCameraNum;
     public bool bFirstStart;
-    public bool bInside;
 }
 
 [System.Serializable]
@@ -232,16 +230,6 @@ public class SaveData_Manager : MonoBehaviour
         return settingsData.bFirstStart;
     }
     //===================================================================================================
-
-    public void SetBoolInside(bool bbb)
-    {
-        settingsData.bInside = bbb;
-    }
-    public bool GetBoolInside()
-    {
-        return settingsData.bInside;
-    }
-    //===================================================================================================
     // Save and load methods
     public void SaveSettings()
     {
@@ -275,9 +263,6 @@ public class SaveData_Manager : MonoBehaviour
             settingsData.iTransformRespawn = 0;
             settingsData.iCameraNum = 0;
 
-            settingsData.bFirstStart = false;
-            settingsData.bInside = false;
-          
 
             SaveSettings();
 
@@ -301,10 +286,6 @@ public class SaveData_Manager : MonoBehaviour
         settingsData.sSceneName = null;
         settingsData.iTransformRespawn = 0;
         settingsData.iCameraNum = 0;
-
-        settingsData.bFirstStart = false;
-        settingsData.bInside = false;
-
 
         SaveSettings();
     }
@@ -335,9 +316,6 @@ public class SaveData_Manager : MonoBehaviour
         Debug.Log($"Camera Number: {settingsData.iCameraNum}");
         Debug.Log($"First Start: {settingsData.bFirstStart}");
 
-        Debug.Log($"NOw Inside : {settingsData.bInside}");
-        
-
         Debug.Log("=====================");
     }
 
@@ -349,12 +327,6 @@ public class SaveData_Manager : MonoBehaviour
         settingsData.sSceneName = null;
         settingsData.iTransformRespawn = 0;
         settingsData.iCameraNum = 0;
-
-
-
-        settingsData.bFirstStart = false;
-        settingsData.bInside = false;
-
     }
-
+        
 }

@@ -22,6 +22,8 @@ public class Button_StartRealNewGame : MenuButton
         base.ImplementButton();
 
         SaveData_Manager.Instance.GameClearDataReset();
+
+
         mainMenuController.StartNewGame("Chapter1_1_City");
     }
 

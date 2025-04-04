@@ -12,10 +12,8 @@ public class BulBug_SleepState : BulbBugState
     {
         base.OnEnter();
 
-        bulbBug.anim.SetTrigger("doHide");
-
         Debug.Log("Ààµë »óÅÂ ÁøÀÔ ¿Ï·á");
-        bulbBug.ToggleEmission(false);
+        bulbBug.LightObj.SetActive(false);
         bulbBug.carriedObj.enabled = true;
         bulbBug.nav.enabled = false;
         bulbBug.rigid.velocity = Vector3.zero;
@@ -36,7 +34,18 @@ public class BulBug_SleepState : BulbBugState
 
             if (elapsedTime >= 1f)
             {
-                machine.OnStateChange(machine.StandUpState);
+                Vector3 rotation = bulbBug.gameObject.transform.rotation.eulerAngles;
+
+                if (Mathf.Abs(Mathf.DeltaAngle(rotation.x, 0)) <= 4f &&
+                   Mathf.Abs(Mathf.DeltaAngle(rotation.y, 0)) <= 4f &&
+                   Mathf.Abs(Mathf.DeltaAngle(rotation.z, 0)) <= 4f)
+                {
+                    machine.OnStateChange(machine.WanderingState);
+                }
+                else
+                {
+                    machine.OnStateChange(machine.StandUpState);
+                }
             }
         }
 
@@ -53,7 +62,7 @@ public class BulBug_SleepState : BulbBugState
     {
         base.OnExit();
 
-        bulbBug.ToggleEmission(true);
+        bulbBug.LightObj.SetActive(true);
         bulbBug.carriedObj.enabled = false;
         
     }

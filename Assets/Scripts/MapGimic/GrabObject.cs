@@ -8,7 +8,6 @@ public class GrabObject : InteractableObject
     public Collider col;
     public ConfigurableJoint joint;
     public List<Transform> grabPosition;
-    public bool isCliff;
 
     private void Start()
     {
@@ -52,13 +51,11 @@ public class GrabObject : InteractableObject
         joint.yMotion = ConfigurableJointMotion.Locked;
         joint.zMotion = ConfigurableJointMotion.Locked;
         joint.angularYMotion = ConfigurableJointMotion.Locked;
-        rigid.mass = 1;
     }
 
     public void DeleteJoint()
     {
         joint = null;
         Destroy(gameObject.GetComponent<ConfigurableJoint>());
-        rigid.mass = 100;
     }
 }

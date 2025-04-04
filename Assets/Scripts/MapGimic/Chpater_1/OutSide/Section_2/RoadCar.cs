@@ -18,7 +18,7 @@ public class RoadCar : MonoBehaviour
     private float currentSpeed; // 현재 속력
 
     public JustRotate[] justRotates;  // 타이어들 회전 관리
-    public Transform CarFrame;
+    public GameObject CarFrame;
 
     private void Awake()
     {
@@ -27,7 +27,7 @@ public class RoadCar : MonoBehaviour
         if(CarFrame != null) StartShakeEffect();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (bMoveActive)
         {
@@ -53,7 +53,7 @@ public class RoadCar : MonoBehaviour
             if (hit.collider.GetComponent<RoadCar>() != null)
             {
                 // 안전 거리 확보를 위해 서서히 감속
-                currentSpeed -= deceleration * Time.fixedDeltaTime;
+                currentSpeed -= deceleration * Time.deltaTime;
                 currentSpeed = Mathf.Max(currentSpeed, 0);
             }
         }
@@ -62,12 +62,12 @@ public class RoadCar : MonoBehaviour
             // 안전 거리가 확보되면 가속
             if (currentSpeed < maxSpeed)
             {
-                currentSpeed += acceleration * Time.fixedDeltaTime;
+                currentSpeed += acceleration * Time.deltaTime;
             }
         }
 
         // MovePosition을 사용해 오브젝트 이동
-        Vector3 targetPosition = transform.position + transform.forward * currentSpeed * Time.fixedDeltaTime;
+        Vector3 targetPosition = transform.position + transform.forward * currentSpeed * Time.deltaTime;
         rb.MovePosition(targetPosition);
 
         // JustRotate 배열의 각 요소 회전 속도 업데이트
@@ -114,8 +114,6 @@ public class RoadCar : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("Detect On Player");
-
-
             GameAssistManager.Instance.DiePlayerReset(2f, 0);
         }
     }

@@ -7,21 +7,17 @@ using UnityEngine;
 public enum ClockWorkType
 {
     Floor,
-    Wall,
-    NPC,
-    KyungSoo
+    Wall
 };
 
 public class ClockWork : InteractableObject
 {
     public ClockBattery clockBattery;
-    [SerializeField] public ClockWorkType clockWorkType;
+    [SerializeField] private ClockWorkType clockWorkType;
 
     public List<ClockWork> plusClockWorksList  = new List<ClockWork>();
 
     public bool isSingleEvent;
-
-    public float fDistanceOffset;
 
     private void Start()
     {
@@ -32,18 +28,15 @@ public class ClockWork : InteractableObject
 
     public void ChargingBattery()
     {
-        if(clockBattery != null)
+        if (clockBattery.fMaxClockBattery > clockBattery.fCurClockBattery && !clockBattery.bDoing)
         {
-            if (clockBattery.fMaxClockBattery > clockBattery.fCurClockBattery && !clockBattery.bDoing)
-            {
-                //Debug.Log("태엽 돌리는 중");
-                clockBattery.fCurClockBattery += 1;
-                //transform.Rotate(Vector3.forward * 80f * Time.deltaTime);
-                clockBattery.clockWork = this.gameObject;
-                canInteract = false;
-            }
-            if (clockBattery.fMaxClockBattery <= clockBattery.fCurClockBattery) clockBattery.bBatteryFull = true;
+            //Debug.Log("태엽 돌리는 중");
+            clockBattery.fCurClockBattery += 1;
+            //transform.Rotate(Vector3.forward * 80f * Time.deltaTime);
+            clockBattery.clockWork = this.gameObject;
+            canInteract = false;
         }
+        if (clockBattery.fMaxClockBattery <= clockBattery.fCurClockBattery) clockBattery.bBatteryFull = true;
     }
 
     public void EndCharging_To_BatteryStart()
@@ -67,7 +60,7 @@ public class ClockWork : InteractableObject
         return clockWorkType;
     }
 
-    public virtual void ClockWorkRotate(float fRotateDirection = 1f, float fRotateSpeed_Wall = 0.3f, float fRotateSpeed_Floor = 0.8f)
+    public void ClockWorkRotate(float fRotateDirection = 1f, float fRotateSpeed_Wall = 0.3f, float fRotateSpeed_Floor = 0.8f)
     {
         if (clockWorkType == ClockWorkType.Wall)
         {
@@ -104,11 +97,6 @@ public class ClockWork : InteractableObject
             clockWorkType = ClockWorkType.Wall;
         }
     }
-
-
-
-    public virtual void GrapClockWorkOn() {}
-
 }
 
 

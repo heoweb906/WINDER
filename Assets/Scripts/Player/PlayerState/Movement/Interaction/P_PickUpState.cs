@@ -15,12 +15,6 @@ public class P_PickUpState : P_InteractionState
         player.SetPlayerPhysicsIgnore(player.curCarriedObject.col, true);
         player.angle = 0;
         player.isSetAngleZero = false;
-
-        if (player.curCarriedObject.bPickUpEvent)
-        {
-            player.SetLockCarryObject(true);
-            player.curCarriedObject.PickUpEvent();
-        }
     }
 
     public override void OnExit()
@@ -50,7 +44,7 @@ public class P_PickUpState : P_InteractionState
 
     public void CheckPutDownObject()
     {
-        if (player.isCarryObject && !Input.GetButton("Fire1") && !player.playerAnim.IsInTransition(0) && !player.isLockCarryObject)
+        if (player.isCarryObject && !Input.GetButton("Fire1") && !player.playerAnim.IsInTransition(0))
         {
 
             player.SetPlayerPhysicsIgnore(player.curCarriedObject.col, false);
@@ -85,31 +79,13 @@ public class P_PickUpState : P_InteractionState
         moveSequence = DOTween.Sequence();
         moveSequence.Join(player.curCarriedObject.transform.DOLocalMove(targetPosition, 0.5f));
         moveSequence.Join(player.curCarriedObject.transform.DORotate(targetRotation.eulerAngles, 0.5f));
-        
-        if(player.curCarriedObject.carriedObjectType == CarriedObjectType.Normal)
-        {
-            player.isHandIK = true;
-        }
-        else if(player.curCarriedObject.carriedObjectType == CarriedObjectType.Guitar)
-        {
-            player.isHandIK = false;
-            DOTween.To(() => player.playerAnim.GetLayerWeight(1), x => player.playerAnim.SetLayerWeight(1, x), 1, 0.2f);
-        }
+
+        player.isHandIK = true;
     }
 
     public override void OnAnimationExitEvent()
     {
-        if(player.curCarriedObject.carriedObjectType == CarriedObjectType.Normal)
-        {
-            player.playerAnim.SetBool(player.playerAnimationData.CarryNormalParameterHash, true);
-            player.playerAnim.SetBool(player.playerAnimationData.CarryGuitarParameterHash, false);
-        }
-        else if(player.curCarriedObject.carriedObjectType == CarriedObjectType.Guitar)
-        {
-            player.playerAnim.SetBool(player.playerAnimationData.CarryNormalParameterHash, false);
-            player.playerAnim.SetBool(player.playerAnimationData.CarryGuitarParameterHash, true);
-        }
-        DOTween.To(() => player.playerAnim.GetLayerWeight(1), x => player.playerAnim.SetLayerWeight(1, x), 1, 0.2f);
+        player.playerAnim.SetLayerWeight(1, 1);
         machine.OnStateChange(machine.IdleState);
     }
 

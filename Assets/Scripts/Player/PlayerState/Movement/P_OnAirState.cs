@@ -19,6 +19,8 @@ public class P_OnAirState : PlayerMovementState
     {
         base.OnUpdate();
         CheckHanging();
+        if (Input.GetKeyDown(KeyCode.Q))
+            machine.OnStateChange(machine.FallingIdleState);
     }
 
     public override void OnFixedUpdate()
@@ -41,21 +43,14 @@ public class P_OnAirState : PlayerMovementState
             Debug.DrawRay(ray.origin, player.transform.forward * player.cliffCheckRayDistance, Color.red);
             if (Physics.Raycast(ray, out player.cliffRayHit, player.cliffCheckRayDistance, player.cliffLayer))
             {
-                GrabObject grabObject = player.cliffRayHit.collider.GetComponent<GrabObject>();
-                if (grabObject != null && !grabObject.isCliff) return;
-
                 BoxCollider _col = player.cliffRayHit.collider.GetComponent<BoxCollider>();
-
-                // BoxCollider�� ũ��� center�� �����Ͽ� ��� ��ġ�� ���
-                Vector3 worldCenter = _col.transform.TransformPoint(_col.center);
-                Vector3 worldSize = Vector3.Scale(_col.size * 0.5f, _col.transform.lossyScale);
-                Vector3 cliffPos = new Vector3(worldCenter.x, worldCenter.y + worldSize.y, worldCenter.z);
-
-                if ((cliffPos.y - player.cliffRayHit.point.y) < 0.15f && (cliffPos.y - player.cliffRayHit.point.y) > -0.15f)
+                Vector3 cliffPos = Vector3.Scale(_col.size * 0.5f, _col.transform.lossyScale) + player.cliffRayHit.transform.position;
+                if ((cliffPos.y - player.cliffRayHit.point.y) < 0.1f && (cliffPos.y - player.cliffRayHit.point.y) > -0.1f)
                 {
-                    Debug.Log(cliffPos.y - player.cliffRayHit.point.y);
+                    Debug.Log((cliffPos.y - player.cliffRayHit.point.y));
                     player.hangingPos = new Vector3(player.cliffRayHit.point.x, cliffPos.y, player.cliffRayHit.point.z);
-
+                    //player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + cliffPos.y - 0.6f, player.transform.position.z); 
+                   
                     machine.OnStateChange(machine.HangingState);
                 }
             }
@@ -75,7 +70,7 @@ public class P_OnAirState : PlayerMovementState
 
     public override void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player") && other.gameObject.layer != LayerMask.NameToLayer("Ignore Raycast"))
+        if (!other.CompareTag("Player"))
         {
             if (machine.CheckCurrentState(machine.JumpStartIdleState) || machine.CheckCurrentState(machine.FallingIdleState))
                 machine.OnStateChange(machine.SoftLandingState);

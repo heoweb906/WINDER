@@ -27,9 +27,6 @@ public class TrafficLight : ClockBattery, IPartsOwner
     [Space(30f)]
 
     // 따로 분리할 필요가 없다고 판단되어 신호등 스크립트 하나에서 관리합니다.
-    private Queue<GameObject> carPool = new Queue<GameObject>(); // 자동차 풀
-    public int poolSize = 20; // 초기 자동차 풀 크기
-
     [Header("차량 관리")] 
     public GameObject[] roadCars;
     public Transform[] positions_carCreate;
@@ -57,9 +54,6 @@ public class TrafficLight : ClockBattery, IPartsOwner
     {
         ChangeTrafficColor(2);
         positionCooldowns = new float[positions_carCreate.Length];
-
-        // 자동차 풀 초기화
-        InitializeCarPool();
     }
 
     private void Update()
@@ -127,11 +121,8 @@ public class TrafficLight : ClockBattery, IPartsOwner
             // 배터리가 있는 동안 fCurClockBattery 감소
             while (fCurClockBattery > 0)
             {
-                yield return new WaitForSeconds(1.0f);
-                fCurClockBattery -= 1;
-
-                //fCurClockBattery -= Time.deltaTime;
-                //yield return null;
+                fCurClockBattery -= Time.deltaTime;
+                yield return null;
             }
 
             TurnOffObj();
@@ -179,29 +170,48 @@ public class TrafficLight : ClockBattery, IPartsOwner
     private void SpawnCars_1()
     {
         int ranNum_posotion = UnityEngine.Random.Range(0, positions_carCreate.Length);
-        if (positionCooldowns[ranNum_posotion] > 0) return; // 쿨다운 적용
+        int ranNum_car = UnityEngine.Random.Range(0, roadCars.Length);
 
-        GameObject car = GetPooledCar();
-        car.transform.position = positions_carCreate[ranNum_posotion].position;
-        car.transform.rotation = (ranNum_posotion < 3) ? Quaternion.Euler(0, 180, 0) : Quaternion.identity;
-        car.transform.SetParent(transform);
-
-        RoadCar roadCar = car.GetComponent<RoadCar>();
-        roadCar.trafficLight = this;
-        roadCar.bMoveActive = true;
-        roadCar.bDirection = (ranNum_posotion < 3);
 
         if (ranNum_posotion < 3)
-            spawnedCars_1.Add(car);
-        else
-            spawnedCars_2.Add(car);
+        {
+            if (positionCooldowns[ranNum_posotion] <= 0)
+            {
+                Quaternion rotation = Quaternion.Euler(0, 180, 0);
+                GameObject car = Instantiate(roadCars[ranNum_car], positions_carCreate[ranNum_posotion].position, rotation);
+                car.transform.SetParent(gameObject.transform);
+                RoadCar roadCar = car.GetComponent<RoadCar>();
 
-        positionCooldowns[ranNum_posotion] = cooldownDuration_1;
+                roadCar.trafficLight = this;
+                roadCar.bMoveActive = true;
+                roadCar.bDirection = true;
+
+                spawnedCars_1.Add(car); // 생성된 자동차를 리스트에 추가
+                positionCooldowns[ranNum_posotion] = cooldownDuration_1;
+            }
+            else SpawnCars_1();
+        }
+        else
+        {
+            if (positionCooldowns[ranNum_posotion] <= 0)
+            {
+                GameObject car = Instantiate(roadCars[ranNum_car], positions_carCreate[ranNum_posotion].position, Quaternion.identity);
+                car.transform.SetParent(gameObject.transform);
+                RoadCar roadCar = car.GetComponent<RoadCar>();
+
+                roadCar.trafficLight = this;
+                roadCar.bMoveActive = true;
+
+                spawnedCars_2.Add(car); // 생성된 자동차를 리스트에 추가
+                positionCooldowns[ranNum_posotion] = cooldownDuration_1;
+            }
+            else SpawnCars_1();
+        }
     }
 
 
 
-
+  
 
     // #. 태엽을 꽂아서 넣어주는 함수
     public void InsertOwnerFunc(GameObject clockWorkObj,int iIndex)
@@ -228,41 +238,6 @@ public class TrafficLight : ClockBattery, IPartsOwner
 
     }
 
-
-    private void InitializeCarPool()
-    {
-        for (int i = 0; i < poolSize; i++)
-        {
-            int ranNum_car = UnityEngine.Random.Range(0, roadCars.Length);
-            GameObject car = Instantiate(roadCars[ranNum_car]);
-            car.SetActive(false); // 처음엔 비활성화 상태
-            carPool.Enqueue(car);
-        }
-    }
-
-
-    private GameObject GetPooledCar()
-    {
-        if (carPool.Count > 0)
-        {
-            GameObject car = carPool.Dequeue();
-            car.SetActive(true);
-            return car;
-        }
-        else
-        {
-            int ranNum_car = UnityEngine.Random.Range(0, roadCars.Length);
-            GameObject newCar = Instantiate(roadCars[ranNum_car]);
-            return newCar;
-        }
-    }
-
-    private void ReturnCarToPool(GameObject car)
-    {
-        car.SetActive(false);
-        carPool.Enqueue(car);
-    }
-
-
+   
 
 }

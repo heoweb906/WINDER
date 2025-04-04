@@ -19,7 +19,6 @@ public class MainMenuController : MonoBehaviour
 
     [SerializeField] private int nowPanelNum;
 
-    public bool bNowSceneChange = false;
 
     private GameObject PanelNow;
     [Header("Main Panel")]
@@ -128,7 +127,7 @@ public class MainMenuController : MonoBehaviour
             FindClosestButton(Vector2.right);
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape) && nowPanelNum != 0 && !bNowSceneChange)
+        if (Input.GetKeyDown(KeyCode.Escape) && nowPanelNum != 0)
         {
             if (nowPanelNum == 1)
             {
@@ -381,12 +380,8 @@ public class MainMenuController : MonoBehaviour
     /// </summary>
 
     // #. Scene 전환 함수, 게임 시작 버튼에서 사용하지만, 버튼에는 버튼 관련 기능만 넣기 위해서
-    public void StartNewGame(string sSceneSname = "Chapter0_1_Alley")
+    public void StartNewGame(string sSceneSname = "Chapter1_1_City")
     {
-        //  
-
-        bNowSceneChange = true;
-
         // Vignette의 intensity를 현재 값에서 1로 서서히 변화
         //if (vignette != null)
         //{
@@ -496,14 +491,13 @@ public class MainMenuController : MonoBehaviour
 
         Image fadeoutImage = image_FadeOut.GetComponent<Image>();
         Color fadeColor = fadeoutImage.color;
-
+        
         // 알파값을 서서히 1로, 마지막에 감속 후 씬 전환
         DOTween.To(() => fadeColor.a, x => {
             fadeColor.a = x;
             fadeoutImage.color = fadeColor;
-        }, 0f, 4.5f)
+        }, 0f, 3.2f)
         .SetEase(Ease.OutQuad)
-        .SetDelay(1f)
         .OnComplete(() => {
             // image_FadeOut.SetActive(false); 
         });
@@ -518,7 +512,7 @@ public class MainMenuController : MonoBehaviour
 
             ObjGameLogo.DOMove(targetTransform.position, 5.5f)
                 .SetEase(Ease.OutQuad) // 부드러운 감속 효과
-                .SetDelay(5.0f)
+                .SetDelay(3.2f)
                 .SetUpdate(true); // UI에서도 정상 작동
         }
     }

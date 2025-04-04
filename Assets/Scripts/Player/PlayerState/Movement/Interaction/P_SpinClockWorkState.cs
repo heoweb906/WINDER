@@ -12,31 +12,15 @@ public class P_SpinClockWorkState : P_InteractionState
     {
         base.OnEnter();
         machine.StartAnimation(player.playerAnimationData.SpinClockWorkParameterHash);
-        if(player.curClockWork.clockWorkType == ClockWorkType.KyungSoo){
-            player.playerAnim.speed = 0.1f;
-
-            KyungsooClockWork kyungsoo_ = player.curClockWork.GetComponent<KyungsooClockWork>();
-
-            kyungsoo_.KyungsooAnimStart();
-        }
-        else{
-            player.playerAnim.speed = 1f;
-        }
-        player.curClockWork.GetComponent<BoxCollider>().isTrigger = true;
     }
 
     public override void OnExit()
     {
         base.OnExit();
         machine.StopAnimation(player.playerAnimationData.SpinClockWorkParameterHash);
-        if (player.curClockWork.clockWorkType != ClockWorkType.KyungSoo)
-        {
-            player.curClockWork.EndCharging_To_BatteryStart();
-        }
+        player.curClockWork.EndCharging_To_BatteryStart();
         // player.curClockWork = null;
         player.curInteractableObject = null;
-        player.curClockWork.GetComponent<BoxCollider>().isTrigger = false;
-        player.playerAnim.speed = 1f;
     }
 
     public override void OnUpdate()
@@ -52,9 +36,6 @@ public class P_SpinClockWorkState : P_InteractionState
 
     private void CheckCanExit()
     {
-        if(player.curClockWork.clockWorkType == ClockWorkType.KyungSoo) return;
-
-        
         if (player.curClockWork.BoolBatteryFullCharging())
         {
             machine.OnStateChange(machine.IdleState);
@@ -75,10 +56,6 @@ public class P_SpinClockWorkState : P_InteractionState
     {
         bCanExit = false;
         player.curClockWork.ClockWorkRotate();
-
-        if(player.curClockWork.clockWorkType == ClockWorkType.KyungSoo){
-            machine.OnStateChange(machine.UC_FallDownState);
-        }
     }
 
     public override void OnAnimationExitEvent()

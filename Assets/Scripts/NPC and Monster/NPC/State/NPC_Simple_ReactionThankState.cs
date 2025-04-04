@@ -16,35 +16,15 @@ public class NPC_Simple_ReactionThankState : NPC_Simple_State
     {
         base.OnEnter();
 
-        npc.bSad = false;
-        npc.GetAnimator().SetBool("Bool_Sad", false);
-        npc.GetAnimator().SetTrigger("doClockWorkStart");
+        npc.GetAnimator().SetTrigger("doReactionHappy");
 
-
-
-        if (npc.clockworkEvent == ClockWorkEventList.None)
-        {
-            npc.GetAnimator().SetTrigger("doReactionHappy");
-
-            elapsedTime = 0f;
-
-        }
-        else
-        {
-
-
-            ChangeStateNPC();
-        }
-
-       
+        elapsedTime = 0f; 
 
     }
 
     public override void OnUpdate()
     {
         base.OnUpdate();
-
-        Debug.Log("감사하는 상태가 동작중입니다. ");
 
         elapsedTime += Time.deltaTime;
 
@@ -65,22 +45,7 @@ public class NPC_Simple_ReactionThankState : NPC_Simple_State
 
     public override void OnExit()
     {
-    
-
         base.OnExit();
-    }
-
-    private void ChangeStateNPC()
-    {
-        if (npc.clockworkEvent == ClockWorkEventList.RotatePlayerClockwork)
-        {
-            machine.OnStateChange(machine.ThankState_RotatePlayerClockWork);
-
-        }
-        //else
-        //{
-        //    machine.OnStateChange(machine.ThankState);
-        //}
     }
 
 }

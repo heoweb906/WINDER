@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     public bool isWorldAxis;
     [Range(0, 360)]
     public float yAxis;
-    
+
     public PlayerStateMachine machine;
 
     public Transform camTransform;
@@ -102,8 +102,6 @@ public class Player : MonoBehaviour
     public float playerGrapRotateLerpSpeed;
     [SerializeField, Range(0, 60)]
     public float playerGrapMoveSpeed;
-    [Header("SingleEvent")]
-    public SingleEventObject curSingleEventObject;
 
     [Header("Climb")]
     public float cliffCheckRayDistance = 1f; // 탐지 반경
@@ -141,11 +139,6 @@ public class Player : MonoBehaviour
 
     public int dieIndex = 1;
 
-    public bool isLockCarryObject = false;
-
-    public bool isDirectionLock = false;
-    public Transform directionLockPos;
-
     private void Awake()
     {
         playerAnimationData.Initialize();
@@ -170,7 +163,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         groundLayer = ~(1 << LayerMask.NameToLayer("Player") | 1 << LayerMask.NameToLayer("Ignore Raycast") | 1 << LayerMask.NameToLayer("Carry"));
-        cliffLayer = (1 << LayerMask.NameToLayer("Cliff") | 1 << LayerMask.NameToLayer("Interactable"));
+        cliffLayer = (1 << LayerMask.NameToLayer("Cliff"));
     }
 
     private void Update()
@@ -219,7 +212,7 @@ public class Player : MonoBehaviour
     {
         // 탐지 반경을 시각적으로 표시
         Gizmos.color = Color.green; // 기즈모 색상 설정
-        Gizmos.DrawWireSphere(transform.position + new Vector3(0, 1f, 0), detectionRadius); // WireSphere로 탐지 범위 그리기
+        Gizmos.DrawWireSphere(transform.position, detectionRadius); // WireSphere로 탐지 범위 그리기
     }
 
 
@@ -352,53 +345,5 @@ public class Player : MonoBehaviour
         dieIndex = index;
         machine.OnStateChange(machine.UC_DieState);
     }
-
-
-    public void SetLockCarryObject(bool _bool)
-    {
-        isLockCarryObject = _bool;
-    }
-
-    public void RemoveCarryObject(){
-        curInteractableObject = null;
-        curCarriedObject = null;
-        isCarryObject = false;
-        isLockCarryObject = false;
-        isHandIK = false;
-        DOTween.To(() => playerAnim.GetLayerWeight(1), x => playerAnim.SetLayerWeight(1, x), 0, 0.2f);
-    }
-
-    public void SetFallDownState(){
-        machine.OnStateChange(machine.UC_FallDownState);
-    }
-
-    public void SetWakeUpState(){
-        machine.OnStateChange(machine.UC_WakeUpState);
-    }
-    
-    public void SetFallingState(){
-        machine.OnStateChange(machine.UC_FallingState);
-    }
-    public bool bCanExit = false;
-    public void SetCanExit(bool _bool){
-        bCanExit = _bool;
-    }
-    public void SetPlayerDirectionLock(bool _bool , GameObject _obj){
-        isDirectionLock = _bool;
-        if(isDirectionLock){
-            directionLockPos = _obj.transform;
-        }
-    }
-
-    public void SetWakeUpAfterDelay(float delay){
-        StartCoroutine(C_SetWakeUpAfterDelay(delay));
-    }
-    IEnumerator C_SetWakeUpAfterDelay(float delay){
-        yield return new WaitForSeconds(delay);
-        machine.OnStateChange(machine.UC_WakeUpState);
-        bCanExit = false;
-    }
-
-
 
 }

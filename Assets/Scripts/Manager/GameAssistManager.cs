@@ -8,28 +8,23 @@ using DG.Tweening;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Unity.VisualScripting;
-using Cinemachine;
-using Unity.Collections;
+using JetBrains.Annotations;
 
 public class GameAssistManager : MonoBehaviour
 {
     public static GameAssistManager Instance { get; private set; }
 
     public GameObject player;
-    public bool bCantInpuFunc;
 
     [Header("스테이지 / 리스폰 관련")]
     public int iStageNum;
     public Transform[] Transforms_Respawn;
     public GameObject[] Cameras;
-    private GameObject nowCamera;
-    public GameObject[] Cameras_Event;
-    private bool bPlayerDie; // 현재 플레이어가 죽음 상태 -> 죽음 반복 방지
+    private bool bPlayerDie;   // 현재 플레이어가 죽음 상태 -> 죽음 반복 방지
 
     [Header("연출 관련 내면 세계 진입")]
     public GameObject CameraOverlay;
     public Volume volume_1;
-
 
 
     private void Awake()
@@ -38,7 +33,6 @@ public class GameAssistManager : MonoBehaviour
         bPlayerDie = false;
        
         player = FindPlayerRoot();
-
 
         // #. 스테이지 관리
         SaveData_Manager.Instance.SetStringSceneName(SceneManager.GetActiveScene().name);
@@ -50,7 +44,19 @@ public class GameAssistManager : MonoBehaviour
         }
         PlayerStartSeeting(SaveData_Manager.Instance.GetIntTransformRespawn(), SaveData_Manager.Instance.GetIntCameraNum());
 
+
+        // 플레이어 조작 가능
+        PlayerInputLockOff();
+
     }
+
+
+
+ 
+
+    
+
+
 
 
 
@@ -67,9 +73,8 @@ public class GameAssistManager : MonoBehaviour
     {
         player.transform.position = Transforms_Respawn[iTransform].position;
         Cameras[iCamera].SetActive(true);
-
-        nowCamera = Cameras[iCamera];
     }
+
 
 
 
@@ -77,51 +82,45 @@ public class GameAssistManager : MonoBehaviour
     
 
     // #. 플레이어가 죽었을 때 실행시킬 함수
-    public void DiePlayerReset(float fDieDelay = 2f, int iDieIndex = 0, float fDieAimDuration = 0f)  // 죽음 함수를 실행 시키고 얼마나 뒤에 상태를 리셋할 건지 정할 수 있도록
+    public void DiePlayerReset(float fDieDelay = 2f, int iDieIndex = 0)  // 죽음 함수를 실행 시키고 얼마나 뒤에 상태를 리셋할 건지 정할 수 있도록
     {
         if (!bPlayerDie)
         {
             bPlayerDie = true;
 
-            Debug.Log("플레이어 죽음 함수 실행");
+            PlayerInputLockOn();
+            ActionPlayerDieAnimation(iDieIndex);
 
-            // PlayerInputLockOn();    // 플레리어 입력 막음
-
-            StartCoroutine(_DiePlayerReset(fDieDelay)); 
-            StartCoroutine(ActionPlayerDieAnimation(iDieIndex, fDieAimDuration));       // 상황별 죽음 애니메이션
-            
+            StartCoroutine(_DiePlayerReset(fDieDelay)); // '_DiePlayerReset'이라는 코루틴을 호출합니다.
         }
     }
     IEnumerator _DiePlayerReset(float _fDieDelay) 
     {
-        InGameUIController.Instance.bIsUIDoing = true;
+        yield return new WaitForSeconds(_fDieDelay); 
 
-        yield return new WaitForSeconds(_fDieDelay);
-
-        SoundAssistManager.Instance.MuteMasterVolume(2f);
         InGameUIController.Instance.FadeInOutImage(1f, 1f);
 
         yield return new WaitForSeconds(2f);
 
         string currentSceneName = SceneManager.GetActiveScene().name;
-        InGameUIController.Instance.bIsUIDoing = false;
-
         SceneManager.LoadScene(currentSceneName);
     }
-    IEnumerator ActionPlayerDieAnimation(int iDieIndex = 0, float fDieAimDuration = 0f)
-    {
-        yield return new WaitForSeconds(fDieAimDuration);
 
+    private void ActionPlayerDieAnimation(int iDieIndex)
+    {
         // 0 - 분해되서 죽음
         // 1 - 잡혀서 죽음
+        if(iDieIndex == 0)
+        {
+            Player _player = player.GetComponent<Player>();
+            _player.machine.OnStateChange(_player.machine.UC_DieState);
+        }
+        else if(iDieIndex == 1)
+        {
 
-        Player _player = player.GetComponent<Player>();
-        _player.SetDieState(iDieIndex);
+        }
+
     }
-
-
-
-
 
 
 
@@ -135,9 +134,10 @@ public class GameAssistManager : MonoBehaviour
             {
                 SaveData_Manager.Instance.SetIntTransformRespawn(i);
                 break;
-            } 
-        } 
-    } 
+            }
+        }
+    }
+
 
 
     // #. 실제로 사용할 카메라만 True로 하고 나머지는 모두 false
@@ -149,39 +149,11 @@ public class GameAssistManager : MonoBehaviour
             else
             {
                 Cameras[i].SetActive(true);
-                nowCamera = Cameras[i];
                 SaveData_Manager.Instance.SetIntCameraNum(i);
             }
                
         }
     }
-    // #. 특정 구간을 보여주기 위한 카메라 연출
-    public void ImplementCameraEvent(GameObject camera, int fEventTime)
-    {
-        Debug.Log("잘 실행되고 있습니다.");
-
-        nowCamera.SetActive(false);
-        for (int i = 0; i < Cameras_Event.Length; i++)
-        {
-            if (Cameras_Event[i] != camera) Cameras_Event[i].SetActive(false);
-            else Cameras_Event[i].SetActive(true);
-               
-        }
-        StartCoroutine(CameraEventCroutine(nowCamera, fEventTime));
-    }
-    private IEnumerator CameraEventCroutine(GameObject nextCamera, int iEventTime)
-    {
-        while (iEventTime > 0)
-        {
-            yield return new WaitForSeconds(1.0f);
-            iEventTime -= 1;
-        }
-        for (int i = 0; i < Cameras_Event.Length; i++) Cameras_Event[i].SetActive(false);
-        nextCamera.SetActive(true);
-    }
-
-
-
     // #. 현재 활성화된 카메라와 변경하려는 카메라가 다른지 구분하는 함수
     public bool BoolNowActiveCameraObj(GameObject camera)
     {
@@ -202,28 +174,28 @@ public class GameAssistManager : MonoBehaviour
 
 
 
-    // #. 내면 진입 
-    public void InsideInEffect()
+    // #. 내부 진입 
+    public void FadeOutInEffect(float fDuration = 5f)
     {
         if (volume_1 == null) return;
-
-        InGameUIController.Instance.bIsUIDoing = true;
-        SetVignetteIntensity(volume_1, 1f, 2f);
-        SetColorFilter(volume_1, 0f, 0f, 0f, 2f);
-        DOTween.To(() => volume_1.weight, x => volume_1.weight = x, 1f, 3f);
+        StartCoroutine(SwapVolumesCoroutine(fDuration));
     }
 
-    
-    // #. 내면 탈출
-    public void InsideOutEffect()
+    IEnumerator SwapVolumesCoroutine(float fDuration = 5f)
     {
-        SetVignetteIntensity(volume_1, 0f, 2f);
-        DOTween.To(() => volume_1.weight, x => volume_1.weight = x, 0f, 3f)
-            .OnComplete(() => {
-                InGameUIController.Instance.bIsUIDoing = false;
-            });
-    }
+        if (volume_1 != null)
+        {
 
+            SetVignetteIntensity(volume_1, 1f, 2f);
+            DOTween.To(() => volume_1.weight, x => volume_1.weight = x, 1f, 3f);
+
+
+            yield return new WaitForSeconds(fDuration); // 잠시 대기
+
+            SetVignetteIntensity(volume_1, 0f, 2f);
+            DOTween.To(() => volume_1.weight, x => volume_1.weight = x, 0f, 3f);
+        }
+    }
 
     public void SetVignetteIntensity(Volume volume, float targetIntensity, float duration)
     {
@@ -237,43 +209,28 @@ public class GameAssistManager : MonoBehaviour
 
         }
     }
-    public void SetColorFilter(Volume volume, float targetR, float targetG, float targetB, float duration)
-    {
-        if (volume.profile.TryGet<ColorAdjustments>(out var colorAdjustments))
-        {
-            // 현재 RGB 값을 가져옵니다.
-            Color currentColor = colorAdjustments.colorFilter.value;
-
-            // 목표 색상을 설정합니다.
-            Color targetColor = new Color(targetR, targetG, targetB);
-
-            // DOTween을 사용하여 ColorFilter의 RGB 값을 애니메이션합니다.
-            DOTween.To(() => currentColor, x =>
-            {
-                currentColor = x;
-                colorAdjustments.colorFilter.Override(currentColor);
-            }, targetColor, duration);
-        }
-    }
-    public void AnimateFogDensity(float targetValue, float duration)
-    {
-        DOTween.To(() => RenderSettings.fogDensity, x => RenderSettings.fogDensity = x, targetValue, duration);
-    }
-    public void AnimateAmbientIntensity(float targetValue, float duration)
-    {
-        DOTween.To(() => RenderSettings.ambientIntensity, x => RenderSettings.ambientIntensity = x, targetValue, duration);
-    }
 
 
 
-    // 플레이어 관련
-    // 플레이어 관련
+
+
+
+
+
+
+
+
+
+
+
+
     // 플레이어 관련
     #region
 
 
+
     // #. Player 태그가 붙은 오브젝트 중에 가장 부모 오브젝트를 찾아오는 함수
-    public GameObject FindPlayerRoot()
+    private GameObject FindPlayerRoot()
     {
         GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject obj in playerObjects)
@@ -282,36 +239,19 @@ public class GameAssistManager : MonoBehaviour
         }
         return null; // "Player" 태그의 최고 부모 오브젝트가 없을 경우
     }
-
-
-    // #. 여러 Get / Set 함수
-    public void SetPlaterObj(GameObject obj)
-    {
-        player = obj;
-    }
     public GameObject GetPlayer()
     {
         return player;
     }
-    public Player GetPlayerScript()
-    {
-        Player _player = player.GetComponent<Player>();
 
-        return _player;
-    }
     public bool GetBoolPlayerDie()
     {
         return bPlayerDie;
     }
-    public GameObject GetNowCamera()
-    {
-        return nowCamera;
-    }
+    
 
 
 
-
-    // #. 플레이어 입력 잠금 On
     public void PlayerInputLockOn()
     {
         Player playerScript = player.GetComponent<Player>();
@@ -319,13 +259,10 @@ public class GameAssistManager : MonoBehaviour
 
         playerScript.machine.OnStateChange(playerScript.machine.UC_IdleState);
     }
-    // #. 플레이어 입력 잠금 Off
+
+
     public void PlayerInputLockOff()
     {
-        if (bCantInpuFunc) return;
-
-        Debug.Log("플레이어를 다시 조작 가능");
-
         Player playerScript = player.GetComponent<Player>();
         if (playerScript == null) return;
 
@@ -335,6 +272,8 @@ public class GameAssistManager : MonoBehaviour
         playerRigidbody.constraints = RigidbodyConstraints.None;
         playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
     }
+
+    // playerScript.machine.UC_DieState
 
 
     #endregion

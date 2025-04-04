@@ -15,10 +15,7 @@ public class PlayerAnimationData
     [SerializeField] private string unControllableParameterName = "UnControllable";
     [SerializeField] private string uc_IdleParameterName = "UC_Idle";
     [SerializeField] private string uc_DieParameterName = "UC_Die";
-    [SerializeField] private string uc_FallDownParameterName = "UC_FallDown";
     [SerializeField] private string uc_Die_GrabParameterName = "UC_Die_Grab";
-    [SerializeField] private string uc_WakeUpParameterName = "UC_WakeUp";
-    [SerializeField] private string uc_FallingParameterName = "UC_Falling";
     [SerializeField] private string moveStartParameterName = "MoveStart";
     [SerializeField] private string movingParameterName = "Move";
     [SerializeField] private string moveStopParameterName = "MoveStop";
@@ -63,17 +60,13 @@ public class PlayerAnimationData
     [SerializeField] private string putPartsParameterName = "isPutParts";
     [SerializeField] private string removePartsParameterName = "isRemoveParts";
     [SerializeField] private string throwParameterName = "isThrow";
-    [SerializeField] private string carryNormalParameterName = "isCarryNormal";
-    [SerializeField] private string carryGuitarParameterName = "isCarryGuitar";
-    [SerializeField] private string guitarBrokenParameterName = "isGuitarBroken";
+
     [Header("Interaction_Grap Group Parameter")]
     [SerializeField] private string grabParameterName = "Grab";
     [SerializeField] private string pushParameterName = "isPush";
     [SerializeField] private string grabIdleParameterName = "isGrabIdle";
     [SerializeField] private string pullParameterName = "isPull";
 
-    [SerializeField] private string SingleEventParameterName = "isSingleEvent";
-    [SerializeField] private string WheelChairParameterName = "isWheelChair";
 
     public int GroundParameterHash { get; private set; }
     public int OnAirParameterHash { get; private set; }
@@ -83,9 +76,6 @@ public class PlayerAnimationData
     public int UC_IdleParameterHash { get; private set; }
     public int UC_DieParameterHash { get; private set; }
     public int UC_Die_GrabParameterHash { get; private set; }
-    public int UC_FallDownParameterHash { get; private set; }
-    public int UC_WakeUpParameterHash { get; private set; }
-    public int UC_FallingParameterHash { get; private set; }
     public int MoveStartParameterHash { get; private set; }
     public int MovingParameterHash { get; private set; }
     public int MoveStopParameterHash { get; private set; }
@@ -122,19 +112,11 @@ public class PlayerAnimationData
     public int PutPartsParameterHash { get; private set; }
     public int RemovePartsParameterHash { get; private set; }
     public int ThrowParameterHash { get; private set; }
-    public int CarryNormalParameterHash { get; private set; }
-    public int CarryGuitarParameterHash { get; private set; }
-    public int GuitarBrokenParameterHash { get; private set; }
-
 
     public int GrabParameterHash { get; private set; }
     public int PushParameterHash { get; private set; }
     public int GrabIdleParameterHash { get; private set; }
     public int PullParameterHash { get; private set; }
-
-    public int SingleEventParameterHash { get; private set; }
-    public int WheelChairParameterHash { get; private set; }
-
 
     public void Initialize()
     {
@@ -146,9 +128,6 @@ public class PlayerAnimationData
         UC_IdleParameterHash = Animator.StringToHash(uc_IdleParameterName);
         UC_DieParameterHash = Animator.StringToHash(uc_DieParameterName);
         UC_Die_GrabParameterHash = Animator.StringToHash(uc_Die_GrabParameterName);
-        UC_FallDownParameterHash = Animator.StringToHash(uc_FallDownParameterName);
-        UC_WakeUpParameterHash = Animator.StringToHash(uc_WakeUpParameterName);
-        UC_FallingParameterHash = Animator.StringToHash(uc_FallingParameterName);
         MoveStartParameterHash = Animator.StringToHash(moveStartParameterName);
         MovingParameterHash = Animator.StringToHash(movingParameterName);
         MoveStopParameterHash = Animator.StringToHash(moveStopParameterName);
@@ -183,17 +162,11 @@ public class PlayerAnimationData
         PutPartsParameterHash = Animator.StringToHash(putPartsParameterName);
         RemovePartsParameterHash = Animator.StringToHash(removePartsParameterName);
         ThrowParameterHash = Animator.StringToHash(throwParameterName);
-        CarryNormalParameterHash = Animator.StringToHash(carryNormalParameterName);
-        CarryGuitarParameterHash = Animator.StringToHash(carryGuitarParameterName);
-        GuitarBrokenParameterHash = Animator.StringToHash(guitarBrokenParameterName);
 
         GrabParameterHash = Animator.StringToHash(grabParameterName);
         PushParameterHash = Animator.StringToHash(pushParameterName);
         GrabIdleParameterHash = Animator.StringToHash(grabIdleParameterName);
         PullParameterHash = Animator.StringToHash(pullParameterName);
-
-        SingleEventParameterHash = Animator.StringToHash(SingleEventParameterName);
-        WheelChairParameterHash = Animator.StringToHash(WheelChairParameterName);
     }
 
 }

@@ -45,6 +45,7 @@ public class SoundAssistManager : MonoBehaviour
         else
         {
             UnmuteMasterVolume();
+
             Destroy(gameObject); // 이미 존재하는 인스턴스가 있으면 현재 오브젝트 파괴
         }
         
@@ -239,7 +240,7 @@ public class SoundAssistManager : MonoBehaviour
     }
 
 
-    public void MuteMasterVolume(float fMuteDuration = 4f)
+    public void MuteMasterVolume()
     {
         Debug.Log("음소거");
 
@@ -254,25 +255,17 @@ public class SoundAssistManager : MonoBehaviour
                 audioMixer_Master.SetFloat("Master", x);
                 // audioMixer_Master.SetFloat("MasterMute", x <= -30f ? 1f : 0f);  // 볼륨 값에 따라 뮤트 처리
             },
-            muteVolume, fMuteDuration).SetUpdate(true);
+            muteVolume, 4f).SetUpdate(true);
 
     }
 
-    public void UnmuteMasterVolume(float fUnMuteDuration = 4f)
+    public void UnmuteMasterVolume()
     {
-        if (!SaveData_Manager.Instance.GetBoolFristStart()) fUnMuteDuration += 2f;
-
         Debug.Log("음소거 롤백");
 
         // 저장된 원래 볼륨 값 가져오기 (0과 1 사이의 값)
-        // float originalVolume = SaveData_Manager.Instance.GetMasterVolume();
-        float adjustedVolume = Mathf.Lerp(-80f, 0f, SaveData_Manager.Instance.GetMasterVolume());
-        audioMixer_Master.SetFloat("Master", -80f);
-
-
-
-        // 실행 중인 Master 볼륨에 대한 DOTween 애니메이션만 중지
-        DOTween.Kill(audioMixer_Master);
+        float originalVolume = SaveData_Manager.Instance.GetMasterVolume();
+        float adjustedVolume = Mathf.Lerp(-80f, 0f, originalVolume);
 
         DOTween.To(() => {
             audioMixer_Master.GetFloat("Master", out float tempMaster);
@@ -282,80 +275,43 @@ public class SoundAssistManager : MonoBehaviour
                 audioMixer_Master.SetFloat("Master", x);
                 //audioMixer_Master.SetFloat("MasterMute", x <= -30f ? 1f : 0f);  // 볼륨 값에 따라 뮤트 처리
             },
-            adjustedVolume, fUnMuteDuration).SetUpdate(true);
+            adjustedVolume, 4f).SetUpdate(true);
     }
 
 
 
     // #. 다른 코드들에서 호출하고 있음
-    public void BGMChange(string sSceneName, string sCutSceneBGM = null)
+    public void BGMChange(string sceneName = null)
     {
-        // 컷씬용 음악 재생
-        if(sCutSceneBGM != null)
+        switch (sceneName)
         {
-            switch (sCutSceneBGM)
-            {
-                case "BGM_CutScene1":
-                    UnmuteMasterVolume(6f);
-
-                    Debug.Log("BGM_CutScene1 _ 컷씬용 음악 재생");
-                    audioSource_BGM.Stop();
-                    audioSource_BGM.clip = soundDictionary["BGM_CutScene1"];
-                    audioSource_BGM.Play();
-                    break;
-
-
-                default:
-                    break;
-            }
-
-
-        }
-        else
-        {
-            switch (sSceneName)
-            {
-                case "Chapter1_1_City":
-                case "Chapter1_2_Subway":
-                case "Chapter1_3_City":
-                case "Chapter0_1_Alley":
-                    if (audioSource_BGM.clip != soundDictionary["TestBGM"])
-                    {
-
-                    }
-                    UnmuteMasterVolume(4f);
-                    Debug.Log("TestBGM 재생");
-
+            case "Chapter1_1_City":
+            case "Chapter1_2_Subway":
+            case "Chapter1_3_City":
+            case "Chapter0_1_Alley":
+                if (audioSource_BGM.clip != soundDictionary["TestBGM"])
+                {
                     audioSource_BGM.Stop();
                     audioSource_BGM.clip = soundDictionary["TestBGM"];
-                    audioSource_BGM.Play();
-                    break;
+                    audioSource_BGM.Play(); 
+                }
+                break;
 
-                case "MainMenu":
-                    if (audioSource_BGM.clip != soundDictionary["MainMenu_ToyBox"])
-                    {
-
-                    }
-                    UnmuteMasterVolume(2f);
-                    Debug.Log("MainMenu_ToyBox");
-
+            case "MainMenu":
+                if (audioSource_BGM.clip != soundDictionary["The Last Campfire OST  Title Screen"])
+                {
                     audioSource_BGM.Stop();
-                    audioSource_BGM.clip = soundDictionary["MainMenu_ToyBox"];
-                    audioSource_BGM.Play();
-                    break;
+                    audioSource_BGM.clip = soundDictionary["The Last Campfire OST  Title Screen"];
+                    audioSource_BGM.Play(); 
+                }
+                break;
 
-
-
-                default:
-                    Debug.Log("일치하는 사운드가 없습니다");
-                    audioSource_BGM.Stop();
-
-
-
-                    break;
-            }
+            default:
+                audioSource_BGM.Stop();
+                break;
         }
 
+       
 
     }
 
