@@ -5,126 +5,61 @@ public class NPC_Simple_ThankRotatePlayerClockWork : NPC_Simple_State
 {
     public NPC_Simple_ThankRotatePlayerClockWork(NPC_Simple npc, NPC_Simple_StateMachine machine) : base(npc, machine) { }
 
-    private bool bStart = false;
-    public bool bHasFinishedRotation = false;
-    private Quaternion targetRotation;
+    private bool bFlag = false;
 
     public override void OnEnter()
     {
         base.OnEnter();
+        Debug.Log("플레이어 태엽 돌려주기 시작");
 
-        GameAssistManager.Instance.PlayerInputLockOn();
-
-        npc.GetAnimator().SetBool("Bool_Walk", true);
-        npc.GetAnimator().SetInteger("Walk_Num", npc.iAnimWalking);
 
         npc.GetNav().isStopped = false;
-        npc.GetNav().autoBraking = false;
+        npc.GetNav().SetDestination(GameAssistManager.Instance.GetPlayer().transform.position);
 
-        npc.checkPoints = new Transform[3];
-        GameObject objPlayer = npc.GetPlayerObject();
-
-        // 1. 첫 번째 목표 위치 계산
-        Vector3 position1 = objPlayer.transform.position + objPlayer.transform.right + objPlayer.transform.forward * 1f;
-        npc.checkPoints[0] = new GameObject().transform; // 임시 Transform 생성
-        npc.checkPoints[0].position = position1; // 위치만 설정하고 GameObject는 사용 안 함
-
-        // 2. 두 번째 목표 위치 계산
-        Vector3 position2 = objPlayer.transform.position + objPlayer.transform.right + objPlayer.transform.forward * -1f;
-        npc.checkPoints[1] = new GameObject().transform; // 임시 Transform 생성
-        npc.checkPoints[1].position = position2; // 위치만 설정하고 GameObject는 사용 안 함
-
-        Vector3 position3 = objPlayer.transform.position + objPlayer.transform.forward * -1f;
-        npc.checkPoints[2] = new GameObject().transform; // 임시 Transform 생성
-        npc.checkPoints[2].position = position3;
-
-        // 배열 내 위치 출력
-        for (int i = 0; i < npc.checkPoints.Length; i++)
-        {
-            Debug.Log($"Position {i + 1}: {npc.checkPoints[i].position}");
-        }
-
-        npc.CurrentCheckPointIndex = 0; // 시작할 때 첫 번째 체크포인트부터
-
-        MoveToNextCheckPoint(); // 첫 번째 체크포인트로 이동
-
-        bStart = true;
+        // (필요 시 걷는 애니메이션 트리거)
+        npc.GetAnimator().SetInteger("Walk_Num", 1);
+        npc.GetAnimator().SetBool("Bool_Walk",true);
+       
     }
+
+
 
     public override void OnFixedUpdate()
     {
         base.OnFixedUpdate();
 
-        if (bStart)
+        if (!npc.GetNav().pathPending && npc.GetNav().remainingDistance <= 2f && !bFlag)
         {
-            if (npc.GetNav().enabled)
+            // 방향 체크
+            Vector3 toPlayer = GameAssistManager.Instance.GetPlayer().transform.position - npc.transform.position;
+            toPlayer.y = 0; // y축 회전 무시 (수평 기준)
+            Vector3 forward = npc.transform.forward;
+
+            float angle = Vector3.Angle(forward, toPlayer);
+
+            // 플레이어를 충분히 바라보고 있는지 확인 (예: 10도 이하)
+            if (angle <= 3f)
             {
-                float distance = Vector3.Distance(npc.transform.position, npc.GetNav().destination);
+                bFlag = true;
+                npc.GetNav().isStopped = true;
 
-                // 목표 지점 도달 시 다음 체크포인트로 이동
-                if (distance <= npc.GetNav().stoppingDistance)
-                {
-                    npc.CurrentCheckPointIndex++;
+                npc.GetAnimator().SetTrigger("ddddStop");
+                npc.GetAnimator().SetBool("Bool_Walk", false);
 
-                    if (npc.CurrentCheckPointIndex < npc.checkPoints.Length)
-                    {
-                        MoveToNextCheckPoint();
-                    }
-                    else
-                    {
-                        bStart = false;
-
-                        npc.GetAnimator().SetTrigger("ddddStop");
-                        npc.GetAnimator().SetBool("Bool_Walk", false);
-                        LookAtPlayerAndExecuteFunction();
-                    }
-                }
+                npc.RotatePlayerTaeyub();
+            }
+            else
+            {
+                // 도착했지만 방향이 안 맞으면 회전 유도
+                Quaternion lookRotation = Quaternion.LookRotation(toPlayer);
+                npc.transform.rotation = Quaternion.Slerp(npc.transform.rotation, lookRotation, Time.deltaTime * 5f); // 부드럽게 회전
             }
         }
     }
 
-    private void MoveToNextCheckPoint()
-    {
-        if (npc.CurrentCheckPointIndex < npc.checkPoints.Length)
-        {
-            npc.GetNav().SetDestination(npc.checkPoints[npc.CurrentCheckPointIndex].position);
-            Debug.Log($"목표 지점 설정: {npc.checkPoints[npc.CurrentCheckPointIndex].position}");
-        }
-    }
-
-    private void LookAtPlayerAndExecuteFunction()
-    {
-        GameObject objPlayer = npc.GetPlayerObject();
-
-        // NPC가 플레이어를 바라보도록 회전
-        Vector3 directionToPlayer = objPlayer.transform.position - npc.transform.position;
-        directionToPlayer.y = 0; // Y축 회전 제외 (수평 회전만)
-        targetRotation = Quaternion.LookRotation(directionToPlayer);
-
-        // DOTween을 사용하여 부드럽게 회전하고, 딜레이 후 함수 실행
-        float rotationSpeed = 1f;
-        npc.transform.DORotateQuaternion(targetRotation, rotationSpeed)
-            .SetDelay(1.5f) // 회전 후 1초 딜레이
-            .OnComplete(() =>
-            {
-               
-                npc.GetAnimator().SetTrigger("doRoateTaeyubStart");
-
-                // 2초 후 다른 함수 실행
-                DOVirtual.DelayedCall(3f, () =>
-                {
-                    // 2초 후 실행할 함수 호출
-                    GameAssistManager.Instance.PlayerInputLockOff();
-                    npc.GetAnimator().SetTrigger("doRoateTaeyubEnd");
-                    machine.OnStateChange(machine.IDLEState);
-                });
-            });
-    }
-
-
     public override void OnExit()
     {
         base.OnExit();
-        Debug.Log("종료되어 버렸습니다.");
+      
     }
 }

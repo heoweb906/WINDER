@@ -97,6 +97,11 @@ public class NPC_Simple : MonoBehaviour
     }
 
 
+
+
+
+
+
     // ResetState()를 통해 풀에서 재사용 시 필요한 변수들을 재설정
     public void ResetState()
     {
@@ -127,10 +132,23 @@ public class NPC_Simple : MonoBehaviour
         machine = new NPC_Simple_StateMachine(this);
     }
 
+
+
+
     private void Update()
     {
         machine?.OnStateUpdate();
+
+
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            machine.OnStateChange(machine.ThankState_RotatePlayerClockWork);
+        }
     }
+
+
+
+
 
     private void FixedUpdate()
     {
@@ -189,5 +207,55 @@ public class NPC_Simple : MonoBehaviour
     public GameObject GetPlayerObject()
     {
         return GameAssistManager.Instance.GetPlayer();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // 플레이어 태엽 돌려주기
+    public void RotatePlayerTaeyub()
+    {
+        StartCoroutine(RotatePlayerTaeyub_());
+    }
+    IEnumerator RotatePlayerTaeyub_()
+    {
+        yield return new WaitForSeconds(1f);
+
+
+        anim.SetTrigger("doThankyouAction");
+
+
+        yield return new WaitForSeconds(2.7f);
+
+     
+        agent.isStopped = false;
+        agent.SetDestination(GameAssistManager.Instance.GetPlayer().transform.position);
+        anim.SetInteger("Walk_Num", 1);
+        anim.SetBool("Bool_Walk", true);
+        while (agent.pathPending || agent.remainingDistance > 1f) yield return null; // 다음 프레임까지 대기
+        agent.isStopped = true;
+        anim.SetTrigger("ddddStop");
+        anim.SetBool("Bool_Walk", false);
+
+
+        yield return new WaitForSeconds(1f);
+
+
+        anim.SetTrigger("doHandGesture");
+
+
+        yield return new WaitForSeconds(2.5f);
+
+        anim.SetTrigger("doRoateTaeyubStart");
+
+
     }
 }
