@@ -10,6 +10,7 @@ public class P_UnControllable : PlayerMovementState
         base.OnEnter();
         machine.StartAnimationTrigger(player.playerAnimationData.UnControllableParameterHash);
         player.playerMoveSpeed = 0;
+        player.curDirection = Vector3.zero;
     }
 
     public override void OnExit()

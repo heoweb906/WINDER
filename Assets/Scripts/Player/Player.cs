@@ -176,6 +176,12 @@ public class Player : MonoBehaviour
     private void Update()
     {
         machine?.OnStateUpdate();
+        if(Input.GetKeyDown(KeyCode.C)){
+            SetTurnState(turnTargetObject);
+        }
+        else if(Input.GetKeyDown(KeyCode.V)){
+            machine.OnStateChange(machine.IdleState);
+        }
     }
 
     private void FixedUpdate()
@@ -236,13 +242,13 @@ public class Player : MonoBehaviour
         if (!isHandIK)
             return;
 
-        if (Input.GetKey(KeyCode.Z))
-        {
-            if (Input.GetKey(KeyCode.LeftShift))
-                _x--;
-            else
-                _x++;
-        }
+        // if (Input.GetKey(KeyCode.Z))
+        // {
+        //     if (Input.GetKey(KeyCode.LeftShift))
+        //         _x--;
+        //     else
+        //         _x++;
+        // }
 
         BoxCollider _col = curCarriedObject.GetComponent<BoxCollider>();
         Vector3 boxScale = Vector3.Scale(_col.size * 0.5f, _col.transform.lossyScale);
@@ -399,6 +405,13 @@ public class Player : MonoBehaviour
         bCanExit = false;
     }
 
+    public GameObject turnTargetObject;
+    public Vector3 turnDirection;
+    public void SetTurnState(GameObject _obj){
+        turnTargetObject = _obj;
+        turnDirection = transform.position - _obj.transform.position;
+        machine.OnStateChange(machine.UC_TurnState);
+    }
 
 
 }

@@ -18,6 +18,7 @@ public class PlayerStateMachine : StateMachine
     public P_UC_FallDown UC_FallDownState { get; private set; }
     public P_UC_WakeUp UC_WakeUpState { get; private set; }
     public P_UC_Falling UC_FallingState { get; private set; }
+    public P_UC_Turn UC_TurnState { get; private set; }
 
     public P_IdleState IdleState { get; private set; }
     public P_SoftLandingState SoftLandingState { get; private set; }
@@ -76,6 +77,7 @@ public class PlayerStateMachine : StateMachine
         UC_FallDownState = new P_UC_FallDown(player, this);
         UC_WakeUpState = new P_UC_WakeUp(player, this);
         UC_FallingState = new P_UC_Falling(player, this);
+        UC_TurnState = new P_UC_Turn(player, this);
         IdleState = new P_IdleState(player, this);
         SoftLandingState = new P_SoftLandingState(player, this);
         MoveLandingState = new P_MoveLandingState(player, this);
