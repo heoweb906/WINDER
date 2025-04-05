@@ -83,10 +83,10 @@ public class GGILICK_ChaseManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Y))
-        {
-            TransitionToState(ChaseState.Falling);
-        }
+        //if(Input.GetKeyDown(KeyCode.Y))
+        //{
+        //    TransitionToState(ChaseState.Falling);
+        //}
     }
 
 

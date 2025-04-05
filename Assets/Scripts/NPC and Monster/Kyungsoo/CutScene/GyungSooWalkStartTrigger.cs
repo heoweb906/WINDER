@@ -6,15 +6,12 @@ using UnityEngine;
 public class GyungSooWalkStartTrigger : MonoBehaviour
 {
     private Coroutine nowCoroutine;
+    private bool bFlag = false;
 
     public Animator anim;
     public CinemachineDollyCart cart;
 
     public float fDissapointTime;
-
-
-
-
 
     public void CutScencStart()
     {
@@ -23,7 +20,7 @@ public class GyungSooWalkStartTrigger : MonoBehaviour
 
     IEnumerator CutScencStart_Attack()
     {
- 
+
         cart.enabled = true;
         anim.SetBool("Bool_Walk", true);
 
@@ -37,4 +34,22 @@ public class GyungSooWalkStartTrigger : MonoBehaviour
         StopCoroutine(nowCoroutine);
         Destroy(gameObject);
     }
+
+
+
+
+
+
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player") && !bFlag)
+        {
+            bFlag = true;
+            CutScencStart();
+        }
+    }
+
+
 }

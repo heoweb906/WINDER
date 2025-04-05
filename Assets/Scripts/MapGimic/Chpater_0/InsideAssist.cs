@@ -40,6 +40,8 @@ public class InsideAssist : MonoBehaviour
 
 
     [Header("내면에서 나왔을 때 사용할 세팅")]
+    public GameObject GgilcikBad;       // 내면에서 나오고 나면 삭제시켜야 함
+
     public Material skyboxMaterial; // 사용할 스카이박스
     public Color targetFogColor = new Color(168f / 255f, 168f / 255f, 168f / 255f); // 목표 포그 색상
     public float targetFogDensity = 0.03f; // 목표 포그 밀도
@@ -74,6 +76,7 @@ public class InsideAssist : MonoBehaviour
             AnimateLightIntensity(light_3, 0.8f, 1.5f);
             AnimateLightIntensity(light_4, 0.38f, 1.5f);
             LightSettingNew(2f);
+            GgilcikBad.SetActive(false);
         }
     }
 
@@ -197,11 +200,13 @@ public class InsideAssist : MonoBehaviour
     public void StartDirect_2()
     {
         GameAssistManager.Instance.InsideInEffect();
+        InGameUIController.Instance.bIsUIDoing = true;
         StartCoroutine(InsideOff_GGILICK());
     }
     IEnumerator InsideOff_GGILICK()
     {
         GameAssistManager.Instance.PlayerInputLockOn();
+        GgilcikBad.SetActive(false);
 
         yield return new WaitForSeconds(1.2f);
 
@@ -234,7 +239,9 @@ public class InsideAssist : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
         InGameUIController.Instance.FadeInOutImage(1f, 2f);
-     
+    
+
+
         yield return new WaitForSeconds(3f);
         GameAssistManager.Instance.InsideOutEffect();
         InGameUIController.Instance.FadeInOutImage(0f, 2f);
@@ -245,6 +252,11 @@ public class InsideAssist : MonoBehaviour
         GameAssistManager.Instance.PlayerInputLockOff();
         SaveData_Manager.Instance.SetIntInside(2);
         InsideAssist.Instance.bCanCarCreate = false;
+
+
+
+
+        InGameUIController.Instance.bIsUIDoing = false;
     }
 
     private void LightSettingNew(float duration)
