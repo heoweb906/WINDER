@@ -46,7 +46,7 @@ public class TimelineManager : MonoBehaviour
     public void SetDropBox(GameObject dropBox)
     {
         dropBox.transform.position = dropBoxObject.transform.position;
-        dropBox.transform.rotation = dropBoxObject.transform.rotation;
+        // dropBox.transform.rotation = dropBoxObject.transform.rotation;
         dropBoxObject.SetActive(false);
         dropBox.SetActive(true);
     }
