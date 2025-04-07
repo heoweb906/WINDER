@@ -13,6 +13,9 @@ public class NPC_Simple_ThankRotatePlayerClockWork : NPC_Simple_State
         Debug.Log("플레이어 태엽 돌려주기 시작");
 
 
+        GameAssistManager.Instance.PlayerInputLockOn();
+
+
         npc.GetNav().isStopped = false;
         npc.GetNav().SetDestination(GameAssistManager.Instance.GetPlayer().transform.position);
 

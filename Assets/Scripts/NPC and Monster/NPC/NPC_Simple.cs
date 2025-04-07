@@ -31,6 +31,7 @@ public class NPC_Simple : MonoBehaviour
     [Header("NPC 상태들")]
     public bool bSad; // true = Sad, false = NotSad
     public bool bWalking; // true = Walking, false = IDLE
+    public int iIDLE_Num;
     public int iAnimWalking;        // 걷기 애니메이션 인덱스
     public bool bClockWorkEventNPC; // 태엽을 돌려준 이후에 이벤트 수행 여부
     public bool bActionEventNPC; // 생성 시점부터 특정 행동 수행 여부
@@ -74,6 +75,8 @@ public class NPC_Simple : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
 
         // 최초 초기화
+        anim.SetInteger("IDLE_Num", iIDLE_Num);
+
         anim.SetBool("Bool_Walk", bWalking);
         anim.SetBool("Bool_Sad", bSad);
         anim.SetBool("Bool_ActionEvent", bActionEventNPC);
@@ -88,7 +91,7 @@ public class NPC_Simple : MonoBehaviour
 
         if (npcHeart != null)
         {
-          
+
         }
         else
         {
@@ -123,6 +126,8 @@ public class NPC_Simple : MonoBehaviour
         // 애니메이터 파라미터 초기화
         if (anim != null)
         {
+            anim.SetInteger("IDLE_Num", iIDLE_Num);
+
             anim.SetBool("Bool_Walk", bWalking);
             anim.SetBool("Bool_Sad", bSad);
             anim.SetBool("Bool_ActionEvent", bActionEventNPC);
@@ -140,10 +145,7 @@ public class NPC_Simple : MonoBehaviour
         machine?.OnStateUpdate();
 
 
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            machine.OnStateChange(machine.ThankState_RotatePlayerClockWork);
-        }
+
     }
 
 
@@ -200,7 +202,7 @@ public class NPC_Simple : MonoBehaviour
     }
 
 
-    
+
 
 
     // 
@@ -235,7 +237,7 @@ public class NPC_Simple : MonoBehaviour
 
         yield return new WaitForSeconds(2.7f);
 
-     
+
         agent.isStopped = false;
         agent.SetDestination(GameAssistManager.Instance.GetPlayer().transform.position);
         anim.SetInteger("Walk_Num", 1);
@@ -251,11 +253,35 @@ public class NPC_Simple : MonoBehaviour
 
         anim.SetTrigger("doHandGesture");
 
+        yield return new WaitForSeconds(1.5f);
 
-        yield return new WaitForSeconds(2.5f);
+        GameAssistManager.Instance.GetPlayerScript().SetTurnState(gameObject);
+
+
+        yield return new WaitForSeconds(2f);
+
+        GameAssistManager.Instance.GetPlayerScript().playerAnim.SetTrigger("doClockWork_Grapped");
+
+        yield return new WaitForSeconds(0.5f);
+
 
         anim.SetTrigger("doRoateTaeyubStart");
+        GameAssistManager.Instance.GetPlayerScript().playerAnim.SetTrigger("doClockWork_RotateStart");
 
 
+        yield return new WaitForSeconds(2.6f);
+
+        anim.SetTrigger("doRoateTaeyubEnd");
+        machine.OnStateChange(machine.IDLEState);
+        GameAssistManager.Instance.GetPlayerScript().playerAnim.SetTrigger("doClockWork_RotateEnd");
+        GameAssistManager.Instance.PlayerInputLockOff();
+
+
+    }
+
+
+    public void ChangeStateToSubWay()
+    {
+        machine.OnStateChange(machine.SubwayState);
     }
 }
