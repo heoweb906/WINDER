@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ParsArea_DropBox : PartsArea
 {
+    [SerializeField]
+    private Event_BeforeStation_Controller eventController;
 
     public GameObject Wall;
 
@@ -13,6 +15,7 @@ public class ParsArea_DropBox : PartsArea
         ItemCount++;
         if(ItemCount >= 3){
             Wall.SetActive(false);
+            eventController.PickUpEvent();
         }
     }
     
