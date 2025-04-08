@@ -11,7 +11,6 @@ public class NPC_Simple_StateMachine : StateMachine
     public BaseState PreState { get; private set; }
     public NPC_Simple_IDLEState IDLEState { get; private set; }
     public NPC_Simple_WalkState WalkState { get; private set; }
-    public NPC_Simple_TakeSubway SubwayState { get; private set; }
     public NPC_Simple_GrappedState GrappedState { get; private set; }
     public NPC_Simple_Scared ScaredState { get; private set; }
 
