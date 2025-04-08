@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -284,4 +285,10 @@ public class NPC_Simple : MonoBehaviour
     {
         machine.OnStateChange(machine.SubwayState);
     }
+
+    public void ChangeStateToSubWayTakeOff()
+    {
+        machine.OnStateChange(machine.SubwayStateTakeOffState);
+    }
+
 }

@@ -11,9 +11,11 @@ public class NPC_Simple_StateMachine : StateMachine
     public BaseState PreState { get; private set; }
     public NPC_Simple_IDLEState IDLEState { get; private set; }
     public NPC_Simple_WalkState WalkState { get; private set; }
-    public NPC_Simple_TakeSubway SubwayState { get; private set; }
     public NPC_Simple_GrappedState GrappedState { get; private set; }
     public NPC_Simple_Scared ScaredState { get; private set; }
+
+    public NPC_Simple_TakeSubway SubwayState { get; private set; }
+    public NPC_Simple_TakeoffSubway SubwayStateTakeOffState { get; private set; }
 
 
     public NPC_Simple_ReactionThankState ThankState { get; private set; }
@@ -38,9 +40,11 @@ public class NPC_Simple_StateMachine : StateMachine
     {
         IDLEState = new NPC_Simple_IDLEState(npc, this);
         WalkState = new NPC_Simple_WalkState(npc, this);
-        SubwayState = new NPC_Simple_TakeSubway(npc, this);
         GrappedState = new NPC_Simple_GrappedState(npc, this);
         ScaredState = new NPC_Simple_Scared(npc, this);
+
+        SubwayState = new NPC_Simple_TakeSubway(npc, this);
+        SubwayStateTakeOffState = new NPC_Simple_TakeoffSubway(npc, this);
 
         ThankState = new NPC_Simple_ReactionThankState(npc, this);
         ThankState_RotatePlayerClockWork = new NPC_Simple_ThankRotatePlayerClockWork(npc, this);

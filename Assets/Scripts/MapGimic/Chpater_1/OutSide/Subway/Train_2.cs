@@ -1,6 +1,8 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Train_2 : MonoBehaviour
@@ -11,11 +13,15 @@ public class Train_2 : MonoBehaviour
     public float travelDuration;        // 출발점 -> 정거장, 정거장 -> 최종 목적지 이동 시간
 
     public TrainDoor[] trainDoors;
-    public GameObject[] crowds;
+    public NPC_Simple[] npcArray;
+    public Transform transform_RotationTarget;
 
     [Header("지하철 바닥 활성화 여부 관리")]
+
+
     public GameObject Floor;
-    public GameObject Wall;
+    // public GameObject Wall;
+
 
     public void StartTrain()
     {
@@ -26,13 +32,9 @@ public class Train_2 : MonoBehaviour
     private IEnumerator StartTrainJourney()
     {
         GameAssistManager.Instance.player.transform.SetParent(transform);
+        npcArray[SubWayAssist.Instance.iCrowedRanNum].gameObject.SetActive(false);
 
-        // 열리는 문 중에서 하나의 문에만 탑승할 수 있도록
-        for (int i = 0; i < trainDoors.Length; i++)
-        {
-            crowds[i].SetActive(true);
-        }
-        crowds[SubWayAssist.Instance.iCrowedRanNum].SetActive(false);
+
 
         yield return new WaitForSeconds(0.1f);
 
@@ -43,6 +45,25 @@ public class Train_2 : MonoBehaviour
                .SetUpdate(UpdateType.Fixed);
 
         yield return new WaitForSeconds(travelDuration);
+        Floor.SetActive(true);
+
+
+        for (int i = 0; i < npcArray.Length; ++i)
+        {
+            if (i == SubWayAssist.Instance.iCrowedRanNum) continue;
+
+            npcArray[i].GetNav().enabled = true;
+        }
+
+
+
+
+
+
+
+
+
+
 
 
         // 문을 엽니다.
@@ -51,8 +72,22 @@ public class Train_2 : MonoBehaviour
             traindoor.StartOpen();
 
         GameAssistManager.Instance.PlayerInputLockOff();
-        Floor.SetActive(true);
-        Wall.SetActive(false);
+
+        yield return new WaitForSeconds(3f);
+
+
+        for (int i = 0; i < npcArray.Length; ++i)
+        {
+            if (i == SubWayAssist.Instance.iCrowedRanNum) continue;
+
+            npcArray[i].ChangeStateToSubWayTakeOff();
+            npcArray[i].machine.SubwayStateTakeOffState.target = transform_RotationTarget;
+        }
+
+
+
+        // Floor.SetActive(true);
+        // Wall.SetActive(false);
 
     }
 }

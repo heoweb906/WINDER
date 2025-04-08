@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class Train : MonoBehaviour
 {
+    // #. 플레이어가 탑승한 위치 확인
+    public GameObject[] objArrayPlayerPosionChecker;
+
+
     // #. 시작 지점, 정거장 지점, 끝 지점 Transform 다 설정 해야 함
     public Transform position_StartPoint;
     public Transform position_StationPoint;
@@ -16,6 +20,8 @@ public class Train : MonoBehaviour
     public TrainDoor[] trainDoors;
     public NPC_Simple[] npcArray;
 
+    private bool bFisrt = true;
+    
 
 
 
@@ -28,6 +34,8 @@ public class Train : MonoBehaviour
 
     public void StartTrain()
     {
+        bFisrt = true;
+
         transform.position = position_StartPoint.position;  // 기차를 StartPoint 위치로 이동시킴
         StartCoroutine(StartTrainJourney());
     }
@@ -50,6 +58,7 @@ public class Train : MonoBehaviour
         yield return new WaitForSeconds(travelDuration);
 
 
+        for (int i = 0; i < objArrayPlayerPosionChecker.Length; ++i) objArrayPlayerPosionChecker[i].SetActive(true);
 
 
         // 2. 기차 문을 열고 일정 시간 뒤에 다시 출발
@@ -57,9 +66,12 @@ public class Train : MonoBehaviour
         foreach (TrainDoor traindoor in trainDoors) traindoor.StartOpen_Close(stopDuration);
 
 
+
+
+
         yield return new WaitForSeconds(3f);
 
-        for(int i = 0; i < npcArray.Length; ++i)
+        for (int i = 0; i < npcArray.Length; ++i)
         {
             npcArray[i].ChangeStateToSubWay();
         }
@@ -68,7 +80,30 @@ public class Train : MonoBehaviour
 
         yield return new WaitForSeconds(stopDuration);
 
+        if (bFisrt)
+        {
+            for (int i = 0; i < npcArray.Length; ++i)
+            {
+                GameObject npcObj = npcArray[i].gameObject;
+                npcObj.transform.SetParent(this.transform);
 
+                // Rigidbody 잠금
+                Rigidbody rb = npcObj.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.isKinematic = true;
+                    rb.constraints = RigidbodyConstraints.FreezeAll;
+                }
+
+                // NavMeshAgent 제거
+                UnityEngine.AI.NavMeshAgent agent = npcObj.GetComponent<UnityEngine.AI.NavMeshAgent>();
+                if (agent != null)
+                {
+                    Object.Destroy(agent);
+                }
+            }
+        }
+        for (int i = 0; i < objArrayPlayerPosionChecker.Length; ++i) objArrayPlayerPosionChecker[i].SetActive(false);
 
 
 
@@ -85,6 +120,16 @@ public class Train : MonoBehaviour
             .SetUpdate(UpdateType.Fixed, true);
 
         yield return new WaitForSeconds(travelDuration);
+
+        if(bFisrt)
+        {
+            for (int i = 0; i < npcArray.Length; ++i)
+            {
+                GameObject npcObj = npcArray[i].gameObject;
+                Destroy(npcObj);
+            }
+        }
+        bFisrt = false;
 
 
         // 만약 플레이어가 탑승한 것이 확인되지 않았다면 다시 되돌림

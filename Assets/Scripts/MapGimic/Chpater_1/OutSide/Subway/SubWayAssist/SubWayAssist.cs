@@ -14,7 +14,7 @@ public class SubWayAssist : MonoBehaviour
     public GameObject TrainObj;
 
 
-    public int iCrowedRanNum;
+    public int iCrowedRanNum = 0;
    
 
     private void Awake()
@@ -25,6 +25,8 @@ public class SubWayAssist : MonoBehaviour
 
     public void LetsStartTrain()
     {
+        Debug.Log("어디서 호출하는 거야");
+
         bPlayerInSubway = true;
         Train train = TrainObj.GetComponent<Train>();
         train.StartTrain();
