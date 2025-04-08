@@ -9,6 +9,7 @@ public class P_UC_SingleEvent : P_UnControllable
     {
         base.OnEnter();
         machine.StartAnimation(player.playerAnimationData.SingleEventParameterHash);
+        player.curSingleEventObject.ActiveEvent();
         if(player.curSingleEventObject.singleEventType == SingleEventType.WheelChair){
             machine.OnStateChange(machine.UC_WheelChairState);
         }

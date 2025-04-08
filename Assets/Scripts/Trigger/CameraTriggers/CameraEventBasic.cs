@@ -61,6 +61,11 @@ public class CameraEvent : MonoBehaviour
 
     IEnumerator StartDirection(int iEventTime)
     {
+        GameAssistManager.Instance.PlayerInputLockOn();
+
+        yield return new WaitForSeconds(1.0f);
+
+
         while (iEventTime > 0)
         {
 
@@ -71,7 +76,8 @@ public class CameraEvent : MonoBehaviour
             yield return new WaitForSeconds(1.0f);
             iEventTime -= 1;
         }
-        
+
+        GameAssistManager.Instance.PlayerInputLockOff();
         cineBrain.m_DefaultBlend = new CinemachineBlendDefinition(camObj.blendStyle, fReturnTime);
         StopCoroutine(nowCoroutine);
     }

@@ -748,6 +748,7 @@ MonoBehaviour:
   clockWorkType: 2
   plusClockWorksList: []
   isSingleEvent: 1
+  fDistanceOffset: 0
   npcHeart: {fileID: 2126864039460755559}
   NPC: {fileID: 3581337726679430225}
 --- !u!1 &3581337726679430225
@@ -759,8 +760,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1207847772320335843}
-  - component: {fileID: 7584755395079478173}
   - component: {fileID: 2171650187352413678}
+  - component: {fileID: 7584755395079478173}
   - component: {fileID: 1406049632751720239}
   - component: {fileID: 295485632572723606}
   - component: {fileID: 893266692304596638}
@@ -793,6 +794,27 @@ Transform:
   - {fileID: 7718075905456334975}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!95 &2171650187352413678
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3581337726679430225}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 7fb5655c7a56e1846bd2f300100a8323, type: 3}
+  m_Controller: {fileID: 9100000, guid: 8ce215c4594e7cb4fa96717b9c0de24a, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &7584755395079478173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -815,27 +837,7 @@ MonoBehaviour:
   npcHeart: {fileID: 2126864039460755559}
   npcClockWork: {fileID: 3806328922615266742}
   checkPoints: []
---- !u!95 &2171650187352413678
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3581337726679430225}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 7fb5655c7a56e1846bd2f300100a8323, type: 3}
-  m_Controller: {fileID: 9100000, guid: 8ce215c4594e7cb4fa96717b9c0de24a, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  avoid_Num: 0
 --- !u!136 &1406049632751720239
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -987,7 +989,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7718075905456334975
 Transform:
   m_ObjectHideFlags: 0
@@ -1650,6 +1652,7 @@ MonoBehaviour:
   clockWorkType: 1
   plusClockWorksList: []
   isSingleEvent: 1
+  fDistanceOffset: 0
   npcHeart: {fileID: 2126864039460755559}
   NPC: {fileID: 0}
 --- !u!1 &7924755890960116296

@@ -1,17 +1,22 @@
-using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GGILICK_ClockWork : InteractableObject
+public class GGILICK_ClockWork : SingleEventObject
 {
-    
-    
-
-    private void Start()
+    public override void Start()
     {
-        type = InteractableType.SingleEvent;
+        base.Start();
+        singleEventType = SingleEventType.Ggilick;
     }
+
+    //private void Update()
+    //{
+    //    if(Input.GetKeyDown(KeyCode.Y))
+    //    {
+    //        InsideAssist.Instance.StartDirect_1();
+    //    }
+    //}
 
 
     public override void ActiveEvent()

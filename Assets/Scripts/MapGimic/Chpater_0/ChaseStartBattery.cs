@@ -5,7 +5,10 @@ using UnityEngine;
 public class ChaseStartBattery : ClockBattery
 {
     private Coroutine nowCoroutine;
-    
+
+    public CineCameraChager changer_1;
+    public CineCameraChager changer_2;
+
     [SerializeField]
     private GGILICK_ChaseManager chaseManager;
 
@@ -13,21 +16,25 @@ public class ChaseStartBattery : ClockBattery
     {
         base.TurnOnObj();
 
-        RotateObject((int)fCurClockBattery);
+        RotateObject((int)fCurClockBattery + 2);
         nowCoroutine = StartCoroutine(ChaseStart());
-        chaseManager.ChaseStart();
+        
 
     }
     public override void TurnOffObj()
     {
         if (nowCoroutine != null) StopCoroutine(nowCoroutine);
 
+
+        chaseManager.ChaseStart();
         base.TurnOffObj();
 
     }
 
     IEnumerator ChaseStart()
     {
+        changer_1.CameraChange();
+
         while (fCurClockBattery > 0)
         {
 
@@ -38,7 +45,11 @@ public class ChaseStartBattery : ClockBattery
 
         yield return new WaitForSecondsRealtime(1.0f);
 
-        TurnOffObj(); // 배터리가 다 되면 종료
+        changer_2.CameraChange();
+
+        yield return new WaitForSecondsRealtime(2.0f);
+
+        TurnOffObj(); 
     }
 
 }

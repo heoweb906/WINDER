@@ -31,6 +31,7 @@ public class NPC_Simple : MonoBehaviour
     [Header("NPC 상태들")]
     public bool bSad; // true = Sad, false = NotSad
     public bool bWalking; // true = Walking, false = IDLE
+    public int iIDLE_Num;
     public int iAnimWalking;        // 걷기 애니메이션 인덱스
     public bool bClockWorkEventNPC; // 태엽을 돌려준 이후에 이벤트 수행 여부
     public bool bActionEventNPC; // 생성 시점부터 특정 행동 수행 여부
@@ -74,25 +75,34 @@ public class NPC_Simple : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
 
         // 최초 초기화
+        anim.SetInteger("IDLE_Num", iIDLE_Num);
+
         anim.SetBool("Bool_Walk", bWalking);
         anim.SetBool("Bool_Sad", bSad);
         anim.SetBool("Bool_ActionEvent", bActionEventNPC);
 
-        if (npcClockWork != null)
-            npcClockWork.canInteract = bSad;
+        //if (npcClockWork != null)
+        //    npcClockWork.canInteract = bSad;
 
         machine = new NPC_Simple_StateMachine(this);
 
+        npcHeart.machine = machine;
+        npcHeart.SetAnimator(anim);
+
         if (npcHeart != null)
         {
-            npcHeart.machine = machine;
-            npcHeart.SetAnimator(anim);
+
         }
         else
         {
             Debug.Log("심장이 비어있습니다");
         }
     }
+
+
+
+
+
 
 
     // ResetState()를 통해 풀에서 재사용 시 필요한 변수들을 재설정
@@ -116,6 +126,8 @@ public class NPC_Simple : MonoBehaviour
         // 애니메이터 파라미터 초기화
         if (anim != null)
         {
+            anim.SetInteger("IDLE_Num", iIDLE_Num);
+
             anim.SetBool("Bool_Walk", bWalking);
             anim.SetBool("Bool_Sad", bSad);
             anim.SetBool("Bool_ActionEvent", bActionEventNPC);
@@ -125,10 +137,20 @@ public class NPC_Simple : MonoBehaviour
         machine = new NPC_Simple_StateMachine(this);
     }
 
+
+
+
     private void Update()
     {
         machine?.OnStateUpdate();
+
+
+
     }
+
+
+
+
 
     private void FixedUpdate()
     {
@@ -180,12 +202,86 @@ public class NPC_Simple : MonoBehaviour
     }
 
 
-    
+
 
 
     // 
     public GameObject GetPlayerObject()
     {
         return GameAssistManager.Instance.GetPlayer();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    // 플레이어 태엽 돌려주기
+    public void RotatePlayerTaeyub()
+    {
+        StartCoroutine(RotatePlayerTaeyub_());
+    }
+    IEnumerator RotatePlayerTaeyub_()
+    {
+        yield return new WaitForSeconds(1f);
+
+
+        anim.SetTrigger("doThankyouAction");
+
+
+        yield return new WaitForSeconds(2.7f);
+
+
+        agent.isStopped = false;
+        agent.SetDestination(GameAssistManager.Instance.GetPlayer().transform.position);
+        anim.SetInteger("Walk_Num", 1);
+        anim.SetBool("Bool_Walk", true);
+        while (agent.pathPending || agent.remainingDistance > 1f) yield return null; // 다음 프레임까지 대기
+        agent.isStopped = true;
+        anim.SetTrigger("ddddStop");
+        anim.SetBool("Bool_Walk", false);
+
+
+        yield return new WaitForSeconds(1f);
+
+
+        anim.SetTrigger("doHandGesture");
+
+        yield return new WaitForSeconds(1.5f);
+
+        GameAssistManager.Instance.GetPlayerScript().SetTurnState(gameObject);
+
+
+        yield return new WaitForSeconds(2f);
+
+        GameAssistManager.Instance.GetPlayerScript().playerAnim.SetTrigger("doClockWork_Grapped");
+
+        yield return new WaitForSeconds(0.5f);
+
+
+        anim.SetTrigger("doRoateTaeyubStart");
+        GameAssistManager.Instance.GetPlayerScript().playerAnim.SetTrigger("doClockWork_RotateStart");
+
+
+        yield return new WaitForSeconds(2.6f);
+
+        anim.SetTrigger("doRoateTaeyubEnd");
+        machine.OnStateChange(machine.IDLEState);
+        GameAssistManager.Instance.GetPlayerScript().playerAnim.SetTrigger("doClockWork_RotateEnd");
+        GameAssistManager.Instance.PlayerInputLockOff();
+
+
+    }
+
+
+    public void ChangeStateToSubWay()
+    {
+        machine.OnStateChange(machine.SubwayState);
     }
 }

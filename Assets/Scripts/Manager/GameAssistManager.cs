@@ -212,6 +212,7 @@ public class GameAssistManager : MonoBehaviour
         SetColorFilter(volume_1, 0f, 0f, 0f, 2f);
         DOTween.To(() => volume_1.weight, x => volume_1.weight = x, 1f, 3f);
     }
+
     
     // #. 내면 탈출
     public void InsideOutEffect()

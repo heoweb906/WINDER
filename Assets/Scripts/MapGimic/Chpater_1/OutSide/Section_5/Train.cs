@@ -14,7 +14,10 @@ public class Train : MonoBehaviour
     public float stopDuration;          // 정거장에서 멈추는 시간
 
     public TrainDoor[] trainDoors;
-    public GameObject[] crowds;
+    public NPC_Simple[] npcArray;
+
+
+
 
     [Header("지하철 바닥 활성화 여부 관리")]
     public Train_PlayerCheck trainPlayerCheck;
@@ -35,17 +38,18 @@ public class Train : MonoBehaviour
         transform.position = position_StartPoint.position;
 
         // 열리는 문 중에서 하나의 문에만 탑승할 수 있도록
-        SubWayAssist.Instance.iCrowedRanNum = Random.Range(0, trainDoors.Length);
-        for(int i = 0; i < trainDoors.Length; i++) crowds[i].SetActive(true);
-        crowds[SubWayAssist.Instance.iCrowedRanNum].SetActive(false);
+        //SubWayAssist.Instance.iCrowedRanNum = Random.Range(0, trainDoors.Length);
+        //for(int i = 0; i < trainDoors.Length; i++) crowds[i].SetActive(true);
+        //crowds[SubWayAssist.Instance.iCrowedRanNum].SetActive(false);
 
 
         // 1. StartPoint에서 StationPoint로 이동 (서서히 멈추는 효과)
         transform.DOMove(position_StationPoint.position, travelDuration)
             .SetEase(Ease.OutCubic)  // 이동이 끝나갈 때 점점 느려짐
             .SetUpdate(UpdateType.Fixed, true);
-
         yield return new WaitForSeconds(travelDuration);
+
+
 
 
         // 2. 기차 문을 열고 일정 시간 뒤에 다시 출발
@@ -53,7 +57,20 @@ public class Train : MonoBehaviour
         foreach (TrainDoor traindoor in trainDoors) traindoor.StartOpen_Close(stopDuration);
 
 
+        yield return new WaitForSeconds(3f);
+
+        for(int i = 0; i < npcArray.Length; ++i)
+        {
+            npcArray[i].ChangeStateToSubWay();
+        }
+
+
+
         yield return new WaitForSeconds(stopDuration);
+
+
+
+
 
 
         // 3. StationPoint에서 EndPoint로 이동 (서서히 가속하는 효과)
@@ -63,8 +80,6 @@ public class Train : MonoBehaviour
             Floor.SetActive(false);
             GameAssistManager.Instance.PlayerInputLockOn();
         } 
-            
-           
         transform.DOMove(position_EndPoint.position, travelDuration)
             .SetEase(Ease.InCubic)   // 출발 시 서서히 가속
             .SetUpdate(UpdateType.Fixed, true);

@@ -9,6 +9,10 @@ public class TimelineManager : MonoBehaviour
     private PlayableDirector playableDirector;
     [SerializeField]
     private PlayableAsset[] timelines;
+    [SerializeField]
+    private GameObject dropBoxObject;
+    [SerializeField]
+    private List<GameObject> dropObjects;
 
 
 
@@ -31,8 +35,19 @@ public class TimelineManager : MonoBehaviour
         npc.SetDropState();
     }
 
+    public void AddForceDropObjects(){
+        foreach (GameObject dropObject in dropObjects){
+            dropObject.transform.parent = null;
+            dropObject.GetComponent<Rigidbody>().isKinematic = false;
+            dropObject.GetComponent<Rigidbody>().AddForce(Vector3.back * 50f + Vector3.left * 25f,ForceMode.Impulse);
+        }
+    }
+
     public void SetDropBox(GameObject dropBox)
     {
-        dropBox.transform.parent = null;
+        dropBox.transform.position = dropBoxObject.transform.position;
+        // dropBox.transform.rotation = dropBoxObject.transform.rotation;
+        dropBoxObject.SetActive(false);
+        dropBox.SetActive(true);
     }
 }

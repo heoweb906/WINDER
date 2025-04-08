@@ -26,14 +26,6 @@ public class HandheldCamera_DollyCart : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        // Y 키를 누르면 강한 흔들림 실행!
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            TriggerStrongShake(amount, fTime);
-        }
-    }
 
     void FixedUpdate()
     {
@@ -66,6 +58,8 @@ public class HandheldCamera_DollyCart : MonoBehaviour
     // 강한 흔들림 트리거 함수 (지진 효과)
     public void TriggerStrongShake(float amount, float duration)
     {
+        Debug.Log("카메라 강하게 흔들기");
+
         strongShakeAmount = amount;
         strongShakeDuration = duration;
         strongShakeTimer = duration;

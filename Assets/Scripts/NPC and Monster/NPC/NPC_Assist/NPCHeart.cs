@@ -9,7 +9,6 @@ public class NPCHeart : ClockBattery
 
     private Coroutine nowCoroutine;
 
-  
 
     public override void TurnOnObj()
     {

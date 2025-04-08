@@ -15,6 +15,7 @@ public class SingleEventObject : InteractableObject
 public enum SingleEventType
 {
     WheelChair,
+    Ggilick
 }
 
 
