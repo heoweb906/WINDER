@@ -20,11 +20,21 @@ public class Trigger_FirstGyungsooFind : MonoBehaviour
         if (other.CompareTag("Player") && !bFlag)
         {
             bFlag = true;
-            cameraEvent.CameraTriggerStart(iCameraTime);
-            gyungSooWalkStartTrigger.CutScencStart();
+            StartCoroutine(DelayedTrigger());
+            GameAssistManager.Instance.PlayerInputLockOn();
         }
     }
 
-    
+
+    private IEnumerator DelayedTrigger()
+    {
+        yield return new WaitForSeconds(1f);
+        cameraEvent.CameraTriggerStart(iCameraTime);
+
+        yield return new WaitForSeconds(0.3f);
+        gyungSooWalkStartTrigger.CutScencStart();
+    }
+
+
 
 }

@@ -42,8 +42,10 @@ public class CameraEvent : MonoBehaviour
     // #. 트리거로 실행
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !bTrigger)
         {
+            bTrigger = true;
+
             cineBrain.m_DefaultBlend = new CinemachineBlendDefinition(camObj.blendStyle, camObj.duration);
             GameAssistManager.Instance.ImplementCameraEvent(camera, iEventTime);
             nowCoroutine = StartCoroutine(StartDirection(iEventTime));

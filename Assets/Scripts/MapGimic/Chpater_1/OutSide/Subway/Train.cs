@@ -20,9 +20,9 @@ public class Train : MonoBehaviour
     public TrainDoor[] trainDoors;
     public NPC_Simple[] npcArray;
 
+
     private bool bFisrt = true;
     
-
 
 
     [Header("지하철 바닥 활성화 여부 관리")]
@@ -131,6 +131,8 @@ public class Train : MonoBehaviour
         }
         bFisrt = false;
 
+
+        yield return new WaitForSeconds(5f);
 
         // 만약 플레이어가 탑승한 것이 확인되지 않았다면 다시 되돌림
         if (!SubWayAssist.Instance.bPlayerTakeTrain) StartCoroutine(StartTrainJourney());

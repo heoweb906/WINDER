@@ -12,6 +12,7 @@ public class Train_2 : MonoBehaviour
 
     public float travelDuration;        // 출발점 -> 정거장, 정거장 -> 최종 목적지 이동 시간
 
+    public Transform[] telepotTranforms;
     public TrainDoor[] trainDoors;
     public NPC_Simple[] npcArray;
     public Transform transform_RotationTarget;
@@ -31,12 +32,16 @@ public class Train_2 : MonoBehaviour
     // 기차 여정을 시작하는 코루틴
     private IEnumerator StartTrainJourney()
     {
-        GameAssistManager.Instance.player.transform.SetParent(transform);
+        Rigidbody rigid = GameAssistManager.Instance.player.GetComponent<Rigidbody>();
+        GameAssistManager.Instance.player.transform.SetParent(telepotTranforms[SubWayAssist.Instance.iCrowedRanNum]);
         npcArray[SubWayAssist.Instance.iCrowedRanNum].gameObject.SetActive(false);
 
+   
+        rigid.isKinematic = true;
 
 
         yield return new WaitForSeconds(0.1f);
+        
 
 
         // 기차가 계속 이동합니다.
@@ -45,8 +50,9 @@ public class Train_2 : MonoBehaviour
                .SetUpdate(UpdateType.Fixed);
 
         yield return new WaitForSeconds(travelDuration);
-        Floor.SetActive(true);
 
+        rigid.isKinematic = false;
+        Floor.SetActive(true);
 
         for (int i = 0; i < npcArray.Length; ++i)
         {
@@ -54,16 +60,6 @@ public class Train_2 : MonoBehaviour
 
             npcArray[i].GetNav().enabled = true;
         }
-
-
-
-
-
-
-
-
-
-
 
 
         // 문을 엽니다.

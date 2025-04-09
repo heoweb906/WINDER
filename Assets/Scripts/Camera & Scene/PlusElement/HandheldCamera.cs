@@ -40,4 +40,24 @@ public class HandheldCamera : MonoBehaviour
         Quaternion shakeRotation = Quaternion.Euler(xRotation, yRotation, 0);
         transform.rotation = baseRotation * shakeRotation;
     }
+
+
+    private void OnEnable()
+    {
+        currentCamera = GetComponent<CameraObj>();
+        //if (currentCamera == null)
+        //{
+        //    currentCamera = GetComponent<Camera_MaxMinFollow>();
+        //}
+
+        // 기본 회전값 설정
+        if (currentCamera != null)
+        {
+            baseRotation = Quaternion.Euler(currentCamera.rotationOffset);
+        }
+        else
+        {
+            baseRotation = transform.rotation;
+        }
+    }
 }

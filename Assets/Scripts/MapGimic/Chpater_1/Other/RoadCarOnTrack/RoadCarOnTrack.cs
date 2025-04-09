@@ -14,6 +14,7 @@ public class RoadCarOnTrack : CinemachineDollyCart
         if (m_Path != null && m_Position >= m_Path.PathLength)
         {
             shakeEffect.StopShakeEffect();
+            DOTween.Kill(transform);
             Destroy(gameObject);
         }
     }

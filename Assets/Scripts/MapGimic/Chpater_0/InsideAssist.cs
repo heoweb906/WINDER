@@ -52,7 +52,10 @@ public class InsideAssist : MonoBehaviour
 
 
 
-
+    [Header("끼릭이들")]
+    public GameObject obj_Ggilick_CutScene_1;            // 버림받는 끼릭
+    public GameObject obj_Ggilick_Beetles;      // 고속도로 한복판에 버려져 있을 끼릭
+    
 
 
 
@@ -114,8 +117,6 @@ public class InsideAssist : MonoBehaviour
     }
     IEnumerator InsideOn_GGILICK()
     {
-        Time.timeScale = 3f;
-
         GameAssistManager.Instance.PlayerInputLockOn();
 
         //Rigidbody rigid = GameAssistManager.Instance.player.GetComponent<Rigidbody>();
@@ -158,23 +159,43 @@ public class InsideAssist : MonoBehaviour
 
         InGameUIController.Instance.FadeInOutImage(1f, 2f);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2.1f);
+
+        HandheldCamera handle = nowCamera.GetComponent<HandheldCamera>();
+        handle.enabled = false;
+        CameraObj camObj = nowCamera.GetComponent<CameraObj>();
+        camObj.rotationOffset = new Vector3(20f, -113.1f, 0f);
+        Camera_PlayerFollow camObj_ = nowCamera.GetComponent<Camera_PlayerFollow>();
+        camObj_.offset = new Vector3(0.3f, 2.03f, 5.81f);
 
 
         GameAssistManager.Instance.InsideOutEffect();
 
-
-
         yield return new WaitForSeconds(2.5f);
+        handle.enabled = true;
 
         cameraFollow_1.SetPlayer(transform_GGILICK.transform);
+
+
+
+
+
 
         yield return new WaitForSeconds(2f);
 
         // #. 끼릭이 연출 보여주는 구간
         InGameUIController.Instance.FadeInOutImage(0f, 2.5f);
+        Animator tempAnim = obj_Ggilick_CutScene_1.GetComponent<Animator>();
+        tempAnim.SetTrigger("doCutSceneStart");
 
-        yield return new WaitForSeconds(3f);
+
+        yield return new WaitForSeconds(19f); 
+         
+
+
+
+
+
 
 
         cineChager_2.CameraChange();
@@ -186,7 +207,8 @@ public class InsideAssist : MonoBehaviour
 
         yield return new WaitForSeconds(0.2f);
 
-        Time.timeScale = 1f;
+        obj_Ggilick_CutScene_1.SetActive(false);
+        obj_Ggilick_Beetles.SetActive(true);
 
         CreateCarFrontPlayer();
         SaveData_Manager.Instance.SetIntInside(1);

@@ -35,7 +35,6 @@ public class SoundBlockMachine : ClockBattery, IPartsOwner
 
 
 
-
     // #. 악기 작동
     private IEnumerator PlayPitchSoundsCoroutine()
     {
