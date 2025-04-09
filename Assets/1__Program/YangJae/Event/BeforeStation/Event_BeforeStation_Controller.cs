@@ -74,12 +74,21 @@ public class Event_BeforeStation_Controller : MonoBehaviour
 
     public IEnumerator PickUpEventCoroutine()
     {
+        GoToPickUp(12);
+        yield return new WaitForSeconds(Random.Range(2f, 3f));
+        GoToPickUp(7);
+        yield return new WaitForSeconds(Random.Range(2f, 3f));
         GoToPickUp(5);
+        yield return new WaitForSeconds(Random.Range(1f, 2f));
+        GoToPickUp(4);
         yield return new WaitForSeconds(Random.Range(2f, 3f));
-        GoToPickUp(1);
-        yield return new WaitForSeconds(Random.Range(2f, 3f));
+        GoToPickUp(8);
+        yield return new WaitForSeconds(Random.Range(1f, 2f));
         GoToPickUp(9);
-        GoToPickUp(3);
+        yield return new WaitForSeconds(Random.Range(1f, 2f));
+        GoToPickUp(10);
+
+        /*
         yield return new WaitForSeconds(Random.Range(2f, 3f));
         GoToPickUp(0);
         GoToPickUp(11);
@@ -91,15 +100,15 @@ public class Event_BeforeStation_Controller : MonoBehaviour
         GoToPickUp(7);
         GoToPickUp(6);
         GoToPickUp(10);
-        
+        */
         
     }
 
     public void GoToPickUp(int index){
-        NPC_Simple npc = npcs[index];
+        NPC_Simple npc = npcs[index-1];
         npc.bWalking = true;
         npc.GetAnimator().SetBool("Bool_Walk", npc.bWalking);
-        MoveNPCToTarget(npc, targets_2[index], npcMoveSpeed,()=>{npc.GetAnimator().SetTrigger("doPickUp"); npc.GetAnimator().SetBool("Bool_Walk", false);});
+        MoveNPCToTarget(npc, targets_2[index-1], npcMoveSpeed,()=>{npc.GetAnimator().SetTrigger("doPickUp"); npc.GetAnimator().SetBool("Bool_Walk", false);});
     }
 
 
@@ -162,6 +171,15 @@ public class Event_BeforeStation_Controller : MonoBehaviour
     public void ActiveHelperNPC()
     {
         currentHelperCount++;
+    }
+
+
+    public int itemPickUpCount = 0;
+    public void ItemPickUp(){
+        itemPickUpCount++;
+        if(itemPickUpCount >= 3){
+            StartPickUpEvent();
+        }
     }
 
     public void AnimationOnTransition(){

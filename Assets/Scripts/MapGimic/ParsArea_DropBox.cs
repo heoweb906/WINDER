@@ -12,11 +12,7 @@ public class ParsArea_DropBox : PartsArea
     public int ItemCount = 0;
     public override void InsertParts(GameObject partsObj)
     {
-        ItemCount++;
-        if(ItemCount >= 3){
-            Wall.SetActive(false);
-            eventController.StartPickUpEvent();
-        }
+        eventController.ItemPickUp();
     }
     
     
