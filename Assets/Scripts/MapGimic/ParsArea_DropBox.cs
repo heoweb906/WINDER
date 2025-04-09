@@ -15,7 +15,7 @@ public class ParsArea_DropBox : PartsArea
         ItemCount++;
         if(ItemCount >= 3){
             Wall.SetActive(false);
-            eventController.PickUpEvent();
+            eventController.StartPickUpEvent();
         }
     }
     
