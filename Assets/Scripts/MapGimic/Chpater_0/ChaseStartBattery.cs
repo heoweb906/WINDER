@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class ChaseStartBattery : ClockBattery
 {
@@ -8,6 +9,10 @@ public class ChaseStartBattery : ClockBattery
 
     public CineCameraChager changer_1;
     public CineCameraChager changer_2;
+
+    [Header("≥¢∏Ø¿Ã µÓ¿Â")]
+    public HandheldCamera handHeld;
+    public CameraEvent cameraEvent;
 
     [SerializeField]
     private GGILICK_ChaseManager chaseManager;
@@ -17,23 +22,29 @@ public class ChaseStartBattery : ClockBattery
         base.TurnOnObj();
 
         RotateObject((int)fCurClockBattery + 2);
-        nowCoroutine = StartCoroutine(ChaseStart());
-        
-
+        nowCoroutine = StartCoroutine(ChaseStart_1());
     }
     public override void TurnOffObj()
     {
         if (nowCoroutine != null) StopCoroutine(nowCoroutine);
 
+        GameAssistManager.Instance.PlayerInputLockOff();
 
-        chaseManager.ChaseStart();
-        base.TurnOffObj();
+        nowCoroutine = StartCoroutine(ChaseStart_2());
 
+
+        bDoing = false;
+        if (clockWork != null) clockWork.GetComponent<ClockWork>().canInteract = false;
+        bBatteryFull = false;
+        fCurClockBattery = 0f;
     }
 
-    IEnumerator ChaseStart()
+
+    IEnumerator ChaseStart_1()
     {
         changer_1.CameraChange();
+
+
 
         while (fCurClockBattery > 0)
         {
@@ -50,6 +61,25 @@ public class ChaseStartBattery : ClockBattery
         yield return new WaitForSecondsRealtime(2.0f);
 
         TurnOffObj(); 
+    }
+
+
+
+    IEnumerator ChaseStart_2()
+    {
+        yield return new WaitForSecondsRealtime(2.0f);
+
+        cameraEvent.CameraTriggerStart(4);
+
+        yield return new WaitForSecondsRealtime(2.1f);
+
+
+        handHeld.PulseShake(2f, 5.2f, 0.8f);
+
+
+        yield return new WaitForSecondsRealtime(2.0f);
+
+        chaseManager.ChaseStart();
     }
 
 }

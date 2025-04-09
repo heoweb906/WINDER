@@ -57,7 +57,7 @@ public class CameraEvent : MonoBehaviour
     {
         cineBrain.m_DefaultBlend = new CinemachineBlendDefinition(camObj.blendStyle, camObj.duration);
         GameAssistManager.Instance.ImplementCameraEvent(camera, iEEEventTime);
-        nowCoroutine = StartCoroutine(StartDirection(iEventTime));
+        nowCoroutine = StartCoroutine(StartDirection(iEEEventTime));
     }
 
 

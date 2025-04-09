@@ -1,63 +1,58 @@
+using System.Collections;
 using UnityEngine;
 
 public class HandheldCamera : MonoBehaviour
 {
-    public float rotationAmount = 1f; // 흔들림 크기
-    public float rotationSpeed = 1f; // 흔들림 속도
+    public float rotationAmount = 1f;
+    public float rotationSpeed = 1f;
 
-    private Quaternion baseRotation; // 원래 카메라 회전값
-    private CameraObj currentCamera; // 현재 활성화된 카메라
+    private Quaternion baseRotation;
+    private CameraObj cameraObj;
+    private bool isShaking = false;
 
-    private void Start()
+    private void Awake()
     {
-        // 현재 활성화된 카메라 찾기
-        currentCamera = GetComponent<CameraObj>();
-        //if (currentCamera == null)
-        //{
-        //    currentCamera = GetComponent<Camera_MaxMinFollow>();
-        //}
+        cameraObj = GetComponent<CameraObj>();
+    }
 
-        // 기본 회전값 설정
-        if (currentCamera != null)
-        {
-            baseRotation = Quaternion.Euler(currentCamera.rotationOffset);
-        }
-        else
-        {
-            baseRotation = transform.rotation;
-        }
+    private void OnEnable()
+    {
+        baseRotation = Quaternion.Euler(cameraObj.rotationOffset);
     }
 
     private void FixedUpdate()
     {
-        if (currentCamera == null) return;
+        if (!isShaking)
+        {
+            float x = (Mathf.PerlinNoise(Time.time * rotationSpeed, 0f) - 0.5f) * 2 * rotationAmount;
+            float y = (Mathf.PerlinNoise(0f, Time.time * rotationSpeed) - 0.5f) * 2 * rotationAmount;
 
-        // Perlin Noise를 사용해 흔들림 값 계산
-        float xRotation = (Mathf.PerlinNoise(Time.time * rotationSpeed, 0) - 0.5f) * 2 * rotationAmount;
-        float yRotation = (Mathf.PerlinNoise(0, Time.time * rotationSpeed) - 0.5f) * 2 * rotationAmount;
-
-        // 기존 회전에 흔들림 효과 추가
-        Quaternion shakeRotation = Quaternion.Euler(xRotation, yRotation, 0);
-        transform.rotation = baseRotation * shakeRotation;
+            Quaternion shake = Quaternion.Euler(x, y, 0f);
+            transform.rotation = baseRotation * shake;
+        }
     }
 
 
-    private void OnEnable()
+    public void PulseShake(float tempAmount, float tempSpeed, float duration, bool bSmoothRetun = false)
     {
-        currentCamera = GetComponent<CameraObj>();
-        //if (currentCamera == null)
-        //{
-        //    currentCamera = GetComponent<Camera_MaxMinFollow>();
-        //}
-
-        // 기본 회전값 설정
-        if (currentCamera != null)
-        {
-            baseRotation = Quaternion.Euler(currentCamera.rotationOffset);
-        }
-        else
-        {
-            baseRotation = transform.rotation;
-        }
+        StopAllCoroutines();
+        StartCoroutine(PulseShakeRoutine(tempAmount, tempSpeed, duration, bSmoothRetun));
     }
+
+    private IEnumerator PulseShakeRoutine(float tempAmount, float tempSpeed, float duration, bool bSmoothRetun)
+    {
+        Debug.Log("ī�޶� ���ϰ� ���� �۵�!!!");
+
+        float originalAmount = rotationAmount;
+        float originalSpeed = rotationSpeed;
+
+        rotationAmount = tempAmount;
+        rotationSpeed = tempSpeed;
+
+        yield return new WaitForSeconds(duration);
+
+        rotationAmount = originalAmount;
+        rotationSpeed = originalSpeed;
+    }
+
 }

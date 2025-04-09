@@ -48,7 +48,8 @@ public class GGILICK_ChaseManager : MonoBehaviour
 
     public CineCameraChager cineChager;   // 끼릭이의 모습을 보여줌
     public Transform transformTeleport_FrontGgilick;     // 플레이어 순간이동 위치
-
+    public Camera_Falling cameraFalling;
+    public HandheldCamera handHeld;
 
 
     [SerializeField] private List<GlassWall> glassWalls;
@@ -83,10 +84,12 @@ public class GGILICK_ChaseManager : MonoBehaviour
 
     private void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.Y))
-        //{
-        //    TransitionToState(ChaseState.Falling);
-        //}
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            cameraFalling.DropShake(3f);
+            handHeld.PulseShake(1.2f, 5f, 7f);
+            TransitionToState(ChaseState.Falling);
+        }
     }
 
 
@@ -128,6 +131,9 @@ public class GGILICK_ChaseManager : MonoBehaviour
                 // 낙하 지점에 도달했는지 확인 (z축 기준)
                 if (endPoint != null && ggilick.transform.position.z >= endPoint.position.z)
                 {
+                    cameraFalling.DropShake(3f);
+                    handHeld.PulseShake(1.2f, 5f, 7f);
+
                     TransitionToState(ChaseState.Falling);
                 }
                 break;
