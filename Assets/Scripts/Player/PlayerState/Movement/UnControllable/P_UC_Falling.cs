@@ -20,5 +20,13 @@ public class P_UC_Falling : P_UnControllable
     public override void OnUpdate()
     {
         base.OnUpdate();
+        
+        // 플레이어 떨어지는 속도 제한
+        if (player.rigid.velocity.y < -player.maxFallingSpeed)
+        {
+            Vector3 limitedVelocity = player.rigid.velocity;
+            limitedVelocity.y = -player.maxFallingSpeed;
+            player.rigid.velocity = limitedVelocity;
+        }
     }
 }

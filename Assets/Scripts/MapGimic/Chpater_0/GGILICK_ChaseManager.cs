@@ -14,6 +14,8 @@ public class GGILICK_ChaseManager : MonoBehaviour
         Chasing,        // 추격 중
         Stopping,       // 멈추는 중
         Stunned,        // 유리벽 충돌 후 기절 상태
+        Attacking,      // 공격 상태
+        AttackExecute,  // 공격 실행 상태
         Falling,        // 낙하 중
         Lying           // 낙하 후 누워있는 상태
     }
@@ -46,10 +48,22 @@ public class GGILICK_ChaseManager : MonoBehaviour
     [SerializeField] private float fallingDuration = 2.0f; // 낙하 지속 시간
     [SerializeField] private float lyingDuration = 5.0f;   // 낙하 후 누워있는 시간
 
+    [Header("공격 설정")]
+    [SerializeField] private float attackSpeed = 8.0f;     // 공격 속도
+    [SerializeField] private float attackDuration = 1.0f;  // 공격 지속 시간
+    [SerializeField] private float attackExecuteDuration = 0.5f; // 공격 실행 지속 시간
+    [SerializeField] private float attackRange = 2.0f;     // 공격 범위
+    [SerializeField] private float returnSpeed = 3.0f;     // 타겟 위치로 돌아갈 때 X축 보간 속도
+    [SerializeField] private float rotationSpeed = 2.0f;   // 회전 속도 계수
+    [SerializeField] private float attackDistance = 1.5f;  // 공격 실행 거리
+
     public CineCameraChager cineChager;   // 끼릭이의 모습을 보여줌
     public Transform transformTeleport_FrontGgilick;     // 플레이어 순간이동 위치
     public Camera_Falling cameraFalling;
-    public HandheldCamera handHeld;
+    public HandheldCamera handHeld_falling;
+
+    public HandheldCamera handheld_first_wall;
+    public HandheldCamera_DollyCart handheld_Chase_wall;
 
 
     [SerializeField] private List<GlassWall> glassWalls;
@@ -63,6 +77,12 @@ public class GGILICK_ChaseManager : MonoBehaviour
 
     private Animator animator;
     
+    private Vector3 attackTargetPosition;    // 공격 목표 위치(플레이어 위치)
+
+
+    [SerializeField]
+    private ChaseStartBattery chaseStartBattery;
+
     private void Start()
     {
         playerTransform = GameAssistManager.Instance.GetPlayer().transform;
@@ -87,7 +107,7 @@ public class GGILICK_ChaseManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Y))
         {
             cameraFalling.DropShake(3f);
-            handHeld.PulseShake(1.2f, 5f, 7f);
+            handHeld_falling.PulseShake(1.2f, 5f, 7f);
             TransitionToState(ChaseState.Falling);
         }
     }
@@ -132,7 +152,7 @@ public class GGILICK_ChaseManager : MonoBehaviour
                 if (endPoint != null && ggilick.transform.position.z >= endPoint.position.z)
                 {
                     cameraFalling.DropShake(3f);
-                    handHeld.PulseShake(1.2f, 5f, 7f);
+                    handHeld_falling.PulseShake(1.2f, 5f, 7f);
 
                     TransitionToState(ChaseState.Falling);
                 }
@@ -151,6 +171,42 @@ public class GGILICK_ChaseManager : MonoBehaviour
                 // 기절 시간이 지나면 다시 추격 시작
                 if (stateTimer >= stunDuration)
                 {
+                    TransitionToState(ChaseState.Starting);
+                }
+                break;
+                
+            case ChaseState.Attacking:
+                // 목표 위치에 충분히 가까워졌는지 확인 (XZ 평면만 고려)
+                Vector3 currentPosXZ = new Vector3(ggilick.transform.position.x, 0, ggilick.transform.position.z);
+                Vector3 targetPosXZ = new Vector3(attackTargetPosition.x, 0, attackTargetPosition.z);
+                float distanceToTargetXZ = Vector3.Distance(currentPosXZ, targetPosXZ);
+                
+                // 디버그 로그 추가
+                if (distanceToTargetXZ <= attackDistance + 0.1f)
+                {
+                    Debug.Log($"목표 접근 중: {distanceToTargetXZ}m, 필요 거리: {attackDistance}m");
+                }
+                
+                if (distanceToTargetXZ <= attackDistance)
+                {
+                    Debug.Log($"공격 실행 상태로 전환! 거리: {distanceToTargetXZ}m");
+                    // 공격 실행 상태로 전환
+                    TransitionToState(ChaseState.AttackExecute);
+                }
+                
+                // 시간이 너무 오래 지나면 강제로 공격 상태 전환 (안전장치)
+                if (stateTimer > 3.0f)
+                {
+                    Debug.LogWarning("공격 타임아웃! 강제로 공격 실행 상태로 전환");
+                    TransitionToState(ChaseState.AttackExecute);
+                }
+                break;
+                
+            case ChaseState.AttackExecute:
+                // 공격 실행 후 시간이 지나면 다시 추격 시작
+                if (stateTimer >= attackExecuteDuration)
+                {
+                    // 공격 후 Starting 상태로 전환
                     TransitionToState(ChaseState.Starting);
                 }
                 break;
@@ -193,9 +249,81 @@ public class GGILICK_ChaseManager : MonoBehaviour
     {
         // 이동이 필요한 상태인지 확인
         if (currentState == ChaseState.Idle || currentState == ChaseState.Stunned 
-            || currentState == ChaseState.Falling || currentState == ChaseState.Lying)
+            || currentState == ChaseState.Falling || currentState == ChaseState.Lying
+            || currentState == ChaseState.AttackExecute)
             return;
             
+        // 공격 상태일 때 플레이어를 향해 빠르게 이동
+        if (currentState == ChaseState.Attacking)
+        {
+            // 공격 방향 계산 (XZ 평면에서만)
+            Vector3 targetPosXZ = new Vector3(attackTargetPosition.x, ggilick.transform.position.y, attackTargetPosition.z);
+            Vector3 attackDirection = (targetPosXZ - ggilick.transform.position).normalized;
+            Vector3 attackMovement = attackDirection * attackSpeed * Time.fixedDeltaTime;
+            
+            // 경사로 고려 (y축 이동 확인)
+            bool isOnSlopeAttacking = false;
+            
+            // 경사로 참조 오브젝트가 설정되어 있는지 확인
+            if (slopeStartObject != null && slopeEndObject != null)
+            {
+                // 현재 Z 위치에 따라 경사로에 있는지 확인
+                float currentZ = ggilick.transform.position.z;
+                float slopeStartZ = slopeStartObject.position.z;
+                float slopeEndZ = slopeEndObject.position.z;
+                
+                // 시작과 끝 지점 순서를 정규화 (시작이 더 작은 값, 끝이 더 큰 값)
+                if (slopeStartZ > slopeEndZ)
+                {
+                    float temp = slopeStartZ;
+                    slopeStartZ = slopeEndZ;
+                    slopeEndZ = temp;
+                }
+                
+                // +z 방향 이동에 맞게 경사로 체크
+                isOnSlopeAttacking = currentZ >= slopeStartZ && currentZ <= slopeEndZ;
+                
+                // 경사로에 있을 경우 y축 이동 추가
+                if (isOnSlopeAttacking)
+                {
+                    // 경사로의 길이 계산
+                    float slopeLength = Mathf.Abs(slopeStartZ - slopeEndZ);
+                    
+                    // 경사로에서의 진행도 (0~1) 계산
+                    float slopeProgress = Mathf.Abs(currentZ - slopeStartZ) / slopeLength;
+                    
+                    // 진행 방향에 따라 올라가거나 내려가는 y 이동 계산
+                    float slopeAngleRad = slopeXRotation * Mathf.Deg2Rad;
+                    
+                    // z 이동 거리에 따른 y 변화량 계산 (탄젠트 이용)
+                    float yOffset = attackMovement.z * Mathf.Tan(slopeAngleRad);
+                    
+                    // 움직임 벡터에 y 성분 추가
+                    attackMovement.y = yOffset;
+                }
+            }
+            
+            ggilick.transform.position += attackMovement;
+            
+            // 공격 방향으로 회전 (XZ 평면 기준)
+            if (attackDirection != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(attackDirection);
+                
+                // 경사로에 있을 경우 X축 회전 적용
+                if (isOnSlopeAttacking)
+                {
+                    Vector3 eulerAngles = targetRotation.eulerAngles;
+                    eulerAngles.x = -slopeXRotation;
+                    targetRotation = Quaternion.Euler(eulerAngles);
+                }
+                
+                ggilick.transform.rotation = Quaternion.Slerp(ggilick.transform.rotation, targetRotation, 10f * Time.fixedDeltaTime);
+            }
+            
+            return;
+        }
+        
         // 플레이어와의 거리 계산
         float distanceToPlayer = Vector3.Distance(ggilick.transform.position, playerTransform.position);
         
@@ -205,8 +333,24 @@ public class GGILICK_ChaseManager : MonoBehaviour
         // 최종 속도 계산 (상태에 따른 속도 계수 적용)
         float currentSpeed = Mathf.Lerp(baseSpeed, maxSpeed, distanceSpeedMultiplier) * currentSpeedFactor;
         
-        // 목표 지점을 향해 이동 (기본적으로 y축 이동 없이)
-        Vector3 targetPosition = new Vector3(TargetPosition.position.x, ggilick.transform.position.y, TargetPosition.position.z);
+        // 목표 위치 계산
+        Vector3 targetPosition;
+        
+        // 추격 상태에서 공격 후 복귀하는 경우 X축을 보간
+        bool isReturningToPath = currentState == ChaseState.Chasing && 
+                                (Mathf.Abs(ggilick.transform.position.x - TargetPosition.position.x) > 0.5f);
+        
+        if (isReturningToPath)
+        {
+            // X축 위치를 목표 지점의 X축 위치로 서서히 보간
+            float newX = Mathf.Lerp(ggilick.transform.position.x, TargetPosition.position.x, returnSpeed * Time.fixedDeltaTime);
+            targetPosition = new Vector3(newX, ggilick.transform.position.y, TargetPosition.position.z);
+        }
+        else
+        {
+            targetPosition = new Vector3(TargetPosition.position.x, ggilick.transform.position.y, TargetPosition.position.z);
+        }
+        
         Vector3 direction = (targetPosition - ggilick.transform.position).normalized;
         Vector3 movement = direction * currentSpeed * Time.fixedDeltaTime;
         
@@ -281,10 +425,29 @@ public class GGILICK_ChaseManager : MonoBehaviour
                 targetRotation = Quaternion.Euler(eulerAngles);
             }
             
-            float rotationSpeed = Mathf.Lerp(2f, 5f, currentSpeedFactor); // 속도에 따른 회전 속도 조정
-            ggilick.transform.rotation = Quaternion.Slerp(ggilick.transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+            // 공격 후 경로로 복귀하는 경우 더 부드러운 회전 적용
+            float actualRotationSpeed;
+            if (isReturningToPath)
+            {
+                // 타겟 위치와의 각도 차이에 따라 회전 속도 조절
+                Vector3 targetDir = (TargetPosition.position - ggilick.transform.position).normalized;
+                float dotProduct = Vector3.Dot(ggilick.transform.forward, targetDir);
+                float angleNormalized = (1 - dotProduct) * 0.5f; // 0(같은방향)~1(반대방향) 범위로 정규화
+                
+                // 각도 차이가 클수록 천천히 회전
+                actualRotationSpeed = Mathf.Lerp(rotationSpeed * 3f, rotationSpeed, angleNormalized);
+            }
+            else
+            {
+                // 일반 추격 중에는 기본 회전 속도 사용
+                actualRotationSpeed = Mathf.Lerp(2f, 5f, currentSpeedFactor);
+            }
+            
+            ggilick.transform.rotation = Quaternion.Slerp(ggilick.transform.rotation, targetRotation, actualRotationSpeed * Time.fixedDeltaTime);
         }
     }
+
+    private bool isFirstWall = true;
     
     private void TransitionToState(ChaseState newState)
     {
@@ -317,9 +480,31 @@ public class GGILICK_ChaseManager : MonoBehaviour
                 break;
                 
             case ChaseState.Stunned:
+                if(isFirstWall){
+                    handheld_first_wall.PulseShake(1.2f, 5f, 7f);
+                    isFirstWall = false;
+                }
+                else{
+                    handheld_Chase_wall.TriggerStrongShake(4f,0.6f);
+                }
                 currentSpeedFactor = 0f;
                 animator.SetTrigger("Brake");
                 // 기절 효과 추가 (필요시 애니메이션 등 추가)
+                break;
+                
+            case ChaseState.Attacking:
+                currentSpeedFactor = 1f;
+                // 현재 플레이어 위치를 공격 목표로 설정 (y 좌표는 사용하지 않음)
+                attackTargetPosition = new Vector3(playerTransform.position.x, 
+                                                 0f, // y 좌표는 중요하지 않음, 이동 시 현재 위치 사용
+                                                 playerTransform.position.z);
+                break;
+                
+            case ChaseState.AttackExecute:
+                currentSpeedFactor = 0f;
+                animator.SetTrigger("Brake"); // 공격 실행 시 Brake 애니메이션 실행
+                // 공격 범위 내에 플레이어가 있는지 확인
+                CheckPlayerInAttackRange();
                 break;
                 
             case ChaseState.Falling:
@@ -359,6 +544,11 @@ public class GGILICK_ChaseManager : MonoBehaviour
             
             // 필요시 충돌 효과 추가 (소리, 파티클 등)
             // PlayCollisionEffect();
+        }
+        // 공격 트리거와 충돌했는지 확인
+        if(other.GetComponent<GGilicAttackTrigger>() != null){
+            Debug.Log("공격 트리거와 충돌! 공격 상태로 전환");
+            TransitionToState(ChaseState.Attacking);
         }
     }
     
@@ -432,6 +622,33 @@ public class GGILICK_ChaseManager : MonoBehaviour
     }
     */
 
-
+    // 공격 범위 내에 플레이어가 있는지 확인하는 함수
+    private void CheckPlayerInAttackRange()
+    {
+        // 끼릭과 플레이어 사이의 거리 계산 (XZ 평면만 고려)
+        Vector3 ggilickPosXZ = new Vector3(ggilick.transform.position.x, 0, ggilick.transform.position.z);
+        Vector3 playerPosXZ = new Vector3(playerTransform.position.x, 0, playerTransform.position.z);
+        float distanceToPlayer = Vector3.Distance(ggilickPosXZ, playerPosXZ);
+        
+        // 끼릭의 전방 방향과 플레이어 방향이 일치하는지 확인 (XZ 평면만 고려)
+        Vector3 directionToPlayer = (playerPosXZ - ggilickPosXZ).normalized;
+        Vector3 forwardXZ = new Vector3(ggilick.transform.forward.x, 0, ggilick.transform.forward.z).normalized;
+        float dotProduct = Vector3.Dot(forwardXZ, directionToPlayer);
+        
+        Debug.Log($"피격 체크: 거리={distanceToPlayer}m, 각도={dotProduct:F2}, 공격범위={attackRange}m");
+        
+        // 플레이어가 공격 범위 내에 있고, 끼릭의 전방에 있는 경우
+        if (distanceToPlayer <= attackRange && dotProduct > 0.5f) // 0.5는 약 60도 각도 내
+        {
+            Debug.Log("플레이어가 공격 범위 내에 있습니다! 플레이어 사망 판정!");
+            GameAssistManager.Instance.DiePlayerReset(2f, 0, 0f);
+            // 여기에 플레이어 사망 처리 추가 (현재는 디버그 로그만 출력)
+            // PlayerDeath();
+        }
+        else
+        {
+            Debug.Log("플레이어가 공격 범위 밖에 있습니다.");
+        }
+    }
 
 }

@@ -10,7 +10,7 @@ public class ChaseStartBattery : ClockBattery
     public CineCameraChager changer_1;
     public CineCameraChager changer_2;
 
-    [Header("³¢¸¯ÀÌ µîÀå")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     public HandheldCamera handHeld;
     public CameraEvent cameraEvent;
 
@@ -49,16 +49,16 @@ public class ChaseStartBattery : ClockBattery
         while (fCurClockBattery > 0)
         {
 
-            yield return new WaitForSecondsRealtime(1.0f);
+            yield return new WaitForSeconds(1.0f);
 
             fCurClockBattery -= 1;
         }
 
-        yield return new WaitForSecondsRealtime(1.0f);
+        yield return new WaitForSeconds(1.0f);
 
         changer_2.CameraChange();
 
-        yield return new WaitForSecondsRealtime(2.0f);
+        yield return new WaitForSeconds(2.0f);
 
         TurnOffObj(); 
     }
@@ -67,17 +67,12 @@ public class ChaseStartBattery : ClockBattery
 
     IEnumerator ChaseStart_2()
     {
-        yield return new WaitForSecondsRealtime(2.0f);
+        yield return new WaitForSeconds(2.0f);
 
         cameraEvent.CameraTriggerStart(4);
 
-        yield return new WaitForSecondsRealtime(2.1f);
+        yield return new WaitForSeconds(2.1f);
 
-
-        handHeld.PulseShake(2f, 5.2f, 0.8f);
-
-
-        yield return new WaitForSecondsRealtime(2.0f);
 
         chaseManager.ChaseStart();
     }
