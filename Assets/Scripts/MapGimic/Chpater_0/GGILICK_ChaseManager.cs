@@ -104,12 +104,12 @@ public class GGILICK_ChaseManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            cameraFalling.DropShake(3f);
-            handHeld_falling.PulseShake(1.2f, 5f, 7f);
-            TransitionToState(ChaseState.Falling);
-        }
+        //if (Input.GetKeyDown(KeyCode.Y))
+        //{
+        //    cameraFalling.DropShake(3f);
+        //    handHeld_falling.PulseShake(1.2f, 5f, 7f);
+        //    TransitionToState(ChaseState.Falling);
+        //}
     }
 
 

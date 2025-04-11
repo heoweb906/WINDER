@@ -15,8 +15,34 @@ public class SoundBlockMachine : ClockBattery, IPartsOwner
     public int[] iCorrectArray;
     private bool bScanFail;
 
+    [Header("오브젝트 애니메이션 관련")]
+    public GameObject GlassCase;
+    public GameObject Guitar;
+    public GameObject[] Arms;
+    private Vector3[] armInitialRotations;
+
+
+
+    public GameObject[] PianoKeyboards;
     public GameObject[] dials;
     public GameObject[] levers;
+
+
+    private void Awake()
+    {
+        armInitialRotations = new Vector3[Arms.Length];
+        for (int i = 0; i < Arms.Length; i++)
+        {
+            armInitialRotations[i] = Arms[i].transform.localEulerAngles;
+        }
+    }
+
+
+
+ 
+
+    
+
 
 
     public override void TurnOnObj()
@@ -51,7 +77,7 @@ public class SoundBlockMachine : ClockBattery, IPartsOwner
         RotateZOverTime(dials[1], (int)fCurClockBattery + 2, false);
 
         MoveYLoop(levers[0], -0.656f, -0.382f, 0.67f, 0.77f, fCurClockBattery + 2);
-        MoveYLoop(levers[1], -0.656f, -0.382f, 0.67f, 0.77f, fCurClockBattery + 2);
+        MoveYLoop(levers[1], -0.382f, -0.656f, 0.77f, 0.67f, fCurClockBattery + 2);
 
         while (iTempTime > 0)
         {
@@ -60,7 +86,13 @@ public class SoundBlockMachine : ClockBattery, IPartsOwner
                 if (soundPieces[i] != null)
                 {
                     if (soundPieces[i].iSoundPieceNum != iCorrectArray[i]) bScanFail = true;
+                    {
+                        PressKeyEffect(PianoKeyboards[soundPieces[i].iSoundPieceNum], 0.3f, 0.2f);
+                    }
+
                     soundPieces[i].PlayingPitchSound();
+
+
                 }
                 else
                 {
@@ -70,20 +102,19 @@ public class SoundBlockMachine : ClockBattery, IPartsOwner
 
                 yield return new WaitForSeconds(1.0f);
 
-                // 배터리 감소
                 iTempTime -= 1;
                 if (iTempTime <= 0)
                 {
                     iTempTime = 0;
                     fCurClockBattery = 0;
                     TurnOffObj();
-                    yield break; // 코루틴 종료
+                    yield break;
                 }
             }
 
 
             TurnOffObj();
-            yield break; // 모든 작업이 완료되면 코루틴 종료
+            yield break;
         }
 
      
@@ -101,7 +132,41 @@ public class SoundBlockMachine : ClockBattery, IPartsOwner
     private void SuccesPlayAction()
     {
         Debug.Log("연주에 성공했습니다.");
+
+        StartCoroutine(SuccesPlayAction_());
+        
     }
+    IEnumerator SuccesPlayAction_()
+    {
+        RotateToX(GlassCase, -200f, 3f);
+
+        yield return new WaitForSeconds(3.2f);
+
+        MoveToPosition(Guitar, new Vector3(22.45f, 2.166f, 17.052f), 2f);
+
+        RotateToZ(Arms[0], 109.121f, 2f);
+        RotateToZ(Arms[1], -108.662f, 2f);
+        RotateToZ(Arms[2], 118.734f, 2f);
+        RotateToZ(Arms[3], -29.655f, 2f);
+
+
+        yield return new WaitForSeconds(2.8f);
+
+        for (int i = 0; i < Arms.Length; i++)
+        {
+            RotateToZ(Arms[i], armInitialRotations[i].z, 0.1f); // ← 기존 함수 사용
+        }
+
+        GuitarObj_1 guitar = Guitar.GetComponent<GuitarObj_1>();
+        guitar.ChangeToFlyingState();
+
+
+
+
+    }
+
+    // 22.45    2.166  17.052
+
 
     // #. 연주에 실패했을 때 실행시킬 함수
     private void FailPlayAction()
@@ -112,12 +177,51 @@ public class SoundBlockMachine : ClockBattery, IPartsOwner
 
 
 
+    // #. 포지션 애니메이션 (기타 케이스 용)
+    public void MoveToPosition(GameObject target, Vector3 targetPosition, float duration = 1.5f)
+    {
+        target.transform.DOMove(targetPosition, duration)
+            .SetEase(Ease.InOutSine);
+    }
+    public void RotateToX(GameObject target, float targetXRotation, float duration)
+    {
+        Transform tf = target.transform;
+        Vector3 currentRotation = tf.localEulerAngles;
+        Vector3 targetRotation = new Vector3(targetXRotation, currentRotation.y, currentRotation.z);
+
+        tf.DOLocalRotate(targetRotation, duration).SetEase(Ease.InOutSine);
+    }
+    public void RotateToZ(GameObject target, float targetZRotation, float duration)
+    {
+        Transform tf = target.transform;
+        Vector3 currentRotation = tf.localEulerAngles;
+        Vector3 targetRotation = new Vector3(currentRotation.x, currentRotation.y, targetZRotation);
+
+        tf.DOLocalRotate(targetRotation, duration).SetEase(Ease.InOutSine);
+    }
 
 
 
 
 
+    // #. 피아노 건반 애니메이션 
+    public void PressKeyEffect(GameObject target, float pressDistance, float pressDuration)
+    {
+        PressKeyRoutine_(target, pressDistance, pressDuration);
+    }
+    public void PressKeyRoutine_(GameObject target, float pressDistance, float pressDuration)
+    {
+        Transform tf = target.transform;
+        Vector3 originalPos = tf.position;
+        Vector3 pressedPos = originalPos + Vector3.down * pressDistance;
 
+        tf.DOMove(pressedPos, pressDuration).SetEase(Ease.OutSine).OnComplete(() =>
+        {
+            tf.DOMove(originalPos, pressDuration).SetEase(Ease.InSine);
+        });
+    }
+
+    // #. 다이얼 애니메이션
     public void RotateZOverTime(GameObject target, int duration, bool bRotateDir)
     {
         StartCoroutine(RotateZRoutine(target.transform, duration, bRotateDir));
@@ -138,15 +242,13 @@ public class SoundBlockMachine : ClockBattery, IPartsOwner
     }
 
 
-
-
+    // #. 레버 애니메이션
     public void MoveYLoop(GameObject target, float minY, float maxY, float minZ, float maxZ, float totalTime)
     {
         Debug.Log("여기서 실행해야 함");
 
         StartCoroutine(MoveLeverManualRoutine(target.transform, minY, maxY, minZ, maxZ, totalTime));
     }
-
     private IEnumerator MoveLeverManualRoutine(Transform target, float minY, float maxY, float minZ, float maxZ, float totalTime)
     {
         float timer = 0f;
@@ -175,6 +277,10 @@ public class SoundBlockMachine : ClockBattery, IPartsOwner
             yield return null;
         }
     }
+
+
+
+
 
 
 

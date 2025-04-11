@@ -31,10 +31,10 @@ public class DissapearobjEffect : MonoBehaviour
     private void Update()
     {
         // 테스트용: T 키를 누르면 Dissolve 효과 실행
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            StartCoroutine(DissolveCoroutine());
-        }
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    StartCoroutine(DissolveCoroutine());
+        //}
     }
 
     private IEnumerator DissolveCoroutine()

@@ -12,7 +12,7 @@ public class DisaponitStep : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.M)) BrokeStep();
+        //if (Input.GetKeyDown(KeyCode.M)) BrokeStep();
 
     }
 

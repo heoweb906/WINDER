@@ -82,10 +82,10 @@ public class ToyTruck : ClockBattery, IPartsOwner
                     isShaking = false;
 
 
-                    ThrowBaggages();
+                    ExplodeBaggagesDirectional();
                     float targetRotation = 40f;
                     currentRotate.z = targetRotation; // 새로운 목표 회전 값을 설정
-                    Trunk.transform.DOLocalRotate(currentRotate, 1f)
+                    Trunk.transform.DOLocalRotate(currentRotate, 0.2f)
                     .SetEase(Ease.OutBack);
                
 
@@ -153,24 +153,52 @@ public class ToyTruck : ClockBattery, IPartsOwner
 
 
 
-    private void ThrowBaggages()
+    public void ExplodeBaggagesDirectional(float upwardForce = 70f, float backwardForce = 30f, float directionRandomness = 4f)
     {
         foreach (GameObject baggage in Baggages)
         {
             Rigidbody rb = baggage.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                float randomX = Random.Range(-3f, 3f);
-                float randomZ = Random.Range(-3f, 3f);
+            Collider col = baggage.GetComponent<Collider>();
 
-                float randomThrowForce = Random.Range(-2f, 1f);
+            if (rb == null || col == null) continue;
 
-                Vector3 modifiedThrowDirection = throwDirection + new Vector3(randomX, 0f, randomZ);
+            rb.isKinematic = false;
 
-                rb.AddForce(modifiedThrowDirection * (throwForce + randomThrowForce), ForceMode.Impulse);
-            }
+            // 1초 동안 트리거 활성화
+            col.isTrigger = true;
+            StartCoroutine(ResetTrigger(col, 1f));
+
+            // 기본 방향 분리
+            Vector3 upDir = Vector3.up * upwardForce;
+            Vector3 backDir = -transform.right * backwardForce;
+
+            // 랜덤 방향 오차
+            Vector3 randomOffset = new Vector3(
+                Random.Range(-directionRandomness, directionRandomness),
+                Random.Range(-directionRandomness, directionRandomness),
+                Random.Range(-directionRandomness, directionRandomness)
+            );
+
+            Vector3 finalForce = upDir + backDir + randomOffset;
+            rb.AddForce(finalForce, ForceMode.Impulse);
+
+            Vector3 torque = new Vector3(
+                Random.Range(-1f, 1f),
+                Random.Range(-1f, 1f),
+                Random.Range(-1f, 1f)
+            ) * 2f;
+
+            rb.AddTorque(torque, ForceMode.Impulse);
         }
     }
+
+    private IEnumerator ResetTrigger(Collider col, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        col.isTrigger = false;
+    }
+
+
 
     public void InsertOwnerFunc(GameObject parts, int iIndex = 0)
     {
