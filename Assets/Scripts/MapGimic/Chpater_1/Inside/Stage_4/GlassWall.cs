@@ -14,7 +14,7 @@ public class GlassWall : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M)) CrashGlassWall();
+        // if (Input.GetKeyDown(KeyCode.M)) CrashGlassWall();
     }
 
     public void CrashGlassWall()

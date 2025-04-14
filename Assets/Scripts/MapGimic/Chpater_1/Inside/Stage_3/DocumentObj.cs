@@ -15,8 +15,6 @@ public class DocumentObj : MonoBehaviour
     }
 
   
-
-
     public void ChangeToColorObj_()
     {
         Invoke("ChangeToColorObj", 2f);
