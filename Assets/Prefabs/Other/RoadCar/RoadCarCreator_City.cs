@@ -38,6 +38,7 @@ public class RoadCarCreator_City : MonoBehaviour
     
     }
 
+
     private void CreateCarAtPath()
     {
         if (Cars.Length < 3 || path == null) return;
@@ -54,10 +55,9 @@ public class RoadCarCreator_City : MonoBehaviour
 
     private GameObject GetRandomCarByWeight()
     {
-        int rand = Random.Range(0, 100); // 0 ~ 99 사이 난수 생성
+        if (Cars == null || Cars.Length == 0) return null;
 
-        if (rand < 60) return Cars[0]; 
-        else if (rand < 85) return Cars[1]; 
-        else return Cars[2]; 
+        int randomIndex = Random.Range(0, Cars.Length);
+        return Cars[randomIndex];
     }
 }

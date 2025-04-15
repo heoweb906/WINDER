@@ -679,6 +679,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bSad: 0
   bWalking: 1
+  iIDLE_Num: 0
   iAnimWalking: 1
   bClockWorkEventNPC: 0
   bActionEventNPC: 0
@@ -757,7 +758,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0
+  m_BaseOffset: -0.04
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!1 &2762260103728091944

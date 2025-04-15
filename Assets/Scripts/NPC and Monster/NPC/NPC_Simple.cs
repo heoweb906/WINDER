@@ -145,7 +145,12 @@ public class NPC_Simple : MonoBehaviour
     {
         machine?.OnStateUpdate();
 
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            machine.OnStateChange(machine.ThankState_RotatePlayerClockWork);
+        }
 
+        
 
     }
 
@@ -243,6 +248,12 @@ public class NPC_Simple : MonoBehaviour
         agent.SetDestination(GameAssistManager.Instance.GetPlayer().transform.position);
         anim.SetInteger("Walk_Num", 1);
         anim.SetBool("Bool_Walk", true);
+        agent.stoppingDistance = 0f;
+
+       
+
+
+
         while (agent.pathPending || agent.remainingDistance > 1f) yield return null; // 다음 프레임까지 대기
         agent.isStopped = true;
         anim.SetTrigger("ddddStop");

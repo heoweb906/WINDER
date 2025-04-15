@@ -10,10 +10,10 @@ public class InsideAssist : MonoBehaviour
     public static InsideAssist Instance { get; private set; }
 
     [Header("카메라 전환 장치들, 연출")]
-    public Light light_1;
-    public Light light_2;
-    public Light light_3;
-    public Light light_4;
+    public Light Light_SunTuroial;          // 0.57
+    public Light Light_SunMeet1;            // 0.8
+    public Light Light_SunMeet2;            // 0.38
+    //public Light light_4;
 
 
     public Camera_PlayerFollow cameraFollow_1;
@@ -43,7 +43,7 @@ public class InsideAssist : MonoBehaviour
     public GameObject GgilcikBad;       // 내면에서 나오고 나면 삭제시켜야 함
 
     public Material skyboxMaterial; // 사용할 스카이박스
-    public Color targetFogColor = new Color(168f / 255f, 168f / 255f, 168f / 255f); // 목표 포그 색상
+    // public Color targetFogColor = new Color(168f / 255f, 168f / 255f, 168f / 255f); // 목표 포그 색상
     public float targetFogDensity = 0.03f; // 목표 포그 밀도
     public float targetHaloStrength = 0.267f; // 목표 할로 강도
     public float targetFlareFadeSpeed = 3f; // 목표 플레어 페이드 속도
@@ -70,14 +70,20 @@ public class InsideAssist : MonoBehaviour
 
         if (SaveData_Manager.Instance.GetIntInside() == 1)
         {
+            Debug.Log("내면에서 죽었었습니다.");
+
             StartCoroutine(StartInsideAgain());
+
+            obj_Ggilick_CutScene_1.SetActive(false);
+            obj_Ggilick_Beetles.SetActive(true);
         }
         else if (SaveData_Manager.Instance.GetIntInside() == 2)
         {
-            AnimateLightIntensity(light_1, 0f, 3f);
-            AnimateLightIntensity(light_2, 0f, 3f);
-            AnimateLightIntensity(light_3, 0.8f, 1.5f);
-            AnimateLightIntensity(light_4, 0.38f, 1.5f);
+            AnimateLightIntensity(Light_SunTuroial, 0f, 3f);
+            AnimateLightIntensity(Light_SunMeet1, 0.8f, 3f);
+            AnimateLightIntensity(Light_SunMeet2, 0.38f, 3f);
+
+
             LightSettingNew(2f);
             GgilcikBad.SetActive(false);
         }
@@ -95,7 +101,7 @@ public class InsideAssist : MonoBehaviour
     {
         Debug.Log("실행됨");
 
-        AnimateLightIntensity(light_1,0f, 2f);
+        //AnimateLightIntensity(light_1,0f, 2f);
         GameAssistManager.Instance.AnimateAmbientIntensity(0.3f, 1.7f);
         GameAssistManager.Instance.AnimateFogDensity(0f, 1.7f);
       
@@ -131,7 +137,7 @@ public class InsideAssist : MonoBehaviour
 
         // #. 여기가 포그랑 라이팅 조절하는 구간임
         // #. 여기가 포그랑 라이팅 조절하는 구간임
-        AnimateLightIntensity(light_1, 0f, 2f);
+        //AnimateLightIntensity(light_1, 0f, 2f);
         GameAssistManager.Instance.AnimateAmbientIntensity(0.3f, 1.7f);
         GameAssistManager.Instance.AnimateFogDensity(0f, 1.7f);
       
@@ -239,10 +245,10 @@ public class InsideAssist : MonoBehaviour
 
         // #. 여기가 포그랑 라이팅 조절하는 구간임
         // #. 여기가 포그랑 라이팅 조절하는 구간임
-        AnimateLightIntensity(light_1, 0f, 3f);
-        AnimateLightIntensity(light_2, 0f, 3f);
-        AnimateLightIntensity(light_3, 0.8f, 1.5f);
-        AnimateLightIntensity(light_4, 0.38f, 1.5f);
+        AnimateLightIntensity(Light_SunTuroial, 0f, 3f);
+        AnimateLightIntensity(Light_SunMeet1, 0.8f, 3f);
+        AnimateLightIntensity(Light_SunMeet2, 0.38f, 3f);
+
         LightSettingNew(2f);
 
 
@@ -299,7 +305,7 @@ public class InsideAssist : MonoBehaviour
 
         // Fog 설정
         RenderSettings.fogMode = FogMode.ExponentialSquared;
-        DOTween.To(() => RenderSettings.fogColor, x => RenderSettings.fogColor = x, targetFogColor, duration);
+        // DOTween.To(() => RenderSettings.fogColor, x => RenderSettings.fogColor = x, targetFogColor, duration);
         DOTween.To(() => RenderSettings.fogDensity, x => RenderSettings.fogDensity = x, targetFogDensity, duration);
 
         // 할로 및 플레어 설정

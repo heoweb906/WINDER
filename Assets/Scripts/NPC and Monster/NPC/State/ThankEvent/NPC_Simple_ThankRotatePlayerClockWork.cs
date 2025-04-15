@@ -49,6 +49,8 @@ public class NPC_Simple_ThankRotatePlayerClockWork : NPC_Simple_State
                 npc.GetAnimator().SetTrigger("ddddStop");
                 npc.GetAnimator().SetBool("Bool_Walk", false);
 
+                machine.OnStateChange(machine.IDLEState);
+
                 npc.RotatePlayerTaeyub();
             }
             else

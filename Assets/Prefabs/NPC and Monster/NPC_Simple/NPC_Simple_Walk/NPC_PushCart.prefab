@@ -780,6 +780,7 @@ MonoBehaviour:
   clockWorkType: 2
   plusClockWorksList: []
   isSingleEvent: 1
+  fDistanceOffset: 0
   npcHeart: {fileID: 3300011797950998586}
   NPC: {fileID: 5336055221476429554}
 --- !u!1 &1933729939242090661
@@ -1266,6 +1267,7 @@ MonoBehaviour:
   clockWorkType: 1
   plusClockWorksList: []
   isSingleEvent: 1
+  fDistanceOffset: 0
   npcHeart: {fileID: 3300011797950998586}
   NPC: {fileID: 0}
 --- !u!1 &4098421101130647454
@@ -1540,6 +1542,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bSad: 0
   bWalking: 1
+  iIDLE_Num: 0
   iAnimWalking: 10
   bClockWorkEventNPC: 0
   bActionEventNPC: 0
@@ -1548,6 +1551,7 @@ MonoBehaviour:
   npcHeart: {fileID: 3300011797950998586}
   npcClockWork: {fileID: 6945438800966360120}
   checkPoints: []
+  avoid_Num: 0
 --- !u!95 &8301288917657456288
 Animator:
   serializedVersion: 5
@@ -1638,7 +1642,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0
+  m_BaseOffset: -0.04
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!1 &5369059858074470425

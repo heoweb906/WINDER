@@ -301,7 +301,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: NPC_TaeYub_RotateHalf
-  m_Speed: -1
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -3897775710711397197}
@@ -314,8 +314,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 1827226128182048838, guid: 0fb84fe26bfef3c4a8518e377fbe7d82,
-    type: 3}
+  m_Motion: {fileID: 7400000, guid: 6fe10e587d8127a4089ce2d30320fe20, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -4189,7 +4188,7 @@ AnimatorStateMachine:
     m_Position: {x: -120, y: 120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8087615840635372189}
-    m_Position: {x: -220, y: 320, z: 0}
+    m_Position: {x: -240, y: 320, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7792647620514605947}
     m_Position: {x: 20, y: 320, z: 0}
