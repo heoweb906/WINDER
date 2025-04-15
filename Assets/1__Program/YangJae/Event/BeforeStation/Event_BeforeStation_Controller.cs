@@ -28,9 +28,11 @@ public class Event_BeforeStation_Controller : MonoBehaviour
 
 
     [SerializeField]
-    private GameObject originDropBox;
+    private GameObject originDropBox_1;
     [SerializeField]
-    private Transform originDropBoxTransform;
+    private GameObject originDropBox_2;
+    [SerializeField]
+    private GameObject originDropBox_3;
     [SerializeField]
     private ParsArea_DropBox replacedDropBox_1;
     [SerializeField]
@@ -41,7 +43,6 @@ public class Event_BeforeStation_Controller : MonoBehaviour
     private void Start(){
         mainNPC.GetAnimator().SetLayerWeight(1,1);
     }
-
     public void StartEvent()
     {
         // 일반 NPC 이동 처리
@@ -57,10 +58,34 @@ public class Event_BeforeStation_Controller : MonoBehaviour
             MoveNPCToTarget(npc, target.position, npcMoveSpeed, () => npc.SetAvoidState());
         }
 
+        // 박스들 위아래로 움직이기
+        if (originDropBox_1 != null)
+        {
+            Vector3 originalPos = originDropBox_1.transform.position;
+            originDropBox_1.transform.DOMoveY(originalPos.y + 0.1f, 0.7f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+        }
+        
+        if (originDropBox_2 != null)
+        {
+            Vector3 originalPos = originDropBox_2.transform.position;
+            originDropBox_2.transform.DOMoveY(originalPos.y + 0.1f, 0.7f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+        }
+        
+        if (originDropBox_3 != null)
+        {
+            Vector3 originalPos = originDropBox_3.transform.position;
+            originDropBox_3.transform.DOMoveY(originalPos.y + 0.1f, 0.7f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+        }
+
         // 메인 NPC 이동 처리
         if(mainNPC != null && mainNPCTarget != null)
         {
             MoveNPCToTarget(mainNPC, mainNPCTarget.position, mainNPCMoveSpeed, () => {
+                // 박스 움직임 중지
+                DOTween.Kill(originDropBox_1.transform);
+                DOTween.Kill(originDropBox_2.transform);
+                DOTween.Kill(originDropBox_3.transform);
+                
                 mainNPC.SetDropState();
                 mainNPC.GetAnimator().SetBool("Bool_Walk", false);
                 DOTween.To(() => mainNPC.GetAnimator().GetLayerWeight(1), x => mainNPC.GetAnimator().SetLayerWeight(1, x), 0, 0.3f);
@@ -132,9 +157,19 @@ public class Event_BeforeStation_Controller : MonoBehaviour
 
     public void ReplaceDropBox(){
         replacedDropBox_1.gameObject.SetActive(true);
-        // replacedDropBox.transform.position = originDropBoxTransform.position;
-        // replacedDropBox.transform.rotation = originDropBox.transform.rotation;
-        originDropBox.SetActive(false);
+        replacedDropBox_2.gameObject.SetActive(true);
+        replacedDropBox_3.gameObject.SetActive(true);
+
+        replacedDropBox_1.transform.position = originDropBox_1.transform.position;
+        replacedDropBox_1.transform.rotation = originDropBox_1.transform.rotation;
+        replacedDropBox_2.transform.position = originDropBox_2.transform.position;
+        replacedDropBox_2.transform.rotation = originDropBox_2.transform.rotation;
+        replacedDropBox_3.transform.position = originDropBox_3.transform.position;
+        replacedDropBox_3.transform.rotation = originDropBox_3.transform.rotation;
+        
+        originDropBox_1.SetActive(false);
+        originDropBox_2.SetActive(false);
+        originDropBox_3.SetActive(false);
     }
 
     private int currentHelperCount = 0;
@@ -272,12 +307,78 @@ public class Event_BeforeStation_Controller : MonoBehaviour
             replacedDropBox_3.RemoveItem(item);
         }
     }
-
+    public void AddForecItems(){
+        StartCoroutine(AddForceItemsSequentially());
+    }
+    
+    private IEnumerator AddForceItemsSequentially(){
+        // 1번 박스 아이템들에 힘 적용
+        List<CarriedObject> items = replacedDropBox_1.GetItems();
+        
+        float zForce = 0f;
+        float xForce = 0f;
+        foreach(CarriedObject item in items){
+            // 아이템의 Rigidbody 설정 변경
+            Rigidbody rb = item.GetComponent<Rigidbody>();
+            if(rb != null){
+                rb.isKinematic = false;
+                
+                // 부모 해제
+                item.transform.parent = null;
+                
+                // -x, y, z 방향으로 힘 적용 (z축은 점점 감소)
+                rb.AddForce(new Vector3(-30f + xForce, 15f, 50f + zForce), ForceMode.Impulse);
+                
+                // 다음 아이템은 z축 힘을 조금 더 감소시킴
+                zForce -= 15f;
+                xForce -= 5f;
+            }
+        }
+        
+        // 0.5초 대기
+        yield return new WaitForSeconds(0.05f);
+        
+        // 2번 박스 아이템들에 힘 적용
+        items = replacedDropBox_2.GetItems();
+        
+        zForce = 0f;
+        xForce = 0f;
+        foreach(CarriedObject item in items){
+            Rigidbody rb = item.GetComponent<Rigidbody>();
+            if(rb != null){
+                rb.isKinematic = false;
+                item.transform.parent = null;
+                rb.AddForce(new Vector3(-32f + xForce, 20f, 20f + zForce), ForceMode.Impulse);
+                zForce -= 15f;
+                xForce -= 3f;
+            }
+        }
+        
+        // 0.5초 대기
+        yield return new WaitForSeconds(0.05f);
+        
+        // 3번 박스 아이템들에 힘 적용
+        items = replacedDropBox_3.GetItems();
+        
+        zForce = 0f;
+        xForce = 0f;
+        foreach(CarriedObject item in items){
+            Rigidbody rb = item.GetComponent<Rigidbody>();
+            if(rb != null){
+                rb.isKinematic = false;
+                item.transform.parent = null;
+                rb.AddForce(new Vector3(-25f + xForce, 18f, 0f + zForce), ForceMode.Impulse);
+                zForce -= 12f;
+                xForce -= 8f;
+            }
+        }
+    }
 
     public void AnimationOnTransition(){
+        AddForecItems();
     }
 
     public void AnimationOnExit(){
-        // ReplaceDropBox();
+        ReplaceDropBox();
     }
 }
