@@ -339,7 +339,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.32, y: 2.05, z: 3.62}
+  m_Size: {x: 1.32, y: 3, z: 3.62}
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!54 &2077127587184589207
 Rigidbody:
@@ -366,7 +366,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 116
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &8737438576164761804
 MonoBehaviour:
@@ -393,17 +393,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 133e7ead496e17e4fa674ad1c8280990, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  iCarType: 1
   trafficLight: {fileID: 0}
   bMoveActive: 0
   bDirection: 0
-  maxSpeed: 12
+  maxSpeed: 7
   safeDistance: 6
   deceleration: 45
   acceleration: 15
   justRotates:
   - {fileID: 3540493582148269636}
   - {fileID: 4943137844970469313}
-  CarFrame: {fileID: 594944241110554640, guid: c6b1dad7bebd4494890946bcb84c0689, type: 3}
+  CarFrame: {fileID: 2015243624852822212}
 --- !u!1 &7020347259942120923
 GameObject:
   m_ObjectHideFlags: 0

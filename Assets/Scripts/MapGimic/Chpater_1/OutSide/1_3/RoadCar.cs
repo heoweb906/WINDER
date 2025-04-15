@@ -5,6 +5,8 @@ using DG.Tweening;
 
 public class RoadCar : MonoBehaviour
 {
+    public int iCarType;
+
     [HideInInspector] public TrafficLight trafficLight; // 교통 신호
     public bool bMoveActive;
     public bool bDirection;
@@ -18,7 +20,7 @@ public class RoadCar : MonoBehaviour
     private float currentSpeed; // 현재 속력
 
     public JustRotate[] justRotates;  // 타이어들 회전 관리
-    public Transform CarFrame;
+    public GameObject CarFrame;
 
     private void Awake()
     {
@@ -45,7 +47,7 @@ public class RoadCar : MonoBehaviour
     private void MoveCar()
     {
         RaycastHit hit;
-        Vector3 rayStart = transform.position + Vector3.up * 2; // Ray 발사 위치를 살짝 올려줌
+        Vector3 rayStart = transform.position + Vector3.up * 1.5f; // Ray 발사 위치를 살짝 올려줌
 
         // 충돌이 감지되면 감속
         if (Physics.Raycast(rayStart, transform.forward, out hit, safeDistance))
@@ -103,7 +105,7 @@ public class RoadCar : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Vector3 rayStart = transform.position + Vector3.up * 2;
+        Vector3 rayStart = transform.position + Vector3.up * 1.5f;
         Gizmos.DrawLine(rayStart, rayStart + transform.forward * safeDistance);
     }
 

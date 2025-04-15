@@ -145,12 +145,6 @@ public class NPC_Simple : MonoBehaviour
     {
         machine?.OnStateUpdate();
 
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            machine.OnStateChange(machine.ThankState_RotatePlayerClockWork);
-        }
-
-        
 
     }
 
@@ -281,7 +275,7 @@ public class NPC_Simple : MonoBehaviour
         GameAssistManager.Instance.GetPlayerScript().playerAnim.SetTrigger("doClockWork_RotateStart");
 
 
-        yield return new WaitForSeconds(2.6f);
+        yield return new WaitForSeconds(1.8f);
 
         anim.SetTrigger("doRoateTaeyubEnd");
         machine.OnStateChange(machine.IDLEState);
