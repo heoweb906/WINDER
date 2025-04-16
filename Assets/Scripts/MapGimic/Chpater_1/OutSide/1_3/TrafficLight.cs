@@ -88,7 +88,7 @@ public class TrafficLight : ClockBattery, IPartsOwner
     public override void TurnOnObj()
     {
         base.TurnOnObj();
-        RotateObject((int)fCurClockBattery + 2);
+        RotateObject((int)fCurClockBattery + 2, true);
 
         if(bInClockWork)
         {
@@ -128,8 +128,8 @@ public class TrafficLight : ClockBattery, IPartsOwner
             while (fCurClockBattery > 0)
             {
                 yield return new WaitForSeconds(1.0f);
-                fCurClockBattery -= 1;
-
+  
+                 
                 //fCurClockBattery -= Time.deltaTime;
                 //yield return null;
             }
@@ -193,7 +193,7 @@ public class TrafficLight : ClockBattery, IPartsOwner
         RoadCar roadCar = car.GetComponent<RoadCar>();
         roadCar.trafficLight = this;
         roadCar.bMoveActive = true;
-        roadCar.bDirection = (ranNum_posotion < 3);
+        roadCar.bDirection = (ranNum_posotion < 2);
 
         if (ranNum_posotion < 3)
             spawnedCars_1.Add(car);

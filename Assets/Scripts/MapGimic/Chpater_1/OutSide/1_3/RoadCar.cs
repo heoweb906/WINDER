@@ -42,42 +42,57 @@ public class RoadCar : MonoBehaviour
                 RemoveCar();
             }
         }
+     
     }
 
     private void MoveCar()
     {
-        RaycastHit hit;
-        Vector3 rayStart = transform.position + Vector3.up * 1.5f; // Ray 발사 위치를 살짝 올려줌
+        bool isCarAhead = false;
 
-        // 충돌이 감지되면 감속
-        if (Physics.Raycast(rayStart, transform.forward, out hit, safeDistance))
+        // 첫 번째 Ray
+        Vector3 rayStart1 = transform.position + Vector3.up * 0.5f;
+        if (Physics.Raycast(rayStart1, transform.forward, out RaycastHit hit1, safeDistance))
         {
-            if (hit.collider.GetComponent<RoadCar>() != null)
+            if (hit1.collider.GetComponent<RoadCar>() != null)
             {
-                // 안전 거리 확보를 위해 서서히 감속
-                currentSpeed -= deceleration * Time.fixedDeltaTime;
-                currentSpeed = Mathf.Max(currentSpeed, 0);
+                isCarAhead = true;
             }
+        }
+
+        // 두 번째 Ray
+        Vector3 rayStart2 = transform.position + Vector3.up * 2f;
+        if (Physics.Raycast(rayStart2, transform.forward, out RaycastHit hit2, safeDistance))
+        {
+            if (hit2.collider.GetComponent<RoadCar>() != null)
+            {
+                isCarAhead = true;
+            }
+        }
+
+        // 감속 또는 가속
+        if (isCarAhead)
+        {
+            currentSpeed -= deceleration * Time.fixedDeltaTime;
+            currentSpeed = Mathf.Max(currentSpeed, 0);
         }
         else
         {
-            // 안전 거리가 확보되면 가속
             if (currentSpeed < maxSpeed)
             {
                 currentSpeed += acceleration * Time.fixedDeltaTime;
             }
         }
 
-        // MovePosition을 사용해 오브젝트 이동
+        // 이동 처리
         Vector3 targetPosition = transform.position + transform.forward * currentSpeed * Time.fixedDeltaTime;
         rb.MovePosition(targetPosition);
 
-        // JustRotate 배열의 각 요소 회전 속도 업데이트
+        // 바퀴 회전 처리
         foreach (var rotate in justRotates)
         {
             if (rotate != null)
             {
-                rotate.rotationSpeed = currentSpeed * 10f; // 속도에 비례하도록 조정 (10f는 비율 조정값)
+                rotate.rotationSpeed = currentSpeed * 10f;
             }
         }
     }
@@ -105,8 +120,14 @@ public class RoadCar : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Vector3 rayStart = transform.position + Vector3.up * 1.5f;
-        Gizmos.DrawLine(rayStart, rayStart + transform.forward * safeDistance);
+
+        // 첫 번째 Ray (0.5f 높이)
+        Vector3 rayStart1 = transform.position + Vector3.up * 0.5f;
+        Gizmos.DrawLine(rayStart1, rayStart1 + transform.forward * safeDistance);
+
+        // 두 번째 Ray (1.5f 높이)
+        Vector3 rayStart2 = transform.position + Vector3.up * 2f;
+        Gizmos.DrawLine(rayStart2, rayStart2 + transform.forward * safeDistance);
     }
 
 
