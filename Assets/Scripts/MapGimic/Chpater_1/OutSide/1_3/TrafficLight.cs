@@ -31,10 +31,9 @@ public class TrafficLight : ClockBattery, IPartsOwner
     public int poolSize = 20; // 초기 자동차 풀 크기
 
     [Header("차량 관리")] 
-    public GameObject[] roadCars;
-    public Transform[] positions_carCreate;
-    public Transform[] positions_carCreate_2;
-    public Transform[] postions_end;
+    public GameObject[] roadCars;           
+    public Transform[] positions_carCreate; 
+    public Transform[] postions_end;        
 
 
     private float[] positionCooldowns; // 각 위치의 쿨다운 타이머
@@ -43,7 +42,7 @@ public class TrafficLight : ClockBattery, IPartsOwner
     public int iMaxCarCnt_1; // 하나의 도로에서 생성될 수 있는 최대 차량 수
     private float spawnTimer_1 = 0f; // 타이머
     public List<GameObject> spawnedCars_1 = new List<GameObject>(); // 생성된 자동차를 담을 리스트
-    public List<GameObject> spawnedCars_2 = new List<GameObject>(); 
+    public List<GameObject> spawnedCars_2 = new List<GameObject>();
 
 
     private Coroutine nowCoroutine;
@@ -52,6 +51,8 @@ public class TrafficLight : ClockBattery, IPartsOwner
     [Header("파츠 관련")] 
     public Transform partsTransform;
     public Transform partsInteractTransform;
+
+    public CrossWayAssist crossWayAssist;
 
     private void Awake()
     {
@@ -64,11 +65,6 @@ public class TrafficLight : ClockBattery, IPartsOwner
 
     private void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.T))
-        //{
-        //    InsertClockWorkPiece(testObj);
-        //}
-
         // 자동차 관련 부분
         spawnTimer_1 += Time.deltaTime;
         if (spawnedCars_1.Count < iMaxCarCnt_1 && bTrafficLightOnOff) // 생성된 자동차가 100대 미만일 때
@@ -88,7 +84,17 @@ public class TrafficLight : ClockBattery, IPartsOwner
     public override void TurnOnObj()
     {
         base.TurnOnObj();
-        RotateObject((int)fCurClockBattery + 2, true);
+
+        if(bInClockWork)
+        {
+            RotateObject((int)fCurClockBattery + 2, true);
+
+            Invoke(nameof(AssignCrossWayNPCs_), 7f);
+        }
+        else
+        {
+            RotateObject((int)fCurClockBattery + 2);
+        }
 
         if(bInClockWork)
         {
@@ -99,15 +105,20 @@ public class TrafficLight : ClockBattery, IPartsOwner
             }
         }
 
-        nowCoroutine = StartCoroutine(ChangeToYellowAndRed());
+        nowCoroutine = StartCoroutine(ChangeToYellowAndRed()); 
     }
-
     public override void TurnOffObj()
     {
         base.TurnOffObj();
 
         if (nowCoroutine != null) StopCoroutine(nowCoroutine);
         ChangeTrafficColor(2);
+    }
+
+
+    private void AssignCrossWayNPCs_()
+    {
+        crossWayAssist.AssignCrossWayNPCs();
     }
 
 
@@ -134,18 +145,24 @@ public class TrafficLight : ClockBattery, IPartsOwner
                 //yield return null;
             }
 
-            TurnOffObj();
+
+
+        
+
+
+
+            //TurnOffObj();
         }
         else
         {
-            yield return new WaitForSeconds(4.1f);
+            yield return new WaitForSeconds(6f);
             TurnOffObj();
         }
 
-           
+
     }
 
-   
+
 
     // #. 신호등 불 교체 함수 
     // 0 = 빨간불, 1 = 노란불, 2 = 초록불
@@ -195,7 +212,7 @@ public class TrafficLight : ClockBattery, IPartsOwner
         roadCar.bMoveActive = true;
         roadCar.bDirection = (ranNum_posotion < 2);
 
-        if (ranNum_posotion < 3)
+        if (ranNum_posotion < 2)
             spawnedCars_1.Add(car);
         else
             spawnedCars_2.Add(car);

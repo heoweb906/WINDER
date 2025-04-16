@@ -102,7 +102,7 @@ public class RoadCar : MonoBehaviour
     {
         if (CarFrame != null) DOTween.Kill(CarFrame);
         DOTween.Kill(gameObject);
-
+        DOTween.Kill(CarFrame.transform);
 
         // 리스트에서 이 자동차 제거
         if (bDirection)
