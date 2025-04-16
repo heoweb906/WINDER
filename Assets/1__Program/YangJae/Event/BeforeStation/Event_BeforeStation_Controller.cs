@@ -45,6 +45,9 @@ public class Event_BeforeStation_Controller : MonoBehaviour
     }
     public void StartEvent()
     {
+        foreach(NPC_Simple npc in npcs){
+            npc.gameObject.SetActive(true);
+        }
         // 일반 NPC 이동 처리
         int count = Mathf.Min(npcs.Count, targets_1.Count);
         for(int i = 0; i < count; i++)
@@ -85,6 +88,9 @@ public class Event_BeforeStation_Controller : MonoBehaviour
                 DOTween.Kill(originDropBox_1.transform);
                 DOTween.Kill(originDropBox_2.transform);
                 DOTween.Kill(originDropBox_3.transform);
+                originDropBox_1.transform.localPosition = new Vector3(-0.08f,0,0);
+                originDropBox_2.transform.localPosition = new Vector3(-0.08f,0,0);
+                originDropBox_3.transform.localPosition = new Vector3(-0.08f,0,0);
                 
                 mainNPC.SetDropState();
                 mainNPC.GetAnimator().SetBool("Bool_Walk", false);
@@ -102,23 +108,57 @@ public class Event_BeforeStation_Controller : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        GoToPickUp(npcs[0], replacedDropBox_1);
+        MoveNPCToTarget(npcs[0], targets_2[0].position, npcMoveSpeed, () => {
+            npcs[0].gameObject.SetActive(false);
+        });
+        MoveNPCToTarget(npcs[3], targets_2[3].position, npcMoveSpeed, () => {
+            npcs[3].gameObject.SetActive(false);
+        });
 
         yield return new WaitForSeconds(2f);
 
-        GoToPickUp(npcs[6], replacedDropBox_2);
+        MoveNPCToTarget(npcs[6], targets_2[6].position, npcMoveSpeed, () => {
+            npcs[6].gameObject.SetActive(false);
+        MoveNPCToTarget(npcs[8], targets_2[8].position, npcMoveSpeed, () => {
+            npcs[8].gameObject.SetActive(false);
+        });
+        });
 
         yield return new WaitForSeconds(2f);
 
-        GoToPickUp(npcs[10], replacedDropBox_3);
+        MoveNPCToTarget(npcs[10], targets_2[10].position, npcMoveSpeed, () => {
+            npcs[10].gameObject.SetActive(false);
+        MoveNPCToTarget(npcs[4], targets_2[4].position, npcMoveSpeed, () => {
+            npcs[4].gameObject.SetActive(false);
+        });
+        });
 
         yield return new WaitForSeconds(2f);
 
-        GoToPickUp(npcs[9], replacedDropBox_2);
+        MoveNPCToTarget(npcs[9], targets_2[9].position, npcMoveSpeed, () => {
+            npcs[9].gameObject.SetActive(false);
+        MoveNPCToTarget(npcs[7], targets_2[7].position, npcMoveSpeed, () => {
+            npcs[7].gameObject.SetActive(false);
+        });
+        MoveNPCToTarget(npcs[1], targets_2[1].position, npcMoveSpeed, () => {
+            npcs[1].gameObject.SetActive(false);
+        });
+        });
 
         yield return new WaitForSeconds(2f);
 
-        GoToPickUp(npcs[11], replacedDropBox_3);
+        MoveNPCToTarget(npcs[11], targets_2[11].position, npcMoveSpeed, () => {
+            npcs[11].gameObject.SetActive(false);
+        MoveNPCToTarget(npcs[12], targets_2[12].position, npcMoveSpeed, () => {
+            npcs[12].gameObject.SetActive(false);
+        });
+        MoveNPCToTarget(npcs[5], targets_2[5].position, npcMoveSpeed, () => {
+            npcs[5].gameObject.SetActive(false);
+        });
+        MoveNPCToTarget(npcs[2], targets_2[2].position, npcMoveSpeed, () => {
+            npcs[2].gameObject.SetActive(false);
+        });
+        });
     }
 
 
@@ -126,6 +166,7 @@ public class Event_BeforeStation_Controller : MonoBehaviour
 
     private void MoveNPCToTarget(NPC_Simple npc, Vector3 target, float speed, System.Action onComplete = null)
     {
+        npc.GetAnimator().SetBool("Bool_Walk", true);
         Transform npcTransform = npc.transform;
 
         // 타겟 방향을 계산하여 y축만 회전
@@ -244,6 +285,8 @@ public class Event_BeforeStation_Controller : MonoBehaviour
             mainNPC.GetAnimator().SetTrigger("doThankyouAction");
         };
 
+
+
         
         yield return new WaitForSeconds(2f);
         targetRotation = GameAssistManager.Instance.GetPlayer().transform.position - mainNPC.transform.position;
@@ -295,6 +338,30 @@ public class Event_BeforeStation_Controller : MonoBehaviour
 
         
     }
+
+    public IEnumerator GoHomeEventCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+
+        GoToPickUp(npcs[0], replacedDropBox_1);
+
+        yield return new WaitForSeconds(2f);
+
+        GoToPickUp(npcs[6], replacedDropBox_2);
+
+        yield return new WaitForSeconds(2f);
+
+        GoToPickUp(npcs[10], replacedDropBox_3);
+
+        yield return new WaitForSeconds(2f);
+
+        GoToPickUp(npcs[9], replacedDropBox_2);
+
+        yield return new WaitForSeconds(2f);
+
+        GoToPickUp(npcs[11], replacedDropBox_3);
+    }
+
 
     public void RemoveItems(CarriedObject item){
         if(replacedDropBox_1.GetItems().Contains(item)){
