@@ -1,12 +1,11 @@
-using Keto;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ScanMaster_Last : MonoBehaviour
 {
-    public ColorType[] ColorCorrects;       // ScanMasterÀÇ Á¤´ä ÄÃ·¯
-    public Scanner_Last[] scanners;              // °¢ ½ºÅ×ÀÌÁöÀÇ Scanner 
+    public ColorType[] ColorCorrects;       // ScanMasterï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½
+    public Scanner_Last[] scanners;              // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Scanner 
 
     private bool bWork = false;
 
@@ -21,7 +20,7 @@ public class ScanMaster_Last : MonoBehaviour
     }
 
 
-    // ½ºÄ³³Ê À§ÀÇ ¿ÀºêÁ§Æ®µéÀÇ »ö»óÀÌ Á¤´ä°ú ÀÏÄ¡ÇÏ´ÂÁö °Ë»çÇÏ´Â ÇÔ¼ö
+    // ï¿½ï¿½Ä³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ï´ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
     private bool BoolCheckObjOnScanner()
     {
         for (int i = 0; i < ColorCorrects.Length; i++)
@@ -47,7 +46,7 @@ public class ScanMaster_Last : MonoBehaviour
 
 
 
-    // ½ºÄ³³Ê ¸¶Áö¸· ¿¬Ãâ ÇÔ¼ö
+    // ï¿½ï¿½Ä³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     private void DirectLastScanner()
     {
         foreach (var scanner in scanners)
@@ -60,7 +59,7 @@ public class ScanMaster_Last : MonoBehaviour
 
                 if (dissolveTest != null)
                 {
-                    Debug.Log("Á¤»óÀûÀ¸·Î ½ÇÇàµÊ");
+                    Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½");
                     dissolveTest.Reset();
                     dissolveTest.Dissolve();
                 }
