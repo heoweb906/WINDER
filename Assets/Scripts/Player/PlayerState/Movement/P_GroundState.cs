@@ -227,7 +227,7 @@ public class P_GroundState : PlayerMovementState
                 Vector3 directionToLockPos = player.directionLockPos.position - player.transform.position;
                 directionToLockPos.y = 0;
                 float dot = Vector3.Dot(player.curDirection.normalized, directionToLockPos.normalized);
-                if (dot < 0.7f)
+                if (dot < 0.4f)
                 {
                     player.curDirection = Vector3.zero;
                 }

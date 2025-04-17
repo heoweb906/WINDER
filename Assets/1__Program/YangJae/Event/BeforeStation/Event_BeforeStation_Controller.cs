@@ -456,4 +456,38 @@ public class Event_BeforeStation_Controller : MonoBehaviour
     public void AnimationOnExit(){
         ReplaceDropBox();
     }
+
+    private GameObject curBox;
+    private int curBoxIndex = 1;
+    private Transform boxPos;
+
+    public void PickUpItem_OnTransition()
+    {
+        curBox.transform.parent = boxPos;
+        curBox.transform.DOLocalMove(Vector3.zero, 0.3f);
+    }
+
+    public void PickUpItem_OnExit()
+    {
+        DOTween.To(() => mainNPC.GetAnimator().GetLayerWeight(1), x => mainNPC.GetAnimator().SetLayerWeight(1, x), 1, 0.3f);
+    }
+
+    public void PutDownItem_OnTransition()
+    {   
+        GameObject targetBox = null;
+        if(curBoxIndex == 1){
+            targetBox = replacedDropBox_2.gameObject;
+        }
+        else if(curBoxIndex == 2){
+            targetBox = replacedDropBox_3.gameObject;
+        }
+        curBox.transform.parent = targetBox.transform;
+        DOTween.To(() => mainNPC.GetAnimator().GetLayerWeight(1), x => mainNPC.GetAnimator().SetLayerWeight(1, x), 0, 0.3f);
+    }
+
+    public void PutDownItem_OnExit()
+    {
+        curBox.transform.DOLocalMove(Vector3.zero, 0.3f);
+    }
+
 }
