@@ -40,6 +40,9 @@ public class Event_BeforeStation_Controller : MonoBehaviour
     [SerializeField]
     private ParsArea_DropBox replacedDropBox_3;
 
+    [SerializeField]
+    private GameObject wall;
+
     private void Start(){
         mainNPC.GetAnimator().SetLayerWeight(1,1);
     }
@@ -259,6 +262,8 @@ public class Event_BeforeStation_Controller : MonoBehaviour
         targetRotation = GameAssistManager.Instance.GetPlayer().transform.position - mainNPC.transform.position;
         mainNPC.transform.DORotate(new Vector3(0,Quaternion.LookRotation(targetRotation).eulerAngles.y,0), 1f).onComplete = () => {
             mainNPC.RotatePlayerTaeyub();
+
+            StartCoroutine(GoHomeEventCoroutine());
         };
 
     }
@@ -271,7 +276,7 @@ public class Event_BeforeStation_Controller : MonoBehaviour
         if(item == null){
             if(replacedDropBox_1.GetItems().Count == 0 && replacedDropBox_2.GetItems().Count == 0 && replacedDropBox_3.GetItems().Count == 0 && endPickUp == false){
                 EndPickUpEvent();
-                GoHomeEventCoroutine();
+                wall.SetActive(false);
             }
             return;
         } 
@@ -310,7 +315,7 @@ public class Event_BeforeStation_Controller : MonoBehaviour
     public IEnumerator GoHomeEventCoroutine()
     {
 
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(10f);
 
         MoveNPCToTarget(npcs[0], targets_2[0].position, npcMoveSpeed, () => {
             npcs[0].gameObject.SetActive(false);
