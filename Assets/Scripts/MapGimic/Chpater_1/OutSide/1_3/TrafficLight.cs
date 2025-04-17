@@ -116,6 +116,7 @@ public class TrafficLight : ClockBattery, IPartsOwner
     }
 
 
+
     private void AssignCrossWayNPCs_()
     {
         crossWayAssist.AssignCrossWayNPCs();
@@ -158,8 +159,6 @@ public class TrafficLight : ClockBattery, IPartsOwner
             yield return new WaitForSeconds(6f);
             TurnOffObj();
         }
-
-
     }
 
 
@@ -186,7 +185,6 @@ public class TrafficLight : ClockBattery, IPartsOwner
         if(index == 0) TrafficTwoClolors[1].SetActive(true);
         else TrafficTwoClolors[0].SetActive(true);
     }
-
 
 
 

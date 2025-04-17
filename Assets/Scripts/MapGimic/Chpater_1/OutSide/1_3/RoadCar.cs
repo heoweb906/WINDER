@@ -22,12 +22,16 @@ public class RoadCar : MonoBehaviour
     public JustRotate[] justRotates;  // 타이어들 회전 관리
     public GameObject CarFrame;
 
+
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         currentSpeed = maxSpeed; // 초기 속력을 최고 속력으로 설정
         if (CarFrame != null) StartShakeEffect();
     }
+
+
 
     private void FixedUpdate()
     {
@@ -42,8 +46,9 @@ public class RoadCar : MonoBehaviour
                 RemoveCar();
             }
         }
-     
     }
+
+
 
     private void MoveCar()
     {
