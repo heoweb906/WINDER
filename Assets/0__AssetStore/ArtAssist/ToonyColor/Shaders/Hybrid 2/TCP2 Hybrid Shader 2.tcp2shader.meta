@@ -9,7 +9,7 @@ ScriptedImporter:
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 7f24c69ecbea31d49bb0044f94b6c8ea, type: 3}
   detectedRenderPipeline: Universal Render Pipeline
-  strippedLinesCount: 251
+  strippedLinesCount: 255
   shaderSourceCode: "// Toony Colors Pro+Mobile 2\r\n// (c) 2014-2021 Jean Moreno\r\n\r\nShader
     \"Toony Colors Pro 2/Hybrid Shader 2\"\r\n{\r\n\tProperties\r\n\t{\r\n\t\t[Enum(Front,
     2, Back, 1, Both, 0)] _Cull (\"Render Face\", Float) = 2.0\r\n\t\t[TCP2ToggleNoKeyword]
@@ -136,17 +136,20 @@ ScriptedImporter:
     must be compiled with HLSLcc and currently only gles is not using HLSLcc by default\r\n\t\t\t#pragma
     prefer_hlslcc gles\r\n\t\t\t#pragma exclude_renderers d3d11_9x\r\n\t\t\t#pragma
     target 3.0\r\n\r\n\t\t\t#pragma vertex Vertex\r\n\t\t\t#pragma fragment Fragment\r\n\r\n\t\t\t#pragma
-    multi_compile_fog\r\n\t\t\t#pragma multi_compile_instancing\r\n\r\n\t\t\t// -------------------------------------\r\n\t\t\t//
-    Material keywords\r\n\t\t\t#pragma shader_feature_local _ _RECEIVE_SHADOWS_OFF\r\n\r\n\t\t\t//
-    -------------------------------------\r\n\t\t\t// Universal Render Pipeline keywords\r\n\t\t\t#pragma
-    multi_compile _ _MAIN_LIGHT_SHADOWS\r\n\t\t\t#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE\r\n\t\t\t#pragma
-    multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS\r\n\t\t\t#pragma
-    multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS\r\n\t\t\t#pragma multi_compile_fragment
-    _ _SHADOWS_SOFT\r\n\t\t\t// URP 10:\r\n\t\t\t#pragma multi_compile _ _SCREEN_SPACE_OCCLUSION\r\n\t\t\t//
+    multi_compile_fog\r\n\t\t\t#pragma multi_compile_instancing\r\n\r\n\t\t\t#include_with_pragmas
+    \"Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl\"\r\n\r\n\t\t\t//
+    -------------------------------------\r\n\t\t\t// Material keywords\r\n\t\t\t#pragma
+    shader_feature_local _ _RECEIVE_SHADOWS_OFF\r\n\r\n\t\t\t// -------------------------------------\r\n\t\t\t//
+    Universal Render Pipeline keywords\r\n\t\t\t#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+    _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN\r\n\t\t\t#pragma multi_compile
+    _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS\r\n\t\t\t#pragma multi_compile_fragment
+    _ _ADDITIONAL_LIGHT_SHADOWS\r\n\t\t\t#pragma multi_compile_fragment _ _SHADOWS_SOFT\r\n\t\t\t//
+    URP 10:\r\n\t\t\t#pragma multi_compile _ _SCREEN_SPACE_OCCLUSION\r\n\t\t\t//
     URP 12:\r\n\t\t\t#pragma multi_compile_fragment _ _DBUFFER_MRT1 _DBUFFER_MRT2
     _DBUFFER_MRT3\r\n\t\t\t#pragma multi_compile_fragment _ _LIGHT_LAYERS\r\n\t\t\t#pragma
-    multi_compile_fragment _ _LIGHT_COOKIES\r\n\t\t\t//#pragma multi_compile _ _CLUSTERED_RENDERING\r\n\r\n\t\t\t//
-    URP 14:\r\n\t\t\t#pragma multi_compile_fragment _ _WRITE_RENDERING_LAYERS\r\n\r\n\t\t\t//
+    multi_compile_fragment _ _LIGHT_COOKIES\r\n\r\n\t\t\t// URP 14:\r\n\t\t\t#pragma
+    multi_compile_fragment _ _WRITE_RENDERING_LAYERS\r\n\t\t\t#pragma multi_compile
+    _ _FORWARD_PLUS\r\n\t\t\t#pragma multi_compile_fragment _ DEBUG_DISPLAY\r\n\r\n\t\t\t//
     -------------------------------------\r\n\t\t\t// Unity keywords\r\n\t\t\t#pragma
     multi_compile_fragment _ LOD_FADE_CROSSFADE\r\n\r\n\t\t\t//--------------------------------------\r\n\t\t\t//
     Toony Colors Pro 2 keywords\r\n\t\t\t#pragma shader_feature_local TCP2_MOBILE\r\n\t\t\t#pragma
@@ -169,13 +172,13 @@ ScriptedImporter:
     Required to compile gles 2.0 with standard srp library\r\n\t\t\t#pragma prefer_hlslcc
     gles\r\n\t\t\t#pragma exclude_renderers d3d11_9x\r\n\t\t\t#pragma target 2.0\r\n\r\n\t\t\t#pragma
     vertex ShadowPassVertex\r\n\t\t\t#pragma fragment ShadowPassFragment\r\n\r\n\t\t\t#pragma
-    multi_compile_instancing\r\n\t\t\t#pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW\r\n\t\t\t#pragma
-    multi_compile_fragment _ LOD_FADE_CROSSFADE\r\n\r\n\t\t\t#pragma shader_feature_local_fragment
-    _ALPHATEST_ON\r\n\r\n\t\t\t#define SHADOW_CASTER_PASS\r\n\t\t\t#define URP_VERSION
-    14\r\n\t\t\t#include \"TCP2 Hybrid 2 Include.cginc\"\r\n\r\n\t\t\tfloat3 _LightDirection;\r\n\t\t\tfloat3
-    _LightPosition;\r\n\r\n\t\t\tstruct Attributes_Shadow\r\n\t\t\t{\r\n\t\t\t\tfloat4
-    positionOS   : POSITION;\r\n\t\t\t\tfloat3 normalOS     : NORMAL;\r\n\t\t\t\tfloat2
-    texcoord     : TEXCOORD0;\r\n\t\t\t\tUNITY_VERTEX_INPUT_INSTANCE_ID\r\n\t\t\t};\r\n\r\n\t\t\tstruct
+    multi_compile_instancing\r\n\t\t\t#include_with_pragmas \"Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl\"\r\n\r\n\t\t\t#pragma
+    multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW\r\n\t\t\t#pragma multi_compile_fragment
+    _ LOD_FADE_CROSSFADE\r\n\r\n\t\t\t#pragma shader_feature_local_fragment _ALPHATEST_ON\r\n\r\n\t\t\t#define
+    SHADOW_CASTER_PASS\r\n\t\t\t#define URP_VERSION 14\r\n\t\t\t#include \"TCP2 Hybrid
+    2 Include.cginc\"\r\n\r\n\t\t\tfloat3 _LightDirection;\r\n\t\t\tfloat3 _LightPosition;\r\n\r\n\t\t\tstruct
+    Attributes_Shadow\r\n\t\t\t{\r\n\t\t\t\tfloat4 positionOS   : POSITION;\r\n\t\t\t\tfloat3
+    normalOS     : NORMAL;\r\n\t\t\t\tfloat2 texcoord     : TEXCOORD0;\r\n\t\t\t\tUNITY_VERTEX_INPUT_INSTANCE_ID\r\n\t\t\t};\r\n\r\n\t\t\tstruct
     Varyings_Shadow\r\n\t\t\t{\r\n\t\t\t\tfloat2 uv           : TEXCOORD0;\r\n\t\t\t\tfloat4
     positionCS   : SV_POSITION;\r\n\t\t\t};\r\n\r\n\t\t\tfloat4 GetShadowPositionHClip(Attributes_Shadow
     input)\r\n\t\t\t{\r\n\t\t\t\tfloat3 positionWS = TransformObjectToWorld(input.positionOS.xyz);\r\n\t\t\t\tfloat3
@@ -200,9 +203,10 @@ ScriptedImporter:
     Required to compile gles 2.0 with standard srp library\r\n\t\t\t#pragma prefer_hlslcc
     gles\r\n\t\t\t#pragma exclude_renderers d3d11_9x\r\n\t\t\t#pragma target 2.0\r\n\r\n\t\t\t#pragma
     vertex DepthOnlyVertex\r\n\t\t\t#pragma fragment DepthOnlyFragment\r\n\r\n\t\t\t#pragma
-    multi_compile_instancing\r\n\t\t\t#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE\r\n\r\n\t\t\t#pragma
-    shader_feature_local_fragment _ALPHATEST_ON\r\n\r\n\t\t\t#define URP_VERSION
-    14\r\n\t\t\t#include \"TCP2 Hybrid 2 Include.cginc\"\r\n\r\n\t\t\tstruct Attributes_Depth\r\n\t\t\t{\r\n\t\t\t\tfloat4
+    multi_compile_instancing\r\n\t\t\t#include_with_pragmas \"Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl\"\r\n\r\n\t\t\t#pragma
+    multi_compile_fragment _ LOD_FADE_CROSSFADE\r\n\r\n\t\t\t#pragma shader_feature_local_fragment
+    _ALPHATEST_ON\r\n\r\n\t\t\t#define URP_VERSION 14\r\n\t\t\t#include \"TCP2 Hybrid
+    2 Include.cginc\"\r\n\r\n\t\t\tstruct Attributes_Depth\r\n\t\t\t{\r\n\t\t\t\tfloat4
     position     : POSITION;\r\n\t\t\t\tfloat2 texcoord     : TEXCOORD0;\r\n\t\t\t\tUNITY_VERTEX_INPUT_INSTANCE_ID\r\n\t\t\t};\r\n\r\n\t\t\tstruct
     Varyings_Depth\r\n\t\t\t{\r\n\t\t\t\tfloat2 uv           : TEXCOORD0;\r\n\t\t\t\tfloat4
     positionCS   : SV_POSITION;\r\n\t\t\t\tUNITY_VERTEX_INPUT_INSTANCE_ID\r\n\t\t\t\tUNITY_VERTEX_OUTPUT_STEREO\r\n\t\t\t};\r\n\r\n\t\t\tVaryings_Depth
@@ -221,8 +225,9 @@ ScriptedImporter:
     compile gles 2.0 with stanard srp library\r\n\t\t\t#pragma prefer_hlslcc gles\r\n\t\t\t#pragma
     exclude_renderers d3d11_9x\r\n\t\t\t#pragma target 2.0\r\n\r\n\t\t\t#pragma vertex
     DepthNormalsVertex\r\n\t\t\t#pragma fragment DepthNormalsFragment\r\n\r\n\t\t\t#pragma
-    multi_compile_instancing\r\n\t\t\t#pragma multi_compile_fragment _ LOD_FADE_CROSSFADE\r\n\t\t\t#pragma
-    multi_compile_fragment _ _WRITE_RENDERING_LAYERS\r\n\r\n\t\t\t#pragma shader_feature_local_fragment
+    multi_compile_instancing\r\n\t\t\t#include_with_pragmas \"Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl\"\r\n\r\n\t\t\t#pragma
+    multi_compile_fragment _ LOD_FADE_CROSSFADE\r\n\t\t\t#pragma multi_compile_fragment
+    _ _WRITE_RENDERING_LAYERS\r\n\r\n\t\t\t#pragma shader_feature_local_fragment
     _ALPHATEST_ON\r\n\r\n\t\t\t#define DEPTH_NORMALS_PASS\r\n\t\t\t#define URP_VERSION
     14\r\n\t\t\t#include \"TCP2 Hybrid 2 Include.cginc\"\r\n\r\n\t\t\tstruct Attributes_Depth\r\n\t\t\t{\r\n\t\t\t\tfloat4
     position     : POSITION;\r\n\t\t\t\tfloat2 texcoord     : TEXCOORD0;\r\n\t\t\t\tfloat3
@@ -234,18 +239,18 @@ ScriptedImporter:
     = TRANSFORM_TEX(input.texcoord, _BaseMap);\r\n\t\t\t\toutput.positionCS = TransformObjectToHClip(input.position.xyz);\r\n\t\t\t\tfloat3
     normalWS = TransformObjectToWorldNormal(input.normal);\r\n\t\t\t\toutput.normalWS
     = NormalizeNormalPerVertex(normalWS);\r\n\t\t\t\treturn output;\r\n\t\t\t}\r\n\r\n\t\t\thalf4
-    DepthNormalsFragment(\r\n                Varyings_Depth input\r\n#ifdef _WRITE_RENDERING_LAYERS\r\n               
-    , out float4 outRenderingLayers : SV_Target1\r\n#endif\r\n                ) :
-    SV_TARGET\r\n\t\t\t{\r\n\t\t\t\tUNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);\r\n\r\n\t\t\t\t#if
+    DepthNormalsFragment(\r\n\t\t\t\tVaryings_Depth input\r\n#ifdef _WRITE_RENDERING_LAYERS\r\n\t\t\t\t,
+    out float4 outRenderingLayers : SV_Target1\r\n#endif\r\n\t\t\t\t) : SV_TARGET\r\n\t\t\t{\r\n\t\t\t\tUNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);\r\n\r\n\t\t\t\t#if
     defined(LOD_FADE_CROSSFADE)\r\n\t\t\t\t\tconst float dither = Dither4x4(input.positionCS.xy);\r\n\t\t\t\t\tconst
     float ditherThreshold = unity_LODFade.x - CopySign(dither, unity_LODFade.x);\r\n\t\t\t\t\tclip(ditherThreshold);\r\n\t\t\t\t#endif\r\n\r\n\t\t\t\thalf4
     albedo = tex2D(_BaseMap, input.uv.xy).rgba;\r\n\t\t\t\thalf alpha = albedo.a
     * _BaseColor.a;\r\n\r\n\t\t\t\t#if defined(_ALPHATEST_ON)\r\n\t\t\t\t\tclip(alpha
-    - _Cutoff);\r\n\t\t\t\t#endif\r\n\r\n\t            #if URP_VERSION >= 14 && defined(_WRITE_RENDERING_LAYERS)\r\n\t\t           
-    uint meshRenderingLayers = GetMeshRenderingLayer();\r\n\t\t            outRenderingLayers
-    = float4(EncodeMeshRenderingLayer(meshRenderingLayers), 0, 0, 0);\r\n\t           
-    #endif\r\n\r\n\t\t\t\treturn float4(PackNormalOctRectEncode(TransformWorldToViewDir(input.normalWS,
-    true)), 0.0, 0.0);\r\n\t\t\t}\r\n\r\n\t\t\tENDHLSL\r\n\t\t}\r\n\r\n\t\t//--------------------------------------------------------------------------------------------------------------------------------\r\n\t\t\r\n\t\tPass\r\n\t\t{\r\n\t\t\tName
+    - _Cutoff);\r\n\t\t\t\t#endif\r\n\r\n\t\t\t\t#if URP_VERSION >= 14 && defined(_WRITE_RENDERING_LAYERS)\r\n\t\t\t\t\tuint
+    meshRenderingLayers = GetMeshRenderingLayer();\r\n\t\t\t\t\toutRenderingLayers
+    = float4(EncodeMeshRenderingLayer(meshRenderingLayers), 0, 0, 0);\r\n\t\t\t\t#endif\r\n\r\n\t\t\t\t#if
+    URP_VERSION >= 12\r\n\t\t\t\t\treturn float4(input.normalWS.xyz, 0.0);\r\n\t\t\t\t#else\r\n\t\t\t\t\treturn
+    float4(PackNormalOctRectEncode(TransformWorldToViewDir(input.normalWS, true)),
+    0.0, 0.0);\r\n\t\t\t\t#endif\r\n\t\t\t}\r\n\r\n\t\t\tENDHLSL\r\n\t\t}\r\n\r\n\t\t//--------------------------------------------------------------------------------------------------------------------------------\r\n\t\t\r\n\t\tPass\r\n\t\t{\r\n\t\t\tName
     \"Meta\"\r\n\t\t\tTags { \"LightMode\"=\"Meta\" }\r\n\t\t\t\r\n\t\t\tCull Off\r\n\r\n\t\t\tHLSLPROGRAM\r\n\t\t\t//
     Required to compile gles 2.0 with standard SRP library\r\n\t\t\t// All shaders
     must be compiled with HLSLcc and currently only gles is not using HLSLcc by default\r\n\t\t\t#pragma
@@ -263,8 +268,8 @@ ScriptedImporter:
     \"Hidden/InternalErrorShader\"\r\n\tCustomEditor \"ToonyColorsPro.ShaderGenerator.MaterialInspector_Hybrid\"\r\n}\r\n"
   shaderName: Toony Colors Pro 2/Hybrid Shader 2
   shaderErrors: []
-  variantCount: 49162
-  variantCountUsed: 29
+  variantCount: 196626
+  variantCountUsed: 53
   availableOptions:
   - label:
       text: Emission
@@ -387,6 +392,19 @@ ScriptedImporter:
     category: 0
     isOffOption: 0
   - label:
+      text: 'Packages/com.unity.render-pipelines.universal/ShaderLibrary/DOTS.hlsl"   
+        /*** OPTION: "DOTS Instancing (Entities Graphics)'
+      image: {instanceID: 0}
+      tooltip: 
+    category: 0
+    isOffOption: 0
+  - label:
+      text: Rendering Debugger Support (URP 14+)
+      image: {instanceID: 0}
+      tooltip: 
+    category: 0
+    isOffOption: 0
+  - label:
       text: Rendering Layers (URP 14+)
       image: {instanceID: 0}
       tooltip: 
@@ -404,4 +422,5 @@ ScriptedImporter:
       tooltip: 
     category: 0
     isOffOption: 0
-  toggledOptions: []
+  toggledOptions:
+  - Lightmap
