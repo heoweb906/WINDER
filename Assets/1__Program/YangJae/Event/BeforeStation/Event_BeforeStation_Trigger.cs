@@ -10,6 +10,8 @@ public class Event_BeforeStation_Trigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.CompareTag("Player")){
+
+
             eventController.StartEvent();
             this.gameObject.SetActive(false);
         }

@@ -18,6 +18,7 @@ public class GyungSooWalkStartTrigger : MonoBehaviour
         nowCoroutine = StartCoroutine(CutScencStart_Attack());
     }
 
+    // Vector3(-27.7299995,-0.154797882,-1.41400003)
     IEnumerator CutScencStart_Attack()
     {
 
