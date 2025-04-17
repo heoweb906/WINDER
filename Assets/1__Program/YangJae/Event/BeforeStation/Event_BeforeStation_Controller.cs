@@ -98,9 +98,17 @@ public class Event_BeforeStation_Controller : MonoBehaviour
                 mainNPC.SetDropState();
                 mainNPC.GetAnimator().SetBool("Bool_Walk", false);
                 DOTween.To(() => mainNPC.GetAnimator().GetLayerWeight(1), x => mainNPC.GetAnimator().SetLayerWeight(1, x), 0, 0.3f);
+
+
+                Invoke("PLayerInputOnAssist", 5f);
             });
         }
     }
+    private void PLayerInputOnAssist()
+    {
+        GameAssistManager.Instance.PlayerInputLockOff();
+    }
+
 
     public void StartPickUpEvent()
     {

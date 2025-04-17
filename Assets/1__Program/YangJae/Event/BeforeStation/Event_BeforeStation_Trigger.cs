@@ -12,6 +12,8 @@ public class Event_BeforeStation_Trigger : MonoBehaviour
         if(other.gameObject.CompareTag("Player")){
 
 
+            GameAssistManager.Instance.PlayerInputLockOn();
+
             eventController.StartEvent();
             this.gameObject.SetActive(false);
         }

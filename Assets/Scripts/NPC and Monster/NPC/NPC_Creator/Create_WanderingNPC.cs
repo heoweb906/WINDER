@@ -17,6 +17,12 @@ public class Create_WanderingNPC : MonoBehaviour
     private Queue<GameObject> npcPool = new Queue<GameObject>();
     private int iRandNum;
 
+
+    private bool bCantCreateNpc;
+    public Transform transform_Plus_1;
+    public Transform transform_Plus_2;
+
+
     void Start()
     {
         if (positionArray != null)
@@ -77,7 +83,7 @@ public class Create_WanderingNPC : MonoBehaviour
 
     IEnumerator SpawnerNPCs()
     {
-        while (bPollFinish)
+        while (bPollFinish && !bCantCreateNpc)
         {
             if (!bReverse)
             {
@@ -143,6 +149,32 @@ public class Create_WanderingNPC : MonoBehaviour
             }
 
             yield return new WaitForSeconds(spawnInterval);
+        }
+    }
+
+
+    public void SetBoolCantCreateNpc(bool bbb)
+    {
+        bCantCreateNpc = bbb;
+    }
+
+
+
+
+    public void ReplaceLastTwoCheckpoints()
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.activeInHierarchy)
+            {
+                NPC_Simple npcScript = child.GetComponent<NPC_Simple>();
+                if (npcScript != null && npcScript.checkPoints != null && npcScript.checkPoints.Length >= 2)
+                {
+                    int len = npcScript.checkPoints.Length;
+                    npcScript.checkPoints[len - 2] = transform_Plus_1;
+                    npcScript.checkPoints[len - 1] = transform_Plus_2;
+                }
+            }
         }
     }
 }
